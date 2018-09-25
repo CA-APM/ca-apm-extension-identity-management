@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ArcotUserRegistryMgmtSvc" targetNamespace="http://ws.arcot.com/ArcotUserRegistryMgmtSvc/1.0" xmlns:tns="http://ws.arcot.com/ArcotUserRegistryMgmtSvc/1.0" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:msgs="http://ws.arcot.com/ArcotUserRegistryMgmtSvc/1.0/msgs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://ws.arcot.com/ArcotUserRegistryMgmtSvc/1.0/msgs" xmlns:uds="http://ws.arcot.com/UserSchema/1.0">
+			<xsd:import namespace="http://ws.arcot.com/UserSchema/1.0" schemaLocation="ArcotUserSchema.xsd"/>
+            <xsd:element name="orgRegistryError" type="uds:UdsRegistryErrorType"/>
+            <xsd:element name="retrieveOrgRequest">
+            <xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="orgName" type="xsd:string">
+            			</xsd:element>
+					<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            			</xsd:sequence>
+	    </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="retrieveOrgResponse">
+	            <xsd:complexType>
+	            	<xsd:sequence>
+	            		<xsd:element maxOccurs="1" minOccurs="0" name="organization" type="uds:OrganizationType"/>
+	            		<xsd:element maxOccurs="unbounded" minOccurs="0" name="AccountTypeForOrg" type="uds:AccountTypeForOrg" />
+	            	</xsd:sequence>
+	            </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="refreshCacheRequest">
+				<xsd:complexType>
+	            	<xsd:sequence>
+		            	<xsd:element name="systemCache" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
+	            		<xsd:choice minOccurs="0" maxOccurs="1">
+		            		<xsd:element name="allOrganizations" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
+							<xsd:element name="orgName" minOccurs="1" maxOccurs="unbounded"  type="xsd:string"/>
+						</xsd:choice>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+	            	</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="refreshCacheResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="return" type="uds:UdsRegistrySuccessType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="listArcotAttributesRequest" nillable="true">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			 </xsd:element>
+            <xsd:element name="listArcotAttributesResponse">
+            	<xsd:complexType>
+	               	<xsd:sequence>
+	               		<xsd:element name="attributeList" type="uds:ArcotAttributeType">
+	               		</xsd:element>
+	               	</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="listRepositoryAttributesRequest">
+            	<xsd:complexType>
+	               	<xsd:sequence>
+						<xsd:element name="repositoryDetails" type="uds:RepositoryDetailsType" />
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+	               	</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="listRepositoryAttributesResponse">
+                <xsd:complexType>
+                	<xsd:sequence>
+                		<xsd:element name="attributeList" type="uds:RepositoryOrgAttributeType">
+                		</xsd:element>
+                	</xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="createOrgRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="orgName" type="xsd:string">
+            			</xsd:element>
+            			<xsd:element name="displayName" type="xsd:string">
+            			</xsd:element>
+            			<xsd:element name="keyLabel" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+            			<xsd:element name="storage" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+            			<xsd:element maxOccurs="1" minOccurs="0" name="repositoryDetails" type="uds:RepositoryDetailsType">
+            			</xsd:element>
+            			<xsd:element maxOccurs="1" minOccurs="0" name="mappingDetails" type="uds:AttributeMappingsType">
+            			</xsd:element>
+            			<xsd:element maxOccurs="1" minOccurs="0" name="status" type="uds:OrgStatusType"/>
+            			<xsd:element minOccurs="0" name="description" type="xsd:string"/>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="customAttribute" type="uds:CustomAttributeType"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="createOrgResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="return" type="uds:UdsRegistrySuccessType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="updateOrgRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="orgName" type="xsd:string">
+            			</xsd:element>
+            			<xsd:element maxOccurs="1" minOccurs="0" name="status" type="uds:OrgStatusType">
+            			</xsd:element>
+            			<xsd:element maxOccurs="1" minOccurs="0" name="displayName" type="xsd:string">
+            			</xsd:element>
+            			<xsd:element maxOccurs="1" minOccurs="0" name="repositoryDetails" type="uds:RepositoryDetailsType">
+            			</xsd:element>
+            			<xsd:element maxOccurs="1" minOccurs="0" name="mappingDetails" type="uds:AttributeMappingsType">
+            			</xsd:element>
+            			<xsd:element minOccurs="0" name="description" type="xsd:string"/>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="customAttribute" type="uds:CustomAttributeType"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="updateOrgResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="return" type="uds:UdsRegistrySuccessType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="updateOrgStatusRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="Status" type="uds:OrgStatusType">
+            			</xsd:element>
+            			<xsd:element maxOccurs="unbounded" minOccurs="1" name="OrgName" type="xsd:string">
+            			</xsd:element>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="updateOrgStatusResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="return" type="uds:UdsRegistrySuccessType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+           <xsd:element name="listOrgsRequest">
+	            <xsd:complexType>
+	            	<xsd:sequence>
+	            		<xsd:choice minOccurs="1" maxOccurs="1">
+		            		<xsd:element maxOccurs="1" minOccurs="1" name="namePattern" type="xsd:string"/>
+							<xsd:element maxOccurs="unbounded" minOccurs="1" name="orgName" type="xsd:string"/>
+						</xsd:choice>
+	            		<xsd:element maxOccurs="unbounded" minOccurs="0" name="OrgStatus" type="uds:OrgStatusType"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+	            	</xsd:sequence>
+	            </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="listOrgsResponse">
+	            <xsd:complexType>
+	            	<xsd:sequence>
+	            		<xsd:element maxOccurs="unbounded" minOccurs="0" name="organization" type="uds:OrganizationType">
+	            		</xsd:element>
+	            	</xsd:sequence>
+	            </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="retrieveDefaultOrgRequest">
+	            <xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+					</xsd:sequence>
+	            </xsd:complexType>
+			</xsd:element>
+            <xsd:element name="retrieveDefaultOrgResponse">
+            	<xsd:complexType>
+	            	<xsd:sequence>
+	            		<xsd:element name="organization" type="uds:OrganizationType">
+	            		</xsd:element>
+	            		<xsd:element maxOccurs="unbounded" minOccurs="0" name="AccountTypeForOrg" type="uds:AccountTypeForOrg" />
+	            	</xsd:sequence>
+	            </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="deleteOrgRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element maxOccurs="1" minOccurs="1" name="orgName" type="xsd:string">
+            			</xsd:element>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+			</xsd:element>
+            <xsd:element name="deleteOrgResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="return" type="uds:UdsRegistrySuccessType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+
+        </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="retrieveDefaultOrgRequest">
+    <wsdl:part name="param" element="msgs:retrieveDefaultOrgRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteOrgResponse">
+    <wsdl:part name="return" element="msgs:deleteOrgResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateOrgStatusResponse">
+    <wsdl:part name="param" element="msgs:updateOrgStatusResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listRepositoryAttributesRequest">
+    <wsdl:part name="param" element="msgs:listRepositoryAttributesRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createOrgRequest">
+    <wsdl:part name="param" element="msgs:createOrgRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateOrgRequest">
+    <wsdl:part name="param" element="msgs:updateOrgRequest">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="refreshCacheResponse">
+    <wsdl:part name="param" element="msgs:refreshCacheResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listArcotAttributesRequest">
+    <wsdl:part name="param" element="msgs:listArcotAttributesRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteOrgRequest">
+    <wsdl:part name="input" element="msgs:deleteOrgRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="orgRegistryError">
+    <wsdl:part name="param" element="msgs:orgRegistryError">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveDefaultOrgResponse">
+    <wsdl:part name="param" element="msgs:retrieveDefaultOrgResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listArcotAttributesResponse">
+    <wsdl:part name="param" element="msgs:listArcotAttributesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateOrgResponse">
+    <wsdl:part name="param" element="msgs:updateOrgResponse">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="listRepositoryAttributesResponse">
+    <wsdl:part name="param" element="msgs:listRepositoryAttributesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveOrgRequest">
+    <wsdl:part name="param" element="msgs:retrieveOrgRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveOrgResponse">
+    <wsdl:part name="param" element="msgs:retrieveOrgResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="refreshCacheRequest">
+    <wsdl:part name="param" element="msgs:refreshCacheRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listOrgsRequest">
+    <wsdl:part name="param" element="msgs:listOrgsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateOrgStatusRequest">
+    <wsdl:part name="param" element="msgs:updateOrgStatusRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createOrgResponse">
+    <wsdl:part name="param" element="msgs:createOrgResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listOrgsResponse">
+    <wsdl:part name="param" element="msgs:listOrgsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ArcotUserRegistryMgmtSvcPortType">
+  	<wsdl:documentation>
+  		All the services defined under this port type exhibit the below defined global behaviour:
+  		<ul>
+	  		<li>If organization name is not passed in the request, configured default organization is assumed.</li>
+	  		<li>Every request takes a client transaction ID as input. This is an optional input and may be used by client applications to map the transactions.</li>
+	  		<li>Every response returns a server transaction ID.</li>
+	  		<li>Services on failure return OrgRegistryError with error context, error message and error number.</li>
+	  		<li>Due to re-use of data types between operations and request-responses, certain elements in the 'request' are displayed even though they are
+	  		not honored/required at the server side. Such elements are explicitly marked as 'Not Required' in individual operations.
+	  		<br/><b>Note:</b> 'Not Required' elements are not same as 'Optional' elements. Unlike 'Not Required' elements, optional elements are honored at the server side.</li>
+  		</ul>
+  		<br/>If a service is enabled for protection through AnA (Authentication and Authorization), additional inputs should be passed in the request header as defined below.
+  		The header elements should be qualified with the <i>http://ws.arcot.com/UDSTransaction/1.0</i> namespace.
+  		<br/><b>If authentication token is not available:</b>
+  		<ul>
+  			<li>userID:User identifier</li>
+  			<li>orgName: Organization name to which the user belongs</li>
+  			<li>credential: User's credential</li>
+  		</ul>
+  		The service returns an authentication token as part of the response header on successful AnA request. This token can be used in subsequent requests.
+  		The token is valid for a configurable duration of 1 day.
+  		<br/><b>If Authentication Token is available:</b>
+  		<ul>
+  			<li>authToken: The token returned by the service.</li>
+  		</ul>
+  	</wsdl:documentation>
+    <wsdl:operation name="createOrg">
+<wsdl:documentation>
+		  This service is used to create organizations with the mandatory parameters
+		  organization name, organization display name.
+		  If organization status is not passed, default status is INITIAL.
+		  If key label is not set, it defaults to global key.
+		  If storage is not set, it defaults to the default HSMDevice configured in arcotcommon.ini
+		  Supported Storage Types: SOFTWARE, HARDWARE
+		  <b>Note:</b> Key label once created cannot be updated.
+		</wsdl:documentation>
+      <wsdl:input name="createOrgRequest" message="tns:createOrgRequest">
+    </wsdl:input>
+      <wsdl:output name="createOrgResponse" message="tns:createOrgResponse">
+    </wsdl:output>
+      <soap12:fault name="createOrgError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteOrg">
+<wsdl:documentation>
+          This service is used to delete the given organization.<br/>
+          <b>Note:</b>This operation cannot be undone.
+        </wsdl:documentation>
+      <wsdl:input name="deleteOrgRequest" message="tns:deleteOrgRequest">
+    </wsdl:input>
+      <wsdl:output name="deleteOrgResponse" message="tns:deleteOrgResponse">
+    </wsdl:output>
+      <soap12:fault name="deleteOrgError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listArcotAttributes">
+<wsdl:documentation>
+		This service lists the supported Arcot Attributes.
+		</wsdl:documentation>
+      <wsdl:input name="listArcotAttributesRequest" message="tns:listArcotAttributesRequest">
+    </wsdl:input>
+      <wsdl:output name="listArcotAttributesResponse" message="tns:listArcotAttributesResponse">
+    </wsdl:output>
+      <soap12:fault name="listArcotAttributesError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveOrg">
+	<wsdl:documentation>
+		This service retrieves the details of the given organization.
+		</wsdl:documentation>
+      <wsdl:input name="retrieveOrgRequest" message="tns:retrieveOrgRequest">
+    </wsdl:input>
+      <wsdl:output name="retrieveOrgResponse" message="tns:retrieveOrgResponse">
+    </wsdl:output>
+      <soap12:fault name="retrieveOrgError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="refreshCache">
+<wsdl:documentation>
+		This service refreshes the UDS configuration cache.
+		</wsdl:documentation>
+      <wsdl:input name="refreshCacheRequest" message="tns:refreshCacheRequest">
+    </wsdl:input>
+      <wsdl:output name="refreshCacheResponse" message="tns:refreshCacheResponse">
+    </wsdl:output>
+      <soap12:fault name="refreshCacheError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listRepositoryAttributes">
+<wsdl:documentation>
+		This service lists the attributes for the given repository.
+		</wsdl:documentation>
+      <wsdl:input name="listRepositoryAttributesRequest" message="tns:listRepositoryAttributesRequest">
+    </wsdl:input>
+      <wsdl:output name="listRepositoryAttributesResponse" message="tns:listRepositoryAttributesResponse">
+    </wsdl:output>
+      <soap12:fault name="listRepositoryAttributesError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrgStatus">
+<wsdl:documentation>
+		This service updates the status of the given organization.<br/>
+		<b>Note:</b> Organization status cannot be updated to DELETED using this service. To delete an organization, use deleteOrg service.
+		</wsdl:documentation>
+      <wsdl:input name="updateOrgStatusRequest" message="tns:updateOrgStatusRequest">
+    </wsdl:input>
+      <wsdl:output name="updateOrgStatusResponse" message="tns:updateOrgStatusResponse">
+    </wsdl:output>
+      <soap12:fault name="updateOrgStatusError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrg">
+<wsdl:documentation>
+		This service updates the given organization with the updated organization details like attribute mappings
+		and custom attributes.<br/>
+		<b>Note:</b> Organization status cannot be updated to DELETED state using this service. To delete an organization, use deleteOrg service.
+		<br>Following fields are 'Not Required' in the request</br>
+		<ul>
+		<li>repositoryType</li>
+		</ul>
+		</wsdl:documentation>
+      <wsdl:input name="updateOrgRequest" message="tns:updateOrgRequest">
+    </wsdl:input>
+      <wsdl:output name="updateOrgResponse" message="tns:updateOrgResponse">
+    </wsdl:output>
+      <soap12:fault name="updateOrgError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+
+    <wsdl:operation name="listOrgs">
+<wsdl:documentation>
+		This service returns the organization details of all the organizations matching the given organization name pattern 'or' the organization names.
+		The pattern supports '*' to obtain all organizations.
+		</wsdl:documentation>
+      <wsdl:input name="listOrgsRequest" message="tns:listOrgsRequest">
+    </wsdl:input>
+      <wsdl:output name="listOrgsResponse" message="tns:listOrgsResponse">
+    </wsdl:output>
+      <soap12:fault name="listOrgsError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveDefaultOrg">
+<wsdl:documentation>
+		This service retrieves the configured default organization details.
+		</wsdl:documentation>
+      <wsdl:input name="retrieveDefaultOrgRequest" message="tns:retrieveDefaultOrgRequest">
+    </wsdl:input>
+      <wsdl:output name="retrieveDefaultOrgResponse" message="tns:retrieveDefaultOrgResponse">
+    </wsdl:output>
+      <soap12:fault name="retrieveDefaultOrgError" message="tns:orgRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ArcotUserRegistryMgmtSvcBinding" type="tns:ArcotUserRegistryMgmtSvcPortType">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createOrg">
+      <soap12:operation soapAction="urn:UDS.CreateOrg" style="document"/>
+      <wsdl:input name="createOrgRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createOrgResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="createOrgError">
+        <soap12:fault name="createOrgError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteOrg">
+      <soap12:operation soapAction="urn:UDS.DeleteOrg" style="document"/>
+      <wsdl:input name="deleteOrgRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteOrgResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="deleteOrgError">
+        <soap12:fault name="deleteOrgError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listArcotAttributes">
+      <soap12:operation soapAction="urn:UDS.ListArcotAttributes" style="document"/>
+      <wsdl:input name="listArcotAttributesRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listArcotAttributesResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="listArcotAttributesError">
+        <soap12:fault name="listArcotAttributesError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveOrg">
+      <soap12:operation soapAction="urn:UDS.RetrieveOrg" style="document"/>
+      <wsdl:input name="retrieveOrgRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="retrieveOrgResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="retrieveOrgError">
+        <soap12:fault name="retrieveOrgError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="refreshCache">
+      <soap12:operation soapAction="urn:UDS.RefreshCache" style="document"/>
+      <wsdl:input name="refreshCacheRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="refreshCacheResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="refreshCacheError">
+        <soap12:fault name="refreshCacheError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listRepositoryAttributes">
+      <soap12:operation soapAction="urn:UDS.ListRepositoryAttributes" style="document"/>
+      <wsdl:input name="listRepositoryAttributesRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listRepositoryAttributesResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="listRepositoryAttributesError">
+        <soap12:fault name="listRepositoryAttributesError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrgStatus">
+      <soap12:operation soapAction="urn:UDS.UpdateOrgStatus" style="document"/>
+      <wsdl:input name="updateOrgStatusRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateOrgStatusResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="updateOrgStatusError">
+        <soap12:fault name="updateOrgStatusError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateOrg">
+      <soap12:operation soapAction="urn:UDS.UpdateOrg" style="document"/>
+      <wsdl:input name="updateOrgRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateOrgResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="updateOrgError">
+        <soap12:fault name="updateOrgError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+
+    <wsdl:operation name="listOrgs">
+      <soap12:operation soapAction="urn:UDS.ListOrgs" style="document"/>
+      <wsdl:input name="listOrgsRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listOrgsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="listOrgsError">
+        <soap12:fault name="listOrgsError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveDefaultOrg">
+      <soap12:operation soapAction="urn:UDS.RetrieveDefaultOrg" style="document"/>
+      <wsdl:input name="retrieveDefaultOrgRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="retrieveDefaultOrgResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="retrieveDefaultOrgError">
+        <soap12:fault name="retrieveDefaultOrgError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ArcotUserRegistryMgmtSvc">
+    <wsdl:port name="ArcotUserRegistryMgmtSvcBinding" binding="tns:ArcotUserRegistryMgmtSvcBinding">
+      <soap12:address location="http://localhost:8080/arcotuds/services/ArcotUserRegistryMgmtSvc"/>
+    </wsdl:port>
+  </wsdl:service>
+  <wsdl:documentation>
+	<br/>
+	<b>WSDL Documentation</b>:
+	Click <a href="wsdl/3/porttype/ArcotUserRegistryMgmtSvcPortType.html">here</a> to view the documentation on the operations provided by this service.
+  </wsdl:documentation>
+</wsdl:definitions>

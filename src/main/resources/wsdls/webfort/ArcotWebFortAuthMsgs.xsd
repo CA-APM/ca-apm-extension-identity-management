@@ -1,0 +1,987 @@
+<xs:schema xmlns:msgs="http://ws.arcot.com/WebFortAuthAPI/7.0/msgs"
+	xmlns:xsd="http://ws.arcot.com/WebFortAuthAPI/7.0/xsd" xmlns:commonxsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="qualified" targetNamespace="http://ws.arcot.com/WebFortAuthAPI/7.0/msgs">
+	<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+	<xs:import namespace="http://ws.arcot.com/WebFortAuthAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortAuthSchema.xsd" />
+	<xs:element name="WebFortAuthFault">
+		<xs:annotation>
+			<xs:documentation>
+				Common fault for all authentication operations.
+				responseCode - Indicates what error occurred.
+				reasonCode - Provides
+				the response of server. It
+				will help to find out the nature or error.
+				reason - Provides a readable user friendly text
+				corresponding to
+				responseCode.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="commonxsd:WebFortFault">
+					<xs:sequence>
+						<xs:element name="credType" type="xs:int" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetArcotIDRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in GetArcotID operation.
+				userName - identifier of the user for whom the
+				ArcotId needs to be
+				fetched. orgName - the
+				identifier for the organization to which the
+				user belongs. Pass empty or null in case you
+				want to use the default
+				organization.
+				additionalInput - Used to give additional
+				information
+				related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetArcotIDResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response for GetArcotID request. arcotid -
+				Base64
+				encoded ArcotID string.
+				transactionDetails - details of the current
+				transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="arcotID" type="xs:string" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetPAMRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Fetches the PAM of the given user. userName -
+				the
+				identifier for the user. orgName - the
+				identifier for the
+				organization to which the
+				user belongs. Pass empty or null in case
+				you
+				want to use the default organization.
+				additionalInput - Used to
+				give additional
+				information related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetPAMResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response for GetPAM request. pam - PAM(Personal
+				Assurance Message) of the user.
+				transactionDetails - details of the
+				current
+				transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="pam" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AuthResponse">
+		<xs:annotation>
+			<xs:documentation>
+				User information returned when an user is
+				successfully authenticated. userName - Name of
+				the user. orgName -
+				Organization to which the
+				user belongs to. authToken - Returned by
+				server
+				which can be used as an authentication token.
+				tokenType - The
+				type of the token that is to be
+				returned. daysLeftToExpire - Number
+				of days
+				after which the credential will expire.status -
+				Status of the
+				credential. remainingUsageCount -
+				Remaining number of times the
+				credential can be
+				used.createTime - The time at which the
+				credential
+				was created. lastUpdatedTime - The
+				time at which the credential was
+				last
+				updated.validityStartTime - The time before
+				which the credential
+				is invalid. validityEndTime
+				- The time after which the credential is
+				invalid.numberOfFailedAuthAttempts - The number
+				of times the
+				authentication failed.
+				lastSuccessAuthAttemptTime - the time when
+				last
+				successful authentication was performed.
+				lastFailedAuthAttemptTime - the time when the
+				last-attempted
+				authentication failed.
+				profileName - the name of the credential
+				profile
+				using which this credential was created.
+				profileVersion - the
+				version of the credential
+				profile using which this credential was
+				created.notes - Custom attributes that were set
+				for the credential
+				transactionDetails - details
+				of the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" />
+						<xs:element name="authToken" type="xs:string"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="tokenType" type="xs:int" />
+						<xs:element name="daysLeftToExpire" type="xs:int"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="status" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="remainingUsageCount" type="xs:int"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="createTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastUpdatedTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="validityStartTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="validityEndTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="disableStartTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="disableEndTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="numberOfFailedAuthAttempts" type="xs:int"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastSuccessAuthAttemptTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastFailedAuthAttemptTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="profileName" type="xs:string"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="profileVersion" type="xs:int"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="notes" type="commonxsd:PairType"
+							minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetArcotIDChallengeRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Input element used in get challenge request.
+				Only
+				additional input is required.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetArcotIDChallengeResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response for GetArcotIDChallenge operation.
+				challenge - The challenge returned by the
+				WebFort server.
+				transactionDetails - details of
+				the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="challenge" type="xs:string" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyArcotIDSignedChallenge">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in
+				VerifyArcotIDSignedChallenge
+				operation.
+				signedChallenge - Challenge which is signed by
+				using the
+				user's ArcotID. tokenType - the type
+				of authentication token expected
+				after
+				successful authentication. transactionDetails -
+				details of the
+				current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="signedChallenge" type="xs:string" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetQuestionsRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in GetQuestions operation.
+				for
+				authentication. userName - the identifier
+				for the user. orgName - the
+				identifier for the
+				organization to which the user belongs. Pass
+				empty
+				or null in case you want to use the
+				default organization.
+				fetchAnswers - flag to
+				fetch answers. additionalInput - Used to give
+				additional information related to the current
+				transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="fetchAnswers" type="xs:boolean"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetQuestionsResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response object for GetQuestions operation. qna
+				-
+				Contains questionIDs and questions used for
+				authentication.
+				transactionDetails - details of
+				the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="qna" type="xsd:GetQnAType" minOccurs="0"
+							maxOccurs="unbounded" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetPasswordChallengeRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in GetPasswordChallenge
+				operation. userName - the identifier for the
+				user. orgName - the
+				identifier for the
+				organization to which the user belongs. Pass
+				empty
+				or null in case you want to use the
+				default organization.
+				additionalInput - Used to
+				give additional information related to the
+				current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetPasswordChallengeResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response object for GetPasswordChallenge
+				operation.
+				positions - Contains list of
+				positions of password characters, which
+				will be
+				used for authentication. challengeID -
+				ChallengeID given by
+				WebFort server to be passed
+				in VerifyPassword API. transactionDetails
+				-
+				details of the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="positions" type="xs:string"
+							minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="challengeID" type="xs:string" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyAnswers">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in VerifyAnswers
+				operation.orgName - the identifier for the
+				organization to which the
+				user belongs. Pass
+				empty or null in case you want to use the
+				default
+				organization. qna - Contains questionIDs
+				and answers which needs to
+				be verified.
+				tokenType - The type of the token that is to be
+				returned. additionalInput - Used to give
+				additional information
+				related to the current
+				transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="qna" type="xsd:AuthQnAType"
+							minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyPassword">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in VerifyPassword operation.
+				userName - the identifier for the user. orgName
+				- the identifier for
+				the organization to which
+				the user belongs. Pass empty or null in
+				case you
+				want to use the default organization. password -
+				Password to
+				be verified. tokenType - The type of
+				the token that is to be
+				returned. challengeID -
+				Challenge ID returned from
+				GetPasswordChallenge
+				API, It will used in case of partial password
+				authentication. additionalInput - Used to give
+				additional information
+				related to the current
+				transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="password" type="xs:string" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="challengeID" type="xs:string"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyOTP">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in VerifyOTP operation.
+				userName - the identifier for the user. orgName
+				- the identifier for
+				the organization to which
+				the user belongs. Pass empty or null in
+				case you
+				want to use the default organization. otp -
+				OTP(One Time
+				Password) to be verified. tokenType
+				- The type of the token that is
+				to be returned.
+				additionalInput - Used to give additional
+				information
+				related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="otp" type="xs:string" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyOATHOTP">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in VerifyOATHOTP operation.
+				userName - the identifier for the user. orgName
+				- the identifier for
+				the organization to which
+				the user belongs. Pass empty or null in
+				case you
+				want to use the default organization. otp - OATH
+				OTP(One Time
+				Password) to be verified. tokenType
+				- The type of the token that is
+				to be returned.
+				additionalInput - Used to give additional
+				information
+				related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="otp" type="xs:string" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SynchronizeOATHOTP">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in SynchronizeOATHOTP
+				operation. userName - the identifier for the
+				user. orgName - the
+				identifier for the
+				organization to which the user belongs. Pass
+				empty
+				or null in case you want to use the
+				default organization. otpList -
+				list of multiple
+				subsequent OATH-OTPs. tokenType - The type of
+				the
+				token that is to be returned.
+				additionalInput - Used to give
+				additional
+				information related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="otpList" type="xs:string" minOccurs="1"
+							maxOccurs="unbounded" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyArcotOTP">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in VerifyArcotOTP operation.
+				userName - the identifier for the user. orgName
+				- the identifier for
+				the organization to which
+				the user belongs. Pass empty or null in
+				case you
+				want to use the default organization. otp -
+				ArcotOTP to be
+				verified. tokenType - The type of
+				the token that is to be returned.
+				additionalInput - Used to give additional
+				information related to the
+				current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="otp" type="xs:string" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SynchronizeArcotOTP">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in SynchronizeArcotOTP
+				operation. userName - the identifier for the
+				user. orgName - the
+				identifier for the
+				organization to which the user belongs. Pass
+				empty
+				or null in case you want to use the
+				default organization. otpList -
+				list of multiple
+				subsequent ArcotOTPs. tokenType - The type of
+				the
+				token that is to be returned.
+				additionalInput - Used to give
+				additional
+				information related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="otpList" type="xs:string" minOccurs="1"
+							maxOccurs="unbounded" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyEMV">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in VerifyEMV operation.
+				userName - the identifier for the user.
+        orgName - the identifier for the organization to which
+				the user belongs. Pass empty or null in case you
+				want to use the default organization.
+				otp - OTP to be verified.
+        tokenType - The type of the token that is to be returned.
+				additionalInput - Used to give additional
+				information related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" minOccurs="0" maxOccurs="1" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0" maxOccurs="1" />
+						<xs:element name="otp" type="xs:string" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0" maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType" minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SynchronizeEMV">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in SynchronizeEMV operation.
+				userName - the identifier for the user.
+        orgName - the identifier for the organization to which the user belongs.
+        Pass empty or null in case you want to use the default organization.
+        otpList - list of multiple subsequent OTPs.
+        tokenType - The type of the token that is to be returned.
+				additionalInput - Used to give additional information related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" minOccurs="0" maxOccurs="1" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0" maxOccurs="1" />
+						<xs:element name="otpList" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0" maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType" minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyPlain">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in VerifyPlain operation.
+				userName - the identifier for the user.
+				orgName - the identifier for the organization to which the user belongs.
+				          Pass empty or null in case you want to use the default organization.
+				password - password to be verified.
+				           (can be one of Password, LDAP-Password, OTP, HOTP, ArcotOTP, EMV )
+				tokenType - The type of the token that is to be returned.
+				            Pass empty to use default token type as configured in the policy.
+				additionalInput - Used to give additional information
+				related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0" maxOccurs="1" />
+						<xs:element name="password" type="xs:string" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0" maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyAuthTokenRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in VerifyAuthToken
+				operation.
+				token - The token to be verified.
+				additionalInput - Used to give
+				additional
+				information related to the current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="token" type="xs:string" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyAuthTokenResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response object for VerifyAuthToken operation.
+				userName - The name of the user. orgName -
+				Organization to which the
+				user belongs to.
+				transactionDetails - details of the current
+				transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetCustomChallengeRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request for GetCustomChallenge request.userName
+				-
+				the identifier for the user. orgName - the
+				identifier for the
+				organization to which the
+				user belongs. Pass empty or null in case
+				you
+				want to use the default organization.
+				customModName - the custom
+				module that can
+				handle this credential's authentication.
+				additionalInput - Used to give additional
+				information related to the
+				current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="customModName" type="xs:string" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetCustomChallengeResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response of GetCustomChallenge operation.
+				challenge
+				- the challenge that was fetched.
+				transactionDetails - details of the
+				current
+				transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="challenge" type="xs:string"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="VerifyCustomCredential">
+		<xs:annotation>
+			<xs:documentation>
+				Request for verifying custom credential.userName
+				-
+				the identifier for the user. orgName - the
+				identifier for the
+				organization to which the
+				user belongs. Pass empty or null in case
+				you
+				want to use the default
+				organization.customModName - the custom
+				module
+				that can handle this credential's
+				authentication. credential -
+				Credential to be
+				verified. tokenType - The type of the token that
+				is
+				to be returned. additionalInput - Used to
+				give additional information
+				related to the
+				current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="customModName" type="xs:string" />
+						<xs:element name="credential" type="xs:string" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CustomAuthResponse">
+		<xs:annotation>
+			<xs:documentation>
+				User information returned when an user is
+				successfully authenticated. userName - Name of
+				the user. orgName -
+				Organization to which the
+				user belongs to. authToken - Returned by
+				server
+				which can be used as an authentication token.
+				tokenType - The
+				type of the token that is to be
+				returned. daysLeftToExpire - Number
+				of days
+				after which the credential will expire.status -
+				Status of the
+				credential.createTime - The time
+				at which the credential was created.
+				lastUpdatedTime - The time at which the
+				credential was last
+				updated.validityStartTime -
+				The time before which the credential is
+				invalid.
+				validityEndTime - The time after which the
+				credential is
+				invalid.numberOfFailedAuthAttempts
+				- The number of times the
+				authentication failed.
+				lastSuccessAuthAttemptTime - the time when
+				last
+				successful authentication was performed.
+				lastFailedAuthAttemptTime - the time when the
+				last-attempted
+				authentication failed.
+				profileName - the name of the credential
+				profile
+				using which this credential was created.
+				profileVersion - the
+				version of the credential
+				profile using which this credential was
+				created.transactionDetails - details of the
+				current transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAuthResponseType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="authToken" type="xs:string"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="tokenType" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="status" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="createTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastUpdatedTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="validityStartTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="validityEndTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="numberOfFailedAuthAttempts" type="xs:int"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastSuccessAuthAttemptTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastFailedAuthAttemptTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

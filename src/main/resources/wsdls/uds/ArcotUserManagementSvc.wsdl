@@ -1,0 +1,1727 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<wsdl:definitions name="ArcotUserRegistrySvc" targetNamespace="http://ws.arcot.com/ArcotUserRegistrySvc/1.0"
+	xmlns:uregtr="http://ws.arcot.com/ArcotUserRegistrySvc/1.0" xmlns:uds="http://ws.arcot.com/UserSchema/1.0"
+	xmlns:msgs="http://ws.arcot.com/ArcotUserRegistrySvc/1.0/msgs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="qualified" targetNamespace="http://ws.arcot.com/ArcotUserRegistrySvc/1.0/msgs">
+
+			<xs:import namespace="http://ws.arcot.com/UserSchema/1.0"
+				schemaLocation="ArcotUserSchema.xsd" />
+
+			<xs:element name="userRegistryError" type="uds:UdsRegistryErrorType" />
+
+			<xs:element name="retrieveUserRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userIdentifier"
+							type="xs:string" />
+						<xs:element minOccurs="0" maxOccurs="1" name="orgName"
+							type="xs:string" />
+						<xs:element minOccurs="0" maxOccurs="1" name="accountType"
+							type="xs:string" />
+						<xs:element minOccurs="0" maxOccurs="1" name="filter"
+							type="uds:UserFilterType"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="retrieveUserResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UserDetailsTypeEx" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="searchUsersRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1" name="orgPattern"
+							type="xs:string" />
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="orgName"
+							type="xs:string" />
+						<xs:element minOccurs="1" maxOccurs="1" name="searchExpression"
+							type="xs:string">
+							<xs:annotation>
+								<![CDATA[
+								<br/>The search expression will be a standard infix search expression.
+								<br/>The search expression should be of the following syntax:
+										<br/>Expression ::= Token [Separator Token];
+										<br/>Token ::= AttributeName Comparator Regex
+										<br/>AttributeName ::= STRING
+										<br/>Comparator ::= CHOICE {=, !=}
+										<br/>Regex ::= DoubleQuote [WildCard] STRING [WildCard] DoubleQuote
+										<br/>WildCard ::= *
+										<br/>DoubleQuote ::= "
+										<br/>Separator ::= CHOICE {&, |}
+								<br/><br/>Examples:
+								<br/>&nbsp; USERID = "*"
+								<br/>&nbsp; USERID = "*Edison*"
+								<br/>&nbsp; USERID = "Thomas*" & FNAME = "*Alva*"
+								<br/>&nbsp; USERID = "Thomas" | LNAME = "Edison"
+								<br/>
+								]]>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="count"
+							type="xs:int" />
+						<xs:element minOccurs="0" maxOccurs="1" name="filter"
+							type="uds:UserFilterType">
+							<xs:annotation>
+							<![CDATA[
+								Deep search filter is not supported for searchUsers operations.
+							]]>
+							</xs:annotation>
+						</xs:element>
+						<xs:element maxOccurs="unbounded" minOccurs="0" name="status"
+							type="uds:UserStatusType" />
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="account"
+							type="uds:UserAccountType">
+							<xs:annotation>
+								<![CDATA[
+									The account input parameters are not supported.
+								]]>
+							</xs:annotation>
+						</xs:element>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="RepositoryUserAttributes" type="uds:RepositoryUserAttributeType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="searchUsersResponse">
+				<xs:annotation>
+					<![CDATA[
+						The element to hold the search users response results.
+						The attribute moreUseravailable is set to true if there are more results in the repository that match the search criteria beyond what is returned in the result
+					]]>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="SearchResult" type="uds:UserDetailsTypeEx" />
+					</xs:sequence>
+					<xs:attribute name="moreUsersAvailable" type="xs:boolean" use="optional" />
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="listUsersRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="1" minOccurs="0" name="orgName"
+							type="xs:string" />
+						<xs:element maxOccurs="1" minOccurs="1" name="startIndex"
+							type="xs:int" />
+						<xs:element maxOccurs="1" minOccurs="1" name="endIndex"
+							type="xs:int" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="listUsersResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="SearchResult" type="uds:UserDetailsType" />
+					</xs:sequence>
+					<xs:attribute name="count" type="xs:int" use="optional" />
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="listUsersForAccountRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1" name="orgName"
+							type="xs:string" />
+						<xs:element name="accountType" minOccurs="0" maxOccurs="1" type="xs:string"/>
+			            		<xs:choice name="ListUsersByAccountChoice" minOccurs="1" maxOccurs="1">
+
+							<xs:element name="accountID" minOccurs="0" maxOccurs="1" type="xs:string" />
+							<xs:element name="accountIDAttribute" minOccurs="0" maxOccurs="1" type="xs:string" />
+						</xs:choice>
+						<xs:element minOccurs="0" maxOccurs="1" name="filter"
+							type="uds:UserBaseFilterType"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="listUsersForAccountResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="0"
+							name="SearchResult" type="uds:UserDetailsTypeEx" />
+					</xs:sequence>
+					<xs:attribute name="count" type="xs:int" use="optional" />
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="updateUserStatusRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="unbounded" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="status"
+							type="uds:UserStatusType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="startLockTime"
+							type="xs:dateTime" />
+						<xs:element minOccurs="0" maxOccurs="1" name="endLockTime"
+							type="xs:dateTime" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="updateUserStatusResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getUserStatusRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getUserStatusResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="status"
+							type="uds:UserStatusType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="createUserRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userDetails"
+							type="uds:UserDetailsTypeEx" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="createUserResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="addUserAccountRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="unbounded" name="account"
+							type="uds:UserAccountType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="addUserAccountResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="deleteUserRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="deleteUserAccountRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="account"
+							type="uds:UserAccountType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="updateUserAccountRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="unbounded" name="account"
+							type="uds:UserAccountType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+
+			<xs:element name="retrieveUserAccountRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="account"
+							type="uds:UserAccountType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="listUserAccountRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="account"
+							type="uds:UserAccountType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+
+			<xs:element name="retrieveUserAccountResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="account"
+							type="uds:UserAccountType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="listUserAccountResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="account"
+							type="uds:UserAccountType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="deleteUserResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="deleteUserAccountResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="updateUserAccountResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="updateUserRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userDetailsEx"
+							type="uds:UserDetailsTypeEx" />
+						<xs:element minOccurs="0" maxOccurs="1" name="updateUserFlags"
+							type="uds:UpdateUserFlagType"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="updateUserResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="setCustomAttributesRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="UserId" type="uds:UserIdentifierType" />
+						<xs:element name="customAttribute" minOccurs="0"
+							maxOccurs="unbounded" type="uds:CustomAttributeType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="setCustomAttributesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="authenticateUserRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="UserCredential"
+							type="uds:UserCredentialType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="authenticateUserResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AuthResult" type="uds:UserAuthResultType">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPAMRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="UserId" type="uds:UserIdentifierType"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPAMResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="UserId" type="uds:UserIdentifierType"></xs:element>
+						<xs:element name="PAM" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+						<xs:element name="pamImageUrl" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="setPAMRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="UserId" type="uds:UserIdentifierType"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="PAM"
+							type="xs:string"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="pamImageUrl"
+							type="xs:string"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="setPAMResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getQnAAttributesRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="orgName" type="xs:string"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getQnAAttributeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="attribute" minOccurs="0" maxOccurs="unbounded"
+							type="xs:string">
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="performQnAVerificationRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="username" type="xs:string"></xs:element>
+						<xs:element name="orgname" type="xs:string"></xs:element>
+						<xs:element name="attributes" type="uds:QnARequestAttribute"/>
+						<xs:element name="ignorecase" type="xs:boolean"></xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="performQnAVerificationResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="attribute" minOccurs="0" maxOccurs="unbounded" type="uds:QnAResponseAttribute"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getQnAValuesRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="username" type="xs:string"></xs:element>
+						<xs:element name="orgname" type="xs:string"></xs:element>
+						<xs:element name="attributes">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="attribute" minOccurs="1"
+										maxOccurs="unbounded" type="xs:string">
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getQnAValuesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="attribute" minOccurs="1" maxOccurs="unbounded" type="uds:QnAValuesAttribute"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getUserDevicesRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="deviceStatus"
+							type="uds:DeviceStatusType" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getUserDevicesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="deviceDetails" type="uds:DeviceResponseAttrs" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="updateUserDeviceRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="deviceDetails"
+							type="uds:DeviceRequestAttrs" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="updateUserDeviceResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="addUserDeviceRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="deviceDetails"
+							type="uds:DeviceRequestAttrs" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addUserDeviceResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="deleteUserDeviceRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="deviceID"
+							type="xs:string" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="deleteUserDeviceResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="disableUserDeviceRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="deviceID"
+							type="xs:string" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="disableUserDeviceResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="enableUserDeviceRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="userId"
+							type="uds:UserIdentifierType" />
+						<xs:element minOccurs="1" maxOccurs="1" name="deviceID"
+							type="xs:string" />
+						<xs:element minOccurs="0" maxOccurs="1" name="clientTxId"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="enableUserDeviceResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="return"
+							type="uds:UdsRegistrySuccessType" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+
+	<wsdl:message name="userRegistryError">
+		<wsdl:part name="parameters" element="msgs:userRegistryError" />
+	</wsdl:message>
+	<wsdl:message name="searchUsersRequest">
+		<wsdl:part name="parameters" element="msgs:searchUsersRequest" />
+	</wsdl:message>
+	<wsdl:message name="searchUsersResponse">
+		<wsdl:part name="parameters" element="msgs:searchUsersResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="listUsersRequest">
+		<wsdl:part name="parameters" element="msgs:listUsersRequest" />
+	</wsdl:message>
+	<wsdl:message name="listUsersResponse">
+		<wsdl:part name="parameters" element="msgs:listUsersResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="listUsersForAccountRequest">
+		<wsdl:part name="parameters" element="msgs:listUsersForAccountRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="listUsersForAccountResponse">
+		<wsdl:part name="parameters" element="msgs:listUsersForAccountResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="retrieveUserRequest">
+		<wsdl:part name="parameters" element="msgs:retrieveUserRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="retrieveUserResponse">
+		<wsdl:part name="parameters" element="msgs:retrieveUserResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="retrieveUserAccountRequest">
+		<wsdl:part name="parameters" element="msgs:retrieveUserAccountRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="retrieveUserAccountResponse">
+		<wsdl:part name="parameters" element="msgs:retrieveUserAccountResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="listUserAccountRequest">
+		<wsdl:part name="parameters" element="msgs:listUserAccountRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="listUserAccountResponse">
+		<wsdl:part name="parameters" element="msgs:listUserAccountResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="updateUserStatusRequest">
+		<wsdl:part name="parameters" element="msgs:updateUserStatusRequest" />
+	</wsdl:message>
+	<wsdl:message name="updateUserStatusResponse">
+		<wsdl:part name="parameters" element="msgs:updateUserStatusResponse" />
+	</wsdl:message>
+	<wsdl:message name="deleteUserRequest">
+		<wsdl:part name="parameters" element="msgs:deleteUserRequest" />
+	</wsdl:message>
+	<wsdl:message name="deleteUserResponse">
+		<wsdl:part name="parameters" element="msgs:deleteUserResponse" />
+	</wsdl:message>
+	<wsdl:message name="deleteUserAccountRequest">
+		<wsdl:part name="parameters" element="msgs:deleteUserAccountRequest" />
+	</wsdl:message>
+	<wsdl:message name="deleteUserAccountResponse">
+		<wsdl:part name="parameters" element="msgs:deleteUserAccountResponse" />
+	</wsdl:message>
+	<wsdl:message name="updateUserAccountRequest">
+		<wsdl:part name="parameters" element="msgs:updateUserAccountRequest" />
+	</wsdl:message>
+	<wsdl:message name="updateUserAccountResponse">
+		<wsdl:part name="parameters" element="msgs:updateUserAccountResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="createUserRequest">
+		<wsdl:part name="parameters" element="msgs:createUserRequest" />
+	</wsdl:message>
+	<wsdl:message name="createUserResponse">
+		<wsdl:part name="parameters" element="msgs:createUserResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="addUserAccountRequest">
+		<wsdl:part name="parameters" element="msgs:addUserAccountRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="addUserAccountResponse">
+		<wsdl:part name="parameters" element="msgs:addUserAccountResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="updateUserRequest">
+		<wsdl:part name="parameters" element="msgs:updateUserRequest" />
+	</wsdl:message>
+	<wsdl:message name="updateUserResponse">
+		<wsdl:part name="parameters" element="msgs:updateUserResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="setCustomAttributesRequest">
+		<wsdl:part name="parameters" element="msgs:setCustomAttributesRequest" />
+	</wsdl:message>
+	<wsdl:message name="setCustomAttributesResponse">
+		<wsdl:part name="parameters" element="msgs:setCustomAttributesResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="authenticateUserRequest">
+		<wsdl:part name="param" element="msgs:authenticateUserRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="authenticateUserResponse">
+		<wsdl:part name="param" element="msgs:authenticateUserResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPAMRequest">
+		<wsdl:part name="param" element="msgs:getPAMRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getPAMResponse">
+		<wsdl:part name="param" element="msgs:getPAMResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setPAMRequest">
+		<wsdl:part name="param" element="msgs:setPAMRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setPAMResponse">
+		<wsdl:part name="param" element="msgs:setPAMResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserStatusRequest">
+		<wsdl:part name="param" element="msgs:getUserStatusRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserStatusResponse">
+		<wsdl:part name="param" element="msgs:getUserStatusResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QnAAttributesRequest">
+		<wsdl:part name="input" element="msgs:getQnAAttributesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QnAAttributesResponse">
+		<wsdl:part name="output" element="msgs:getQnAAttributeResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QnAVerificationRequest">
+		<wsdl:part name="input" element="msgs:performQnAVerificationRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QnAVerificationResponse">
+		<wsdl:part name="output" element="msgs:performQnAVerificationResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QnAValuesRequest">
+		<wsdl:part name="input" element="msgs:getQnAValuesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QnAValuesResponse">
+		<wsdl:part name="output" element="msgs:getQnAValuesResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addUserDeviceRequest">
+		<wsdl:part name="input" element="msgs:addUserDeviceRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addUserDeviceResponse">
+		<wsdl:part name="output" element="msgs:addUserDeviceResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateUserDeviceRequest">
+		<wsdl:part name="input" element="msgs:updateUserDeviceRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="updateUserDeviceResponse">
+		<wsdl:part name="output" element="msgs:updateUserDeviceResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="deleteUserDeviceRequest">
+		<wsdl:part name="input" element="msgs:deleteUserDeviceRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="deleteUserDeviceResponse">
+		<wsdl:part name="output" element="msgs:deleteUserDeviceResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserDevicesRequest">
+		<wsdl:part name="input" element="msgs:getUserDevicesRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getUserDevicesResponse">
+		<wsdl:part name="output" element="msgs:getUserDevicesResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="disableUserDeviceRequest">
+		<wsdl:part name="input" element="msgs:disableUserDeviceRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="disableUserDeviceResponse">
+		<wsdl:part name="output" element="msgs:disableUserDeviceResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="enableUserDeviceRequest">
+		<wsdl:part name="input" element="msgs:enableUserDeviceRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="enableUserDeviceResponse">
+		<wsdl:part name="output" element="msgs:enableUserDeviceResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="ArcotUserRegistrySvcPortType">
+		<wsdl:documentation>
+	  		All the services defined under this port type exhibit the below defined global behaviour:
+	  		<ul>
+		  		<li>If organization name is not passed in the request, configured default organization is assumed.</li>
+		  		<li>Every request takes a client transaction ID as input. This is an optional input and may be used by client applications to map the transactions.</li>
+		  		<li>Every response returns a server transaction ID.</li>
+		  		<li>Services on failure return UserRegistryError with error context, error message and error number.</li>
+		  		<li>Due to re-use of data types between operations and request-responses, certain elements in the request are displayed even though they are
+	  			not honored/required at the server side. Such elements are explicitly marked as 'Not Required' in individual operations.
+	  			<ul>Examples:
+	  			<li>userRefId</li>
+				<li>dateCreated</li>
+				<li>dateModified</li>
+				</ul>
+	  			<b>Note:</b> 'Not Required' elements are not same as 'Optional' elements. Unlike 'Not Required' elements, optional elements are honored at the server side.</li>
+	  		</ul>
+	  		<br/>If a service is enabled for protection through AnA (Authentication and Authorization), additional inputs should be passed in the request header as defined below.
+	  		The header elements should be qualified with the <i>http://ws.arcot.com/UDSTransaction/1.0</i> namespace.
+	  		<br/><b>If authentication token is not available:</b>
+	  		<ul>
+	  			<li>userID:User identifier</li>
+	  			<li>orgName: Organization name to which the user belongs</li>
+	  			<li>credential: User's credential</li>
+	  		</ul>
+	  		The service returns an authentication token as part of the response header on successful AnA request. This token can be used in subsequent requests.
+	  		The token is valid for a configurable duration of 1 day.
+	  		<br/><b>If Authentication Token is available:</b>
+	  		<ul>
+  			<li>authToken: The token returned by the service.</li>
+  		</ul>
+  		</wsdl:documentation>
+		<wsdl:operation name="authenticateUser">
+			<wsdl:documentation>
+				This service is used to authenticate a user with a given authentication
+				mechanism
+				Eg: Users belonging to LDAP can be authenticated against their LDAP
+				user-password credential.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+				</ul>
+		</wsdl:documentation>
+			<wsdl:input message="uregtr:authenticateUserRequest" name="authenticateUserRequest" />
+			<wsdl:output message="uregtr:authenticateUserResponse"
+				name="authenticateUserResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="authenticateUserError" />
+		</wsdl:operation>
+		<wsdl:operation name="searchUsers">
+			<wsdl:documentation>
+				This service searches for the required number of users with the given
+				search expression in the
+				given Organizations identified by the Organization pattern. Returns the
+				obtained user details.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>All account related input parameters.</li>
+					<li>RepositoryUserAttributes</li>
+				</ul>
+		</wsdl:documentation>
+			<wsdl:input message="uregtr:searchUsersRequest" name="searchUserRequest" />
+			<wsdl:output message="uregtr:searchUsersResponse" name="searchUserResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="searchUserError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="listUsers">
+			<wsdl:documentation>
+				This service lists all the users except deleted in the given
+				organization between the startIndex and endIndex.
+				If organization name is not specified, default organization is
+				assumed.
+				ListUserRequest: orgName, startIndex and endIndex.
+				ListUserResponse: SearchResult with user details, requestId, count
+				Page Size: Page size is endIndex-startIndex. The max pagesize allowed is
+				same as the configured DefaultSearchRetCount
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:listUsersRequest" name="listUserRequest" />
+			<wsdl:output message="uregtr:listUsersResponse" name="listUserResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="listUserError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="listUsersForAccount">
+			<wsdl:documentation>
+				This service lists the users with the given
+				organization and account information.
+				If organization name is not
+				passed, configured default organization is assumed.
+				Following filters are allowed to be set:
+				1)
+				If includeImage is set to true, user's image information is also
+				retrieved if present.
+				2) If includeAccounts is set is true, user
+				account information is also retrieved if present.
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:listUsersForAccountRequest"
+				name="listUsersForAccountRequest" />
+			<wsdl:output message="uregtr:listUsersForAccountResponse"
+				name="listUsersForAccountResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="listUsersForAccountError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="retrieveUser">
+			<wsdl:documentation>
+				This service retrieves the user details in the
+				given organization.
+				The user details include account information if
+				any. If organization name is not passed,
+				configured default
+				organization is assumed.
+				Following filters are allowed to be set:
+				1)
+				If includeImage is set to true, user's image information is also
+				retrieved if present.
+				2) If includeAccounts is set is true, user
+				account information is also retrieved if present.
+				3) If deepSearch is set to true, the given user identifier is first
+				searched against UserName;
+				On no match, it would search against AccountID; On no match it would
+				further search against AccountIDAttribute.
+				If deepSearch is set to false, search will be restricted to UserName.
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:retrieveUserRequest" name="retrieveUserRequest" />
+			<wsdl:output message="uregtr:retrieveUserResponse" name="retrieveUserResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="retrieveUserError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="retrieveUserAccount">
+			<wsdl:documentation>
+				This service retrieves the user account details
+				for the given user name, organization and account specified.
+				If
+				organization name is not passed, configured default organization is
+				assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				<li>account : dateCreated</li>
+				<li>account : dateModified</li>
+				<li>account : accountID</li>
+				<li>account : accountStatus</li>
+				<li>account : accountIDAttribute</li>
+				<li>account : accountCustomAttribute</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:retrieveUserAccountRequest"
+				name="retrieveUserAccountRequest" />
+			<wsdl:output message="uregtr:retrieveUserAccountResponse"
+				name="retrieveUserAccountResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="retrieveUserAccountError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="listUserAccounts">
+			<wsdl:documentation>
+				This service lists the user account details for
+				the given user name, organization and account specified.
+				If
+				organization name is not passed, configured default organization is
+				assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				<li>account : dateCreated</li>
+				<li>account : dateModified</li>
+				<li>account : accountID</li>
+				<li>account : accountStatus</li>
+				<li>account : accountIDAttribute</li>
+				<li>account : accountCustomAttribute</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:listUserAccountRequest" name="listUserAccountRequest" />
+			<wsdl:output message="uregtr:listUserAccountResponse"
+				name="listUserAccountResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="listUserAccountError" />
+		</wsdl:operation>
+
+
+		<wsdl:operation name="deleteUser">
+			<wsdl:documentation>
+				This service deletes the user identified by the given Organization.
+				If organization name is not passed, configured default organization is
+				assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+				</ul>
+		</wsdl:documentation>
+			<wsdl:input message="uregtr:deleteUserRequest" name="deleteUserRequest" />
+			<wsdl:output message="uregtr:deleteUserResponse" name="deleteUserResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="deleteUserError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="deleteUserAccount">
+			<wsdl:documentation>
+				This service deletes the user account identified
+				by the given userId, organization and user account information.
+				If
+				organization name is not passed, configured default organization is
+				assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				<li>account : dateCreated</li>
+				<li>account : dateModified</li>
+				<li>account : accountStatus</li>
+				<li>account : accountIDAttribute</li>
+				<li>account : accountCustomAttribute</li>
+				<li>account : accountID</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:deleteUserAccountRequest"
+				name="deleteUserAccountRequest" />
+			<wsdl:output message="uregtr:deleteUserAccountResponse"
+				name="deleteUserAccountResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="deleteUserAccountError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="updateUserAccount">
+			<wsdl:documentation>
+				This service updates the user account identified
+				by the given userId, organization and user account information.
+				If
+				organization name is not passed, configured default organization is
+				assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+					<li>account : dateCreated</li>
+					<li>account : dateModified</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:updateUserAccountRequest"
+				name="updateUserAccountRequest" />
+			<wsdl:output message="uregtr:updateUserAccountResponse"
+				name="updateUserAccountResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="updateUserAccountError" />
+		</wsdl:operation>
+
+
+		<wsdl:operation name="createUser">
+			<wsdl:documentation>
+				This service creates the given user in the given
+				organization with
+				extended information like user account. If user status is not passed, default status is ACTIVE.
+				If organization name is not passed,
+				configured default organization is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userDetails : userId : userRefId</li>
+				<li>userDetails : dateCreated</li>
+				<li>userDetails : dateModified</li>
+				<li>userDetails : startLockTime</li>
+				<li>userDetails : endLockTime</li>
+				<li>userDetails : account : dateCreated</li>
+				<li>userDetails : account : dateModified</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:createUserRequest" name="createUserRequest" />
+			<wsdl:output message="uregtr:createUserResponse" name="createUserResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="createUserError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="addUserAccount">
+			<wsdl:documentation>
+				This service adds an account for the given user
+				in the given organization.
+				If organization name is not passed,
+				configured default organization is assumed.
+				More than one account can be added using this service.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				<li>account : dateCreated</li>
+				<li>account : dateModified</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:addUserAccountRequest" name="addUserAccountRequest" />
+			<wsdl:output message="uregtr:addUserAccountResponse"
+				name="addUserAccountResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="addUserAccountError" />
+		</wsdl:operation>
+
+
+		<wsdl:operation name="updateUser">
+			<wsdl:documentation>
+				This service updates the given user with the
+				given user details. Existing details can not be made null.
+				This
+				service should be used to add or update user account information.
+				If
+				organization name is not passed, configured default organization is
+				assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+					<li>userDetailsEx : dateModified</li>
+					<li>userDetailsEx : dateCreated</li>
+					<li>userDetailsEx : account : dateCreated</li>
+					<li>userDetailsEx : account : dateModified</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:updateUserRequest" name="updateUserRequest" />
+			<wsdl:output message="uregtr:updateUserResponse" name="updateUserResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="updateUserError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="setCustomAttributes">
+			<wsdl:documentation>
+				This service should be used to add or update user
+				custom attribute information.
+				Existing details can be made null by
+				passing a null or empty list.
+				If organization name is not passed,
+				configured default organization is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:setCustomAttributesRequest"
+				name="setCustomAttributesRequest" />
+			<wsdl:output message="uregtr:setCustomAttributesResponse"
+				name="setCustomAttributesResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="setCustomAttributesError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="setPAM">
+			<wsdl:documentation>
+				This service sets the PAM for the given user in the given organization.
+				If organization name is not passed, configured default organization
+				is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+				</ul>
+		</wsdl:documentation>
+			<wsdl:input message="uregtr:setPAMRequest" name="setPAMRequest" />
+			<wsdl:output message="uregtr:setPAMResponse" name="setPAMResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="setPAMError" />
+		</wsdl:operation>
+		<wsdl:operation name="getPAM">
+			<wsdl:documentation>
+				This service gets the PAM for the given user in the given organization.
+				If organization name is not passed, configured default organization
+				is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+				</ul>
+		</wsdl:documentation>
+			<wsdl:input message="uregtr:getPAMRequest" name="getPAMRequest" />
+			<wsdl:output message="uregtr:getPAMResponse" name="getPAMResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="getPAMError" />
+		</wsdl:operation>
+		<wsdl:operation name="updateUserStatus">
+			<wsdl:documentation>
+				This service updates the given user's status with the given status.
+				If organization name is not passed, configured default organization is
+				assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+				</ul>
+		</wsdl:documentation>
+			<wsdl:input message="uregtr:updateUserStatusRequest" name="updateUserStatusRequest" />
+			<wsdl:output message="uregtr:updateUserStatusResponse"
+				name="updateUserStatusResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="updateUserStatusError" />
+		</wsdl:operation>
+		<wsdl:operation name="getUserStatus">
+			<wsdl:documentation>
+				This service gets the status of the given user.
+				If organization name is not passed, configured default organization is
+				assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+					<ul>
+					<li>userId : userRefId</li>
+				</ul>
+		</wsdl:documentation>
+			<wsdl:input message="uregtr:getUserStatusRequest" name="getUserStatusRequest" />
+			<wsdl:output message="uregtr:getUserStatusResponse" name="getUserStatusResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="getUserStatusError" />
+		</wsdl:operation>
+		<wsdl:operation name="getQnAAttributes">
+			<wsdl:documentation>Query QnA Attributes from the LDAP repository
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:QnAAttributesRequest" />
+			<wsdl:output message="uregtr:QnAAttributesResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="QnAError" />
+		</wsdl:operation>
+		<wsdl:operation name="performQnAVerification">
+			<wsdl:documentation>
+				Perform user data verification against the values
+				stored in LDAP.
+				Will return map of attribute-name and verification status.
+				There are 4 values of status defined
+				1. MATCHED
+				2. NOT_MATCHED
+				3. NOT_FOUND
+				4. NOT_VERIFIED
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:QnAVerificationRequest" />
+			<wsdl:output message="uregtr:QnAVerificationResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="QnAError" />
+		</wsdl:operation>
+		<wsdl:operation name="getQnAValues">
+			<wsdl:documentation>
+				Retrieve values for specific set of attributes as
+				stored in the LDAP repository
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:QnAValuesRequest" />
+			<wsdl:output message="uregtr:QnAValuesResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="QnAError" />
+		</wsdl:operation>
+		<wsdl:operation name="getUserDevices">
+			<wsdl:documentation>
+				This service returns the device info for the given
+				user in the given organization.
+				If organization name is not passed, configured default organization
+				is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:getUserDevicesRequest" />
+			<wsdl:output message="uregtr:getUserDevicesResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="getUserDevicesError" />
+		</wsdl:operation>
+
+		<wsdl:operation name="addUserDevice">
+			<wsdl:documentation>
+				This service add the device information for the given
+				user in the given organization.
+				If organization name is not passed, configured default organization
+				is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:addUserDeviceRequest" />
+			<wsdl:output message="uregtr:addUserDeviceResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="addUserDeviceError" />
+		</wsdl:operation>
+		<wsdl:operation name="updateUserDevice">
+			<wsdl:documentation>
+				This service updates the device information for the given
+				user in the given organization.
+				If organization name is not passed, configured default organization
+				is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:updateUserDeviceRequest" />
+			<wsdl:output message="uregtr:updateUserDeviceResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="updateUserDeviceError" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteUserDevice">
+			<wsdl:documentation>
+				This service deletes the device information for the given
+				user in the given organization.
+				If organization name is not passed, configured default organization
+				is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:deleteUserDeviceRequest" />
+			<wsdl:output message="uregtr:deleteUserDeviceResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="deleteUserDeviceError" />
+		</wsdl:operation>
+		<wsdl:operation name="disableUserDevice">
+			<wsdl:documentation>
+				This service disables the device from receiving push notifications for the given
+				user in the given organization.
+				If organization name is not passed, configured default organization
+				is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:disableUserDeviceRequest" />
+			<wsdl:output message="uregtr:disableUserDeviceResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="disableUserDeviceError" />
+		</wsdl:operation>
+		<wsdl:operation name="enableUserDevice">
+			<wsdl:documentation>
+				This service enables the device to receive push notifications for the given
+				user in the given organization.
+				If organization name is not passed, configured default organization
+				is assumed.
+				<br>Following fields are 'Not Required' in the request</br>
+				<ul>
+				<li>userId : userRefId</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="uregtr:enableUserDeviceRequest" />
+			<wsdl:output message="uregtr:enableUserDeviceResponse" />
+			<soap12:fault message="uregtr:userRegistryError" name="enableUserDeviceError" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="ArcotUserRegistrySvcBinding" type="uregtr:ArcotUserRegistrySvcPortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="authenticateUser">
+			<soap12:operation soapAction="urn:UDS.AuthenticateUser"
+				style="document" />
+			<wsdl:input name="authenticateUserRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="authenticateUserResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="authenticateUserError">
+				<soap12:fault use="literal" name="authenticateUserError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="searchUsers">
+			<soap12:operation soapAction="urn:UDS.SearchUsers"
+				style="document" />
+			<wsdl:input name="searchUserRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="searchUserResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="searchUserError">
+				<soap12:fault use="literal" name="searchUserError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="listUsers">
+			<soap12:operation soapAction="urn:UDS.ListUsers"
+				style="document" />
+			<wsdl:input name="listUserRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="listUserResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="listUserError">
+				<soap12:fault use="literal" name="listUserError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="listUsersForAccount">
+			<soap12:operation soapAction="urn:UDS.ListUsersForAccount"
+				style="document" />
+			<wsdl:input name="listUsersForAccountRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="listUsersForAccountResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="listUsersForAccountError">
+				<soap12:fault use="literal" name="listUsersForAccountError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="retrieveUser">
+			<soap12:operation soapAction="urn:UDS.RetrieveUser"
+				style="document" />
+			<wsdl:input name="retrieveUserRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="retrieveUserResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="retrieveUserError">
+				<soap12:fault use="literal" name="retrieveUserError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="retrieveUserAccount">
+			<soap12:operation soapAction="urn:UDS.RetrieveUserAccount"
+				style="document" />
+			<wsdl:input name="retrieveUserAccountRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="retrieveUserAccountResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="retrieveUserAccountError">
+				<soap12:fault use="literal" name="retrieveUserAccountError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="listUserAccounts">
+			<soap12:operation soapAction="urn:UDS.ListUserAccounts"
+				style="document" />
+			<wsdl:input name="listUserAccountRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="listUserAccountResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="listUserAccountError">
+				<soap12:fault use="literal" name="listUserAccountError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+
+		<wsdl:operation name="deleteUser">
+			<soap12:operation soapAction="urn:UDS.DeleteUser"
+				style="document" />
+			<wsdl:input name="deleteUserRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="deleteUserResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="deleteUserError">
+				<soap12:fault use="literal" name="deleteUserError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="deleteUserAccount">
+			<soap12:operation soapAction="urn:UDS.DeleteUserAccount"
+				style="document" />
+			<wsdl:input name="deleteUserAccountRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="deleteUserAccountResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="deleteUserAccountError">
+				<soap12:fault use="literal" name="deleteUserAccountError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="updateUserAccount">
+			<soap12:operation soapAction="urn:UDS.UpdateUserAccount"
+				style="document" />
+			<wsdl:input name="updateUserAccountRequest">
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="updateUserAccountResponse">
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="updateUserAccountError">
+				<soap12:fault use="literal" name="updateUserAccountError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+
+		<wsdl:operation name="createUser">
+			<soap12:operation soapAction="urn:UDS.CreateUser"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="createUserError">
+				<soap12:fault use="literal" name="createUserError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="addUserAccount">
+			<soap12:operation soapAction="urn:UDS.AddUserAccount"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="addUserAccountError">
+				<soap12:fault use="literal" name="addUserAccountError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="updateUser">
+			<soap12:operation soapAction="urn:UDS.UpdateUser"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="updateUserError">
+				<soap12:fault use="literal" name="updateUserError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="setCustomAttributes">
+			<soap12:operation soapAction="urn:UDS.SetCustomAttributes"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="setCustomAttributesError">
+				<soap12:fault use="literal" name="setCustomAttributesError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="setPAM">
+			<soap12:operation soapAction="urn:UDS.SetPAM" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="setPAMError">
+				<soap12:fault use="literal" name="setPAMError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getPAM">
+			<soap12:operation soapAction="urn:UDS.GetPAM" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="getPAMError">
+				<soap12:fault use="literal" name="getPAMError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="updateUserStatus">
+			<soap12:operation soapAction="urn:UDS.UpdateUserStatus"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="updateUserStatusError">
+				<soap12:fault use="literal" name="updateUserStatusError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getUserStatus">
+			<soap12:operation soapAction="urn:UDS.GetUserStatus"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="getUserStatusError">
+				<soap12:fault use="literal" name="getUserStatusError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getQnAAttributes">
+			<soap12:operation soapAction="urn:UDS.GetQnAAttributes"
+				style="document"></soap12:operation>
+			<wsdl:input>
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="QnAError">
+				<soap12:fault use="literal" name="QnAError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="performQnAVerification">
+			<soap12:operation soapAction="urn:UDS.PerformQnAVerification"
+				style="document"></soap12:operation>
+			<wsdl:input>
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="QnAError">
+				<soap12:fault use="literal" name="QnAError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getQnAValues">
+			<soap12:operation soapAction="urn:UDS.GetQnAValues"
+				style="document"></soap12:operation>
+			<wsdl:input>
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="QnAError">
+				<soap12:fault use="literal" name="QnAError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="getUserDevices">
+			<soap12:operation soapAction="urn:UDS.GetUserDevices"
+				style="document"></soap12:operation>
+			<wsdl:input name="getUserDevicesRequest">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output name="getUserDevicesResponse">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="getUserDevicesError">
+				<soap12:fault use="literal" name="getUserDevicesError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="addUserDevice">
+			<soap12:operation soapAction="urn:UDS.AddUserDevice"
+				style="document"></soap12:operation>
+			<wsdl:input name="addUserDeviceRequest">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output name="addUserDeviceResponse">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="addUserDeviceError">
+				<soap12:fault use="literal" name="addUserDeviceError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="updateUserDevice">
+			<soap12:operation soapAction="urn:UDS.UpdateUserDevice"
+				style="document"></soap12:operation>
+			<wsdl:input name="updateUserDeviceRequest">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output name="updateUserDeviceResponse">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="updateUserDeviceError">
+				<soap12:fault use="literal" name="updateUserDeviceError" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="deleteUserDevice">
+			<soap12:operation soapAction="urn:UDS.DeleteUserDevice"
+				style="document"></soap12:operation>
+			<wsdl:input name="deleteUserDeviceRequest">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output name="deleteUserDeviceResponse">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="deleteUserDeviceError">
+				<soap12:fault use="literal" name="deleteUserDeviceError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="disableUserDevice">
+			<soap12:operation soapAction="urn:UDS.DisableUserDevice"
+				style="document"></soap12:operation>
+			<wsdl:input name="disableUserDeviceRequest">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output name="disableUserDeviceResponse">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="disableUserDeviceError">
+				<soap12:fault use="literal" name="disableUserDeviceError" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="enableUserDevice">
+			<soap12:operation soapAction="urn:UDS.EnableUserDevice"
+				style="document"></soap12:operation>
+			<wsdl:input name="enableUserDeviceRequest">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:input>
+			<wsdl:output name="enableUserDeviceResponse">
+				<soap12:body use="literal"></soap12:body>
+			</wsdl:output>
+			<soap12:fault name="enableUserDeviceError">
+				<soap12:fault use="literal" name="enableUserDeviceError" />
+			</soap12:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ArcotUserRegistrySvc">
+		<wsdl:port name="ArcotUserRegistrySvcBinding" binding="uregtr:ArcotUserRegistrySvcBinding">
+			<soap12:address
+				location="http://localhost:8080/arcotuds/services/ArcotUserRegistrySvc" />
+		</wsdl:port>
+	</wsdl:service>
+	<wsdl:documentation>
+		<br/>
+		<b>WSDL Documentation</b>:
+		Click <a href="wsdl/3/porttype/ArcotUserRegistrySvcPortType.html">here</a> to view the documentation on the operations provided by this service.
+	</wsdl:documentation>
+</wsdl:definitions>

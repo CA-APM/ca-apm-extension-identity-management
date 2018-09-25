@@ -1,0 +1,447 @@
+<xs:schema xmlns:xsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="qualified" targetNamespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd">
+	<xs:complexType name="ArcotDateType">
+		<xs:annotation>
+			<xs:documentation>
+				ArcotDateType is the structure used to represent
+				date and time. year, month, day, hour, minute
+				and second fields are
+				used to represent any date
+				and time. dateType represents the type of
+				date.
+				type can be any of following. 1 represents
+				current date (current
+				date in database). 2
+				represents for ever date. 3 represents explicit
+				date, Example year=2008, month=12, day=31. 4
+				represents relative
+				time, Example year=10,
+				month=1. If the type is 1 or 2 then date values
+				(year, month etc...) will be ignored.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="year" type="xs:int" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="month" type="xs:int" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="day" type="xs:int" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="hour" type="xs:int" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="minute" type="xs:int" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="second" type="xs:int" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="dateType" type="xs:int" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PairType">
+		<xs:annotation>
+			<xs:documentation>
+				Used as basic container for holding name value
+				pairs. name - Name of the variable. value -
+				Value of the variable.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="value" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ListType">
+		<xs:annotation>
+			<xs:documentation>
+				Used as basic container for lists.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="operation" type="xs:int" minOccurs="0"
+				maxOccurs="1" >
+				<xs:annotation>
+					<xs:documentation>
+						This is used when an update operation is performed.
+						This will specify what to be done on an existing list.
+						The default value is REPLACE.
+						Supported operations are
+						0 - REPLACE (Replaces the existing list with the given list)
+						1 - CLEAR (Clears the existing list, any value specified 
+						           in the input list will be ignored)
+						Any value other than the above will be discarded and default
+						value (REPLACE) will be considered.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PairTypeList">
+		<xs:annotation>
+			<xs:documentation>
+				Used as list for holding name value
+				pairs.
+				list -
+				list of values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:ListType">
+				<xs:sequence>
+					<xs:element name="list" type="xsd:PairType" minOccurs="0"
+						maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of name value pairs.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="IntegerList">
+		<xs:annotation>
+			<xs:documentation>
+				Used as list for holding integer values
+				list - list
+				of values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:ListType">
+				<xs:sequence>
+					<xs:element name="list" type="xs:int" minOccurs="0"
+						maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of integer values.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StringList">
+		<xs:annotation>
+			<xs:documentation>
+				Used as list for holding string values
+				list - list
+				of values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:ListType">
+				<xs:sequence>
+					<xs:element name="list" type="xs:string" minOccurs="0"
+						maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of string values.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NameValueType">
+		<xs:annotation>
+			<xs:documentation>
+				Used as basic container for holding name value
+				pairs.
+				name - Name of the parameter.
+				strValue - String value of the
+				parameter.
+				binValue - Binary value of the parameter.
+				Only one value is
+				possible at a time.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="strValue" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="binValue" type="xs:base64Binary"
+				minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AdditionalInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Encapsulates the additional inputs that may be
+				needed for different operations.
+
+				Following are some of the pre-defined additional
+				input parameters: AR_WF_LOCALE_ID identifier for
+				the locale that WebFort will use in returning
+				the messages.
+				AR_WF_CALLER_ID identifier for the transaction in 
+				the calling	application. This is useful for 
+				tracking the transaction end-to-end.
+				AR_WF_TXN_FILE_LOG_TRACE is the identifier that 
+				enables the trace logging for the current 
+				transaction. The presence of the identifier 
+				irrespective of the value would enable this.
+				AR_WF_TXN_FILE_LOG_LEVEL is the identifier to 
+				control the log level for the current transaction. 
+				The supported values are 1 for WARN, 2 for INFO 
+				and 3 for DETAIL.
+				AR_WF_TXN_LOG_SENSITIVE_DATA is the identifier that 
+				enables the logging of certain sensitive data for 
+				the current transaction which otherwise would not 
+				be logged. E.g. Username. The presence of the 
+				identifier irrespective of the value would enable this.
+				AR_WF_TXN_DB_LOG_QUERY_DETAILS is the identifier that 
+				enables the detailed logging of database query execution. 
+				The presence of the identifier irrespective of the 
+				value would enable this.
+
+				In the context of external plug-ins or callouts,
+				any parameter can be
+				added to this class and it
+				is passed to the external plug-ins or
+				callouts.
+				This can be used by applications to customize or
+				personalize the behavior of the plug-ins or
+				callouts for each user or
+				transaction.
+
+					</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="pairs"
+				type="xsd:PairType" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AdditionalOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				Encapsulates any additional output that WebFort
+				sends to your application. In the context of
+				external plug-ins or
+				callouts, this can be used
+				to pass information from the plug-in or
+				callout
+				all the way back to the application for
+				customization or
+				personalization for each user
+				and/or transaction.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="pairs"
+				type="xsd:PairType" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Validity">
+		<xs:annotation>
+			<xs:documentation>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="validityBegin" type="xsd:ArcotDateType"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="validityEnd" type="xsd:ArcotDateType"
+				minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CertificateDetails">
+		<xs:annotation>
+			<xs:documentation>
+				CertificateCoordinates provides information
+				about a
+				certificate that has been loaded on the
+				server in a human readable
+				form. certSubject is
+				the full Distinguished Name of the certificate.
+				validityBegin is the date and time the
+				certificate may be used.
+				validityEnd is the date
+				and time of the certificate expiration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="certSubject" type="xs:string" />
+			<xs:element name="issuerName" type="xs:string" />
+			<xs:element name="validity" type="xsd:Validity" />
+			<xs:element name="keyInHSM" type="xs:boolean" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CertKeyPair">
+		<xs:annotation>
+			<xs:documentation>
+				Defines a key pair.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="keyPairInHSM">
+				<xs:annotation>
+					<xs:documentation>
+						Use this when the key pair is in HSM.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="certChainPEM" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="keyPairInP12">
+				<xs:annotation>
+					<xs:documentation>
+						Use this when the key pair is in P12.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="certKeyP12" type="xs:base64Binary" />
+						<xs:element name="certKeyP12Password" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ResponseDetails">
+		<xs:annotation>
+			<xs:documentation>
+				This type encapsulates the details associated
+				with
+				the error code, such as response code,
+				reason code,
+				localized transaction message, and so on.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="message" type="xs:string" />
+			<xs:element name="reasonCode" type="xs:int" />
+			<xs:element name="responseCode" type="xs:int" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ErrorDetails">
+		<xs:annotation>
+			<xs:documentation>
+				This type includes error parameter name
+				to the ResponseDetails.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:ResponseDetails">
+				<xs:sequence>
+					<xs:element name="paramName" type="xs:string" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Invalid parameter name.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TransactionDetailsType">
+		<xs:annotation>
+			<xs:documentation>
+				This type encapsulates the details associated
+				with
+				the transaction, such as response code,
+				reason code, a unique
+				transaction identifier,
+				localized transaction message, and so on.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:ResponseDetails">
+				<xs:sequence>
+					<xs:element name="transactionID" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1" name="additionalOutput"
+						type="xsd:AdditionalOutputType" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BaseRequestType">
+		<xs:annotation>
+			<xs:documentation>
+				Base request used by all WebFort Components.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="clientTxnId" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BaseResponseType">
+		<xs:annotation>
+			<xs:documentation>
+				Base response used by all WebFort Components.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence />
+	</xs:complexType>
+	<xs:complexType name="OrgDetails">
+		<xs:annotation>
+			<xs:documentation>
+				OrgDetails is the structure used to represent
+				the
+				organization details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="orgName" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Organization name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="isGlobal" minOccurs="1" maxOccurs="1">
+	            <xs:annotation>
+	                <xs:documentation>
+	                    isGlobal represents the global organization. If this element is
+	                    exist then server will consider the organization is global organization,
+	                    otherwise organization name will be taken from orgName.
+	                </xs:documentation>
+	            </xs:annotation>
+	            <xs:complexType>
+	              	<xs:sequence>
+	                    <xs:any minOccurs="0" maxOccurs="1"/>
+	                </xs:sequence>
+	        	</xs:complexType>
+	        </xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="WebFortFault">
+		<xs:annotation>
+			<xs:documentation>
+				"WebFortFault is the structure returned as a
+				fault
+				for any errors occuring at the server.
+				responseCode provides the
+				response of server. It
+				will help to find out the nature or error.
+				errorMessage provides the readable user friendly
+				text corresponding
+				to errorCode. errorCode
+				indicates what error occurred. See server
+				documentation for possible error codes."
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:TransactionDetailsType">
+				<xs:sequence>
+					<xs:element name="paramName" type="xs:string" minOccurs="0"
+							maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Invalid parameter name.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

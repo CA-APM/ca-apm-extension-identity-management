@@ -1,0 +1,560 @@
+<xs:schema xmlns:xsd="http://ws.arcot.com/WebFortIssuanceAPI/7.0/xsd"
+	xmlns:commonxsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="qualified" targetNamespace="http://ws.arcot.com/WebFortIssuanceAPI/7.0/xsd">
+	<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+	<xs:complexType name="BaseIssuanceRequestType">
+		<xs:annotation>
+			<xs:documentation>
+				Base request used in issuance requests.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:BaseRequestType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BaseIssuanceResponseType">
+		<xs:annotation>
+			<xs:documentation>
+				Base response used in issuance responses.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:BaseResponseType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CredentialInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Common input that is required by all credential
+				operations. validityEndTime is used to specify
+				the absolute date to
+				which the credential
+				validity should be changed. If you want to
+				specify relative date from validity start date
+				then use
+				validityEndTimeEx, for more details
+				look into the type ArcotDateType.
+				validityEndTimeEx will take precedence over
+				validityEndTime, that is
+				if both are specified
+				then validityEndTimeEx will be considered.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="notes" type="commonxsd:PairType"
+				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="profileName" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="validityEndTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="validityEndTimeEx" type="commonxsd:ArcotDateType"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="disableStartTime" type="commonxsd:ArcotDateType"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="disableEndTime" type="commonxsd:ArcotDateType"
+				minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CredentialOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				This type encapsulates different common
+				attributes
+				of a credential. This is generic
+				information that is applicable to
+				all WebFort
+				credentials. userName - Name of the user.
+				orgName -
+				Organization(Organization) to which
+				the user belongs.
+				daysLeftToExpire - Number of
+				days after which the credential will
+				expire.status - Status of the
+				credential.remainingUsageCount -
+				Remaining
+				number of times the credential can be used.
+				createTime - The
+				time at which the credential
+				was created. lastUpdatedTime - The time
+				at which
+				the credential was last
+				updated.validityStartTime - The time
+				before
+				which the credential is invalid. validityEndTime
+				- The time
+				after which the credential is
+				invalid.numberOfFailedAuthAttempts -
+				The number
+				of times the authentication failed.
+				lastSuccessAuthAttemptTime - the time when last
+				successful
+				authentication was performed.
+				lastFailedAuthAttemptTime - the time
+				when the
+				last-attempted authentication failed.
+				profileName - the name
+				of the credential profile
+				using which this credential was created.
+				profileVersion - the version of the credential
+				profile using which
+				this credential was
+				created.notes - Custom attributes that were set
+				for the credential.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="userName" type="xs:string" />
+			<xs:element name="orgName" type="xs:string" />
+			<xs:element name="status" type="xs:int" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="remainingUsageCount" type="xs:int"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="createTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="lastUpdatedTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="validityStartTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="validityEndTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="disableStartTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="disableEndTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="numberOfFailedAuthAttempts" type="xs:int"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="lastSuccessAuthAttemptTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="lastFailedAuthAttemptTime" type="xs:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xs:element name="profileName" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="profileVersion" type="xs:int" minOccurs="0"
+				maxOccurs="1" />
+			<xs:element name="notes" type="commonxsd:PairType"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArcotIDAttributeType">
+		<xs:annotation>
+			<xs:documentation>
+				The ArcotIDAttributeType is used for holding
+				ArcotID attributes that need to be set for an
+				ArcotID. An ArcotID
+				attribute is a name-value
+				pair that resides within the ArcotID.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="value" type="xs:base64Binary" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="QuestionType">
+		<xs:annotation>
+			<xs:documentation>
+				Class for holding a question.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="question" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="QnQType">
+		<xs:annotation>
+			<xs:documentation>
+				Class for holding a question-question pair.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="question" type="xs:string" />
+			<xs:element name="newQuestion" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="QnAType">
+		<xs:annotation>
+			<xs:documentation>
+				Class for holding a question-answer pair.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="question" type="xs:string" />
+			<xs:element name="answer" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="QnAResetType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the data that is needed to reset the qna 
+				credential partially.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="deleteList" type="xsd:QuestionType" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="addList" type="xsd:QnAType" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="changeAnswerList" type="xsd:QnAType" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element name="changeQuestionList" type="xsd:QnQType" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArcotIDInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the data that is needed to manage
+				ArcotID credential.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialInputType">
+				<xs:sequence>
+					<xs:element name="password" type="xs:string" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="unsignedAttributes" type="xsd:ArcotIDAttributeType"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="fetchAttributes" type="xs:boolean"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OTPInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the data that is needed to manage the
+				OTP credential.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialInputType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OATHOTPInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the data that is needed to create the
+				OATH credential.tokenID - Identifier of the
+				token.reUseToken - Reuse
+				the token that was
+				already used by some other user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialInputType">
+				<xs:sequence>
+					<xs:element name="tokenID" type="xs:string" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="reUseToken" type="xs:boolean"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArcotOTPInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the data that is needed to create the
+				ArcotOTP credential
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialInputType">
+				<xs:sequence>
+					<xs:element name="password" type="xs:string" minOccurs="0"
+						maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="EMVInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the data that is needed to create the
+				EMV credential
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialInputType">
+				<xs:sequence>
+					<xs:element name="password" type="xs:string" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="QnAInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the data that is needed to manage the
+				QnA credential.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialInputType" >
+				<xs:sequence>
+					<xs:choice minOccurs="0" maxOccurs="1">
+						<xs:element name="qna" type="xsd:QnAType" minOccurs="1"
+							maxOccurs="unbounded" />
+						<xs:element name="qnaReset" type="xsd:QnAResetType" />
+					</xs:choice>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="UPInputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the data that is needed to create the
+				Username-Password credential.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialInputType">
+				<xs:sequence>
+					<xs:element name="password" type="xs:string" minOccurs="0"
+						maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArcotIDOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				Provides the ArcotID credential details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialOutputType">
+				<xs:sequence>
+					<xs:element name="unsignedAttributes" type="xsd:ArcotIDAttributeType"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="arcotID" type="xs:string" minOccurs="0"
+						maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OTPOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the OTP credential details.
+				remainingUsageCount and usageCount represents
+				the same, usageCount is
+				still maintained for
+				backward compatibility.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialOutputType">
+				<xs:sequence>
+					<xs:element name="otp" type="xs:string" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="usageCount" type="xs:int" minOccurs="0"
+						maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OATHOTPOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the OATH credential details. tokenID
+				-
+				The identifier of the token. type - Type of
+				the token. counterOffSet
+				- Offset of OATH.
+				counterStep - Step to increment, used in time
+				based
+				OATH OTPs.otpLength - Length of the OATH
+				OTP.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialOutputType">
+				<xs:sequence>
+					<xs:element name="tokenID" type="xs:string" minOccurs="1"
+						maxOccurs="1" />
+					<xs:element name="type" type="xs:int" minOccurs="1"
+						maxOccurs="1" />
+					<xs:element name="counterOffSet" type="xs:long"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArcotOTPOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the ArcotOTP credential details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialOutputType">
+				<xs:sequence>
+					<xs:element name="card" type="xs:string" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="type" type="xs:int" minOccurs="1"
+						maxOccurs="1" />
+					<xs:element name="counterOffSet" type="xs:long"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="EMVOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the EMV credential details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialOutputType">
+				<xs:sequence>
+					<xs:element name="card" type="xs:string" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="counterOffSet" type="xs:long"
+						minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="QnAOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the QnA credential details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialOutputType">
+				<xs:sequence>
+					<xs:element name="questions" type="xs:string" minOccurs="0"
+						maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="UPOutputType">
+		<xs:annotation>
+			<xs:documentation>
+				Represents the Username-Password credential
+				details.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CredentialOutputType" />
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ArcotIDKeyBagP12Representation">
+		<xs:annotation>
+			<xs:documentation>
+				Set of key elements representing a PKCS12.
+				certEncoding - the PKCS12 encoding.
+				password 	 - password corresponding to the PKCS12.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="certEncoding" type="xs:base64Binary"/>
+			<xs:element name="password" type="xs:string" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+
+	</xs:complexType>
+
+	<xs:complexType name="ArcotIDKeyBagElementSet">
+		<xs:annotation>
+			<xs:documentation>
+				Set of keybag elements. Currently only PKCS12s are supported.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="p12Representations" type="xsd:ArcotIDKeyBagP12Representation" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ArcotIDKeyBagCertDetails">
+		<xs:annotation>
+			<xs:documentation>
+				Information in a human readable form about a certificate that has
+				been loaded into the  ArcotID-Keybag.
+				elementId 	- an internal identifier for the certificate and corresponding key if any. This is used to refer to the elements in requests like delete.
+				issuerName  - full Distinguished Name of the issuer of the certificate.
+				certSubject - full Distinguished Name of the subject of the certificate.
+				certValidFrom -  date and time the certificate may be used.
+				certValidTo   -  date and time of the certificate expiration.
+				hasPrivatekey - true : The private key corresponding to the certificate exists in the KeyBag.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="elementId" type="xs:string" />
+			<xs:element name="issuerName" type="xs:string" />
+			<xs:element name="serialNumber" type="xs:string"/>
+			<xs:element name="certSubject" type="xs:string" />
+			<xs:element name="certValidFrom" type="xs:dateTime" />
+			<xs:element name="certValidTo" type="xs:dateTime" />
+			<xs:element name="hasPrivatekey" type="xs:boolean" />
+		</xs:sequence>
+
+	</xs:complexType>
+
+	<xs:complexType name="ArcotIDKeyBagCertAndDetails">
+		<xs:annotation>
+			<xs:documentation>
+			A structure to hold both certEncoding and certDetails. Used in responses.
+			certEncoding is the certificate encoding and certDetails are the details of the certificate.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="certEncoding" type="xs:base64Binary" minOccurs="0" maxOccurs="1" />
+			<xs:element name="certsDetails" type="xsd:ArcotIDKeyBagCertDetails" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+
+	</xs:complexType>
+	<xs:complexType name="ArcotIDKeyBagElementSelection">
+		<xs:annotation>
+			<xs:documentation>
+				Select different types of elements retrievable from the server for a given ArcotID-KeyBag.
+				selectCertEncoding - a flag to be set to true to retrieve the certificate encoding in the response.
+				selectCertsDetails - a flag to be set to true to retrieve the certificate details in the response.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:sequence>
+			<xs:element name="selectCertEncoding" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+			<xs:element name="selectCertsDetails" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+
+	</xs:complexType>
+
+
+	<xs:complexType name="ArcotIDKeyBagReqParams">
+		<xs:annotation>
+			<xs:documentation>
+				Common input that is required by all ArcotIDKeyBag operations.
+				userName - Name of the user.
+				orgName - Organization(Organization) to which the user belongs.
+				profileName - the identifier for the ArcotID profile to be used for
+				the current transaction.If the profileName is not specified,
+				then the default profile will be applied.
+				elementSelection - to select the set of details to be returned in the response.
+				additionalInput - Additional inputs.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseIssuanceRequestType">
+				<xs:sequence>
+					<xs:element name="userName" type="xs:string" />
+					<xs:element name="orgName" type="xs:string" minOccurs="0" maxOccurs="1" />
+					<xs:element name="profileName" type="xs:string" minOccurs="0" maxOccurs="1" />
+					<xs:element name="elementSelection" type="xsd:ArcotIDKeyBagElementSelection" minOccurs="0" maxOccurs="1" />
+					<xs:element name="additionalInput" type="commonxsd:AdditionalInputType" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

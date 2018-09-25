@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://wso2.org/repos/wso2/trunk/commons/annotated-stylesheets/annotated-wsdl.xsl"?>
+<wsdl:definitions
+	xmlns:wfbulkop="http://ws.arcot.com/WebFortBulkOperationsAPI/7.0/wsdl"
+	xmlns:xsd="http://ws.arcot.com/WebFortBulkOperationsAPI/7.0/xsd"
+	xmlns:msgs="http://ws.arcot.com/WebFortBulkOperationsAPI/7.0/msgs"
+	xmlns:tokxsd="http://www.arcot.com/ArWFTokenExchangeFormat/1.0"
+	xmlns:credmgmtxsd="http://www.arcot.com/ArWFCredMgmt/7.0"
+	xmlns:commonxsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	targetNamespace="http://ws.arcot.com/WebFortBulkOperationsAPI/7.0/wsdl"
+	name="WebFortBulkOperationsSvc">
+	<wsdl:types>
+		<xs:schema elementFormDefault="qualified"
+			attributeFormDefault="qualified"
+			targetNamespace="http://ws.arcot.com/WebFortBulkOperationsAPI/7.0/xsd">
+			<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+				schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+			<xs:import namespace="http://www.arcot.com/ArWFTokenExchangeFormat/1.0"
+				schemaLocation="./ArcotWebFortTokenXchange.xsd" />
+			<xs:import namespace="http://www.arcot.com/ArWFCredMgmt/7.0"
+				schemaLocation="./ArcotWebFortCredMgmt.xsd" />
+			<xs:complexType name="BaseBulkOperationsRequestType">
+				<xs:annotation>
+					<xs:documentation>
+						Base response used in bulk operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="commonxsd:BaseRequestType">
+						<xs:sequence>
+							<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+								minOccurs="0" maxOccurs="1" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="BaseBulkOperationsResponseType">
+				<xs:annotation>
+					<xs:documentation>
+						Base response used in bulk operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="commonxsd:BaseResponseType">
+						<xs:sequence>
+							<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="OATHTokenInfoType">
+				<xs:annotation>
+					<xs:documentation>
+						Contains OATH token information.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="tokxsd:Token">
+						<xs:sequence>
+							<xs:element name="orgDetails" type="commonxsd:OrgDetails" />
+							<xs:element name="batchID" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>
+										Identifier for the current batch of tokens
+										being uploaded.
+										</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Status" type="xs:int">
+								<xs:annotation>
+									<xs:documentation>
+										Status of the Token, this is returned in
+										output for FetchOATHTokens call. Not considered
+										in input.
+										1  - FREE
+										2  - ASSIGNED
+										3  - ABANDONED
+										4  - FAILED
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="remark" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Remark if any for the current batch of tokens
+										being uploaded.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="processingStatus" type="commonxsd:ErrorDetails" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="TokenStatusFilterType">
+				<xs:annotation>
+					<xs:documentation>
+						Filter used in fetching tokens.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="free" type="xs:boolean" minOccurs="0" />
+					<xs:element name="assigned" type="xs:boolean" minOccurs="0" />
+					<xs:element name="abandoned" type="xs:boolean" minOccurs="0" />
+					<xs:element name="failed" type="xs:boolean" minOccurs="0" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="UploadOATHTokensType">
+				<xs:annotation>
+					<xs:documentation>
+						Construct a single request object for uploading
+						OATH tokens.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="orgDetails" type="commonxsd:OrgDetails" />
+					<xs:element name="remark" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Remark if any for the current batch of tokens
+								being uploaded.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="key" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								Key in HEX format to decrypt the token file.
+								Will be empty if the keys are in plain.
+					</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="keyContainer" type="tokxsd:ArKeyContainer" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BulkOATHTokensType">
+				<xs:annotation>
+					<xs:documentation>
+						Possible ways of specifying oath tokens to upload.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:choice>
+					<xs:annotation>
+						<xs:documentation>
+							This choice holds the different types of
+							inputs
+							that can
+							be used for uploading oath tokens.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="tokens" type="xsd:UploadOATHTokensType" minOccurs="0" />
+					<xs:element name="inputXml" type="xs:string" minOccurs="0" />
+				</xs:choice>
+			</xs:complexType>
+			<xs:complexType name="UploadOATHTokensRequestType">
+				<xs:annotation>
+					<xs:documentation>
+						Request object used in UploadOATHTokens.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="xsd:BaseBulkOperationsRequestType">
+						<xs:sequence>
+							<xs:element name="bulkOATHTokens" type="xsd:BulkOATHTokensType" minOccurs="0" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="AssignCredentialsType">
+				<xs:sequence>
+					<xs:element name="credContainer" type="credmgmtxsd:CredContainer"
+						minOccurs="1" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="BulkCredentialsType">
+				<xs:annotation>
+					<xs:documentation>
+						Possible ways of specifying credentials to assign.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:choice>
+					<xs:annotation>
+						<xs:documentation>
+							This choice holds the different types of
+							inputs
+							that can
+							be used for assigning credentials.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="credentials" type="xsd:AssignCredentialsType" />
+					<xs:element name="inputXml" type="xs:string" minOccurs="0" />
+				</xs:choice>
+			</xs:complexType>
+			<xs:complexType name="AssignCredentialsRequestType">
+				<xs:annotation>
+					<xs:documentation>
+						Request object used in AssignCredentials.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexContent>
+					<xs:extension base="xsd:BaseBulkOperationsRequestType">
+						<xs:sequence>
+							<xs:element name="bulkCredentials" type="xsd:BulkCredentialsType" minOccurs="0" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+		<xs:schema elementFormDefault="qualified"
+			attributeFormDefault="qualified"
+			targetNamespace="http://ws.arcot.com/WebFortBulkOperationsAPI/7.0/msgs">
+			<xs:import namespace="http://ws.arcot.com/WebFortBulkOperationsAPI/7.0/xsd" />
+			<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+				schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+			<xs:import namespace="http://www.arcot.com/ArWFTokenExchangeFormat/1.0"
+				schemaLocation="./ArcotWebFortTokenXchange.xsd" />
+			<xs:import namespace="http://www.arcot.com/ArWFCredMgmt/7.0"
+				schemaLocation="./ArcotWebFortCredMgmt.xsd" />
+			<xs:element name="WebFortBulkOperationsFault">
+				<xs:annotation>
+					<xs:documentation>
+						Common fault for all bulk operations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="commonxsd:WebFortFault">
+							<xs:sequence>
+								<xs:element name="errCredmgmt" type="xsd:AssignCredentialsRequestType"
+									minOccurs="0" />
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CommonBulkOperationsResponse">
+				<xs:annotation>
+					<xs:documentation>
+						This type encapsulates the details associated
+						with
+						the transaction, such as response code,
+						reason code, a unique
+						transaction identifier,
+						localized transaction message, and so on.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="xsd:BaseBulkOperationsResponseType" />
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UploadOATHTokensRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request object used in UploadOATHTokens.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="xsd:UploadOATHTokensRequestType">
+							<xs:sequence>
+								<xs:element name="orgDetails" type="commonxsd:OrgDetails" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>
+											These details are used to cross check against the
+											organization specified in the input XML.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="UploadOATHTokensResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response object used in UploadOATHTokens.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="xsd:BaseBulkOperationsResponseType">
+							<xs:sequence>
+								<xs:element name="batchID" type="xs:string" />
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="AssignCredentialsRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Request object used in AssignCredentials.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="xsd:AssignCredentialsRequestType" />
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FetchOATHTokensRequest">
+				<xs:annotation>
+					<xs:documentation>
+						Specifies the filter for fetching the tokens.
+						All the filters are combined together and applied.
+						If no filter is specified then all the FREE tokens
+						at global level will be returned.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="xsd:BaseBulkOperationsRequestType">
+							<xs:sequence>
+								<xs:element name="fetchGlobal" type="xs:boolean"
+									minOccurs="0" />
+								<xs:element name="orgList" type="xs:string"
+									minOccurs="0" maxOccurs="unbounded" />
+								<xs:element name="tokenID" type="xs:string" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>
+											Wild cards like *,. are allowed.
+										</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="batchID" type="xs:string" minOccurs="0" />
+								<xs:element name="tokenStatusFilter" type="xsd:TokenStatusFilterType" minOccurs="0" />
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FetchOATHTokensResponse">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="xsd:BaseBulkOperationsResponseType">
+							<xs:sequence>
+								<xs:element name="tokenInfo" type="xsd:OATHTokenInfoType"
+									minOccurs="0" maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="WebFortBulkOperationsFault">
+		<wsdl:part name="WebFortBulkOperationFault" element="msgs:WebFortBulkOperationsFault" />
+	</wsdl:message>
+	<wsdl:message name="UploadOATHTokensRequestMessage">
+		<wsdl:part name="UploadOATHTokensRequest" element="msgs:UploadOATHTokensRequest" />
+	</wsdl:message>
+	<wsdl:message name="UploadOATHTokensResponseMessage">
+		<wsdl:part name="UploadOATHTokensResponse" element="msgs:UploadOATHTokensResponse" />
+	</wsdl:message>
+	<wsdl:message name="AssignCredentialsRequestMessage">
+		<wsdl:part name="AssignCredentialsRequest" element="msgs:AssignCredentialsRequest" />
+	</wsdl:message>
+	<wsdl:message name="AssignCredentialsResponseMessage">
+		<wsdl:part name="AssignCredentialsResponse" element="msgs:CommonBulkOperationsResponse" />
+	</wsdl:message>
+	<wsdl:message name="FetchOATHTokensRequestMessage">
+		<wsdl:part name="FetchOATHTokensRequest" element="msgs:FetchOATHTokensRequest" />
+	</wsdl:message>
+	<wsdl:message name="FetchOATHTokensResponseMessage">
+		<wsdl:part name="FetchOATHTokensResponse" element="msgs:FetchOATHTokensResponse" />
+	</wsdl:message>
+	<wsdl:portType name="ArcotWebFortBulkOperationsAPIPortType">
+		<wsdl:operation name="UploadOATHTokens">
+			<wsdl:documentation>
+				Uploads OATH Tokens to WebFort server registry.
+			</wsdl:documentation>
+			<wsdl:input message="wfbulkop:UploadOATHTokensRequestMessage" />
+			<wsdl:output message="wfbulkop:UploadOATHTokensResponseMessage" />
+			<soap12:fault name="WebFortBulkOperationFault"
+				message="wfbulkop:WebFortBulkOperationsFault" />
+		</wsdl:operation>
+		<wsdl:operation name="AssignCredentials">
+			<wsdl:documentation>
+				Assign credentials to Specified Users.
+			</wsdl:documentation>
+			<wsdl:input message="wfbulkop:AssignCredentialsRequestMessage" />
+			<wsdl:output message="wfbulkop:AssignCredentialsResponseMessage" />
+			<soap12:fault name="WebFortBulkOperationFault"
+				message="wfbulkop:WebFortBulkOperationsFault" />
+		</wsdl:operation>
+		<wsdl:operation name="FetchOATHTokens">
+			<wsdl:documentation>
+				Fetches OATH Tokens matching the given criteria.
+			</wsdl:documentation>
+			<wsdl:input message="wfbulkop:FetchOATHTokensRequestMessage" />
+			<wsdl:output message="wfbulkop:FetchOATHTokensResponseMessage" />
+			<soap12:fault name="WebFortBulkOperationFault"
+				message="wfbulkop:WebFortBulkOperationsFault" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ArcotWebFortBulkOperationsAPISOAP12Binding" type="wfbulkop:ArcotWebFortBulkOperationsAPIPortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="UploadOATHTokens">
+			<soap12:operation soapAction="urn:UploadOATHTokens"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortBulkOperationFault">
+				<soap12:fault name="WebFortBulkOperationFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="AssignCredentials">
+			<soap12:operation soapAction="urn:AssignCredentials"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortBulkOperationFault">
+				<soap12:fault name="WebFortBulkOperationFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="FetchOATHTokens">
+			<soap12:operation soapAction="urn:FetchOATHTokens"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortBulkOperationFault">
+				<soap12:fault name="WebFortBulkOperationFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ArcotWebFortBulkOperationsSvc">
+		<wsdl:port name="ArcotWebFortBulkOperationsAPIPort" binding="wfbulkop:ArcotWebFortBulkOperationsAPISOAP12Binding">
+			<soap12:address
+				location="http://ws.arcot.com/services/WebFortBulkOperationsSvc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,380 @@
+<xs:schema xmlns:msgs="http://ws.arcot.com/WebFortIssuanceAPI/7.0/msgs"
+	xmlns:xsd="http://ws.arcot.com/WebFortIssuanceAPI/7.0/xsd"
+	xmlns:commonxsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="qualified" targetNamespace="http://ws.arcot.com/WebFortIssuanceAPI/7.0/msgs">
+	<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+	<xs:import namespace="http://ws.arcot.com/WebFortIssuanceAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortIssuanceSchema.xsd" />
+	<xs:element name="TransactionDetails">
+		<xs:annotation>
+			<xs:documentation>
+				This type encapsulates the details associated
+				with
+				the transaction, such as response code,
+				reason code, a unique
+				transaction identifier,
+				localized transaction message, and so on.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="commonxsd:TransactionDetailsType" />
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WebFortIssuanceFault">
+		<xs:annotation>
+			<xs:documentation>
+				Common fault for all issuance operations.
+				responseCode - Provides the response of server.
+				It will help to find
+				out the nature or error.
+				reasonCode - Indicates what error occurred.
+				reason - Provides a readable user friendly text
+				corresponding to
+				errorCode.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="commonxsd:WebFortFault">
+					<xs:sequence>
+						<xs:element name="credType" type="xs:int" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CredentialRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in most of the credential
+				management operations.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseIssuanceRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="arcotIDInput" type="xsd:ArcotIDInputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="otpInput" type="xsd:OTPInputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="oathInput" type="xsd:OATHOTPInputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="arcotOTPInput" type="xsd:ArcotOTPInputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="emvInput" type="xsd:EMVInputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="qnaInput" type="xsd:QnAInputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="upInput" type="xsd:UPInputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CredentialResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response object used in most of the credential
+				management operations.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseIssuanceResponseType">
+					<xs:sequence>
+						<xs:element name="arcotIDOutput" type="xsd:ArcotIDOutputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="otpOutput" type="xsd:OTPOutputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="oathOutput" type="xsd:OATHOTPOutputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="arcotOTPOutput" type="xsd:ArcotOTPOutputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="emvOutput" type="xsd:EMVOutputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="qnaOutput" type="xsd:QnAOutputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="upOutput" type="xsd:UPOutputType"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DeleteArcotIDUnsignedAttributes">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in
+				DeleteArcotIDUnsignedAttributes operation.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseIssuanceRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="unsignedAttributeNames" type="xs:string"
+							minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SetArcotIDUnsignedAttributes">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in
+				SetArcotIDUnsignedAttributes
+				operation.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseIssuanceRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="unsignedAttributes" type="xsd:ArcotIDAttributeType"
+							minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FetchQnAConfigurationRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in FetchQnAConfiguration
+				operation. fetchQuestions - Flag for fetching
+				questions associated
+				with QnA configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseIssuanceRequestType">
+					<xs:sequence>
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="profileName" type="xs:string"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="fetchQuestions" type="xs:boolean"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FetchQnAConfigurationResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response object used in FetchQnAConfiguration
+				operation. minQuestions - Minimum number of
+				question that, an user
+				belongs to this
+				organization should submit for issuing QnA.
+				maxQuestions - Maximum number of question up to
+				which, an user
+				belongs to this organization can
+				submit for issuing QnA. questions -
+				List of
+				questions configured.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseIssuanceResponseType">
+					<xs:sequence>
+						<xs:element name="orgName" type="xs:string" />
+						<xs:element name="profileName" type="xs:string" />
+						<xs:element name="minQuestions" type="xs:int" />
+						<xs:element name="maxQuestions" type="xs:int" />
+						<xs:element name="questions" type="xs:string"
+							minOccurs="0" maxOccurs="unbounded" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CustomRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request for creating custom credential.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseIssuanceRequestType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="customModName" type="xs:string" />
+						<xs:element name="credential" type="xs:string"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="validityEndTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="additionalInput" type="commonxsd:AdditionalInputType"
+							minOccurs="0" maxOccurs="1" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CustomResponse">
+		<xs:annotation>
+			<xs:documentation>
+				Response object used in custom credential
+				operations.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseIssuanceResponseType">
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" />
+						<xs:element name="orgName" type="xs:string" />
+						<xs:element name="status" type="xs:int" minOccurs="0"
+							maxOccurs="1" />
+						<xs:element name="createTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastUpdatedTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="validityStartTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="validityEndTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="numberOfFailedAuthAttempts" type="xs:int"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastSuccessAuthAttemptTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="lastFailedAuthAttemptTime" type="xs:dateTime"
+							minOccurs="0" maxOccurs="1" />
+						<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ArcotIDKeyBagGetElementsRequest">
+		<xs:annotation>
+			<xs:documentation>
+			Request for getting list retrievable elements from the ArcotID-Keybag.
+			List of elements to be returned in response can be chosen using elementSelection.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:ArcotIDKeyBagReqParams">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+	</xs:element>
+
+	<xs:element name="ArcotIDKeyBagGetElementsResponse">
+		<xs:annotation>
+			<xs:documentation>
+			Response holds list of elements belonging to an ArcotID-Keybag along  with transaction details.
+			certificates - list of certificates and certificate details as selected in the request.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+				<xs:element name="certificates" type="xsd:ArcotIDKeyBagCertAndDetails" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ArcotIDKeyBagAddElementsRequest">
+		<xs:annotation>
+			<xs:documentation>
+			Request for adding a list of elements to ArcotID-Keybag.
+			List of elements to be returned in response can be chosen using elementSelection.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:ArcotIDKeyBagReqParams">
+					<xs:sequence>
+						<xs:element name="elements" type="xsd:ArcotIDKeyBagElementSet" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ArcotIDKeyBagAddElementsResponse">
+		<xs:annotation>
+			<xs:documentation>
+			Response holds list of elements belonging to an ArcotID-Keybag along with transaction details.
+			certificates - list of certificates and certificate details as selected in the request.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+				<xs:element name="certificates" type="xsd:ArcotIDKeyBagCertAndDetails" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ArcotIDKeyBagDeleteElementsRequest">
+		<xs:annotation>
+			<xs:documentation>
+			Request for deleting a list of elements from ArcotID-Keybag.
+			elementIds - list of element-ids to be deleted from ArcotID-Keybag.
+			</xs:documentation>
+		</xs:annotation>
+
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:ArcotIDKeyBagReqParams">
+					<xs:sequence>
+						<xs:element name="elementIds" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+
+	</xs:element>
+
+	<xs:element name="ArcotIDKeyBagDeleteElementsResponse">
+		<xs:annotation>
+			<xs:documentation>
+			Response holds transaction details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

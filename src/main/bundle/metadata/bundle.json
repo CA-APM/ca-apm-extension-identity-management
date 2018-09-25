@@ -1,0 +1,14 @@
+{
+    "specificationVersion" : "2",
+    "type" : "java",
+    "name": "${project.artifactId}",
+    "displayName": "${project.name}",
+    "version": "${project.version}",
+    "agentVersion": "10.5",
+    "facets" : ["custom", "extension" ],
+    "dependencies" : ["java-agent"],
+    "enhances" : [],
+    "compatibility": {"osName": ["windows","unix"],
+                       "agentVersion" : ">=10.5" },
+    "dynamic": "false"
+}

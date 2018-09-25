@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://wso2.org/repos/wso2/trunk/commons/annotated-stylesheets/annotated-wsdl.xsl"?>
+<wsdl:definitions xmlns:wfiss="http://ws.arcot.com/WebFortIssuanceAPI/7.0/wsdl"
+	xmlns:msgs="http://ws.arcot.com/WebFortIssuanceAPI/7.0/msgs" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://ws.arcot.com/WebFortIssuanceAPI/7.0/wsdl"
+	name="WebFortIssuanceSvc">
+	<wsdl:types>
+		<xs:schema>
+			<xs:import namespace="http://ws.arcot.com/WebFortIssuanceAPI/7.0/msgs"
+				schemaLocation="./ArcotWebFortIssuanceMsgs.xsd" />
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="WebFortIssuanceFaultMessage">
+		<wsdl:part name="WebFortIssuanceFault" element="msgs:WebFortIssuanceFault" />
+	</wsdl:message>
+	<wsdl:message name="CreateCredentialRequestMessage">
+		<wsdl:part name="CreateCredentialRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="CreateCredentialResponseMessage">
+		<wsdl:part name="CreateCredentialResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="DeleteCredentialRequestMessage">
+		<wsdl:part name="DeleteCredentialRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="DeleteCredentialResponseMessage">
+		<wsdl:part name="DeleteCredentialResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="DisableCredentialRequestMessage">
+		<wsdl:part name="DisableCredentialRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="DisableCredentialResponseMessage">
+		<wsdl:part name="DisableCredentialResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="EnableCredentialRequestMessage">
+		<wsdl:part name="EnableCredentialRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="EnableCredentialResponseMessage">
+		<wsdl:part name="EnableCredentialResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="FetchCredentialRequestMessage">
+		<wsdl:part name="FetchCredentialRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="FetchCredentialResponseMessage">
+		<wsdl:part name="FetchCredentialResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="DownloadCredentialRequestMessage">
+		<wsdl:part name="DownloadCredentialRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="DownloadCredentialResponseMessage">
+		<wsdl:part name="DownloadCredentialResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="ReissueCredentialRequestMessage">
+		<wsdl:part name="ReissueCredentialRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="ReissueCredentialResponseMessage">
+		<wsdl:part name="ReissueCredentialResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="ResetCredentialNotesRequestMessage">
+		<wsdl:part name="ResetCredentialNotesRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="ResetCredentialNotesResponseMessage">
+		<wsdl:part name="ResetCredentialNotesResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="ResetCredentialRequestMessage">
+		<wsdl:part name="ResetCredentialRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="ResetCredentialResponseMessage">
+		<wsdl:part name="ResetCredentialResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="ResetCredentialValidityRequestMessage">
+		<wsdl:part name="ResetCredentialValidityRequest" element="msgs:CredentialRequest" />
+	</wsdl:message>
+	<wsdl:message name="ResetCredentialValidityResponseMessage">
+		<wsdl:part name="ResetCredentialValidityResponse" element="msgs:CredentialResponse" />
+	</wsdl:message>
+	<wsdl:message name="DeleteArcotIDUnsignedAttributesRequestMessage">
+		<wsdl:part name="DeleteArcotIDUnsignedAttributesRequest"
+			element="msgs:DeleteArcotIDUnsignedAttributes" />
+	</wsdl:message>
+	<wsdl:message name="DeleteArcotIDUnsignedAttributesResponseMessage">
+		<wsdl:part name="DeleteArcotIDUnsignedAttributesResponse"
+			element="msgs:TransactionDetails" />
+	</wsdl:message>
+	<wsdl:message name="SetArcotIDUnsignedAttributesRequestMessage">
+		<wsdl:part name="SetArcotIDUnsignedAttributesRequest"
+			element="msgs:SetArcotIDUnsignedAttributes" />
+	</wsdl:message>
+	<wsdl:message name="SetArcotIDUnsignedAttributesResponseMessage">
+		<wsdl:part name="SetArcotIDUnsignedAttributesResponse"
+			element="msgs:TransactionDetails" />
+	</wsdl:message>
+	<wsdl:message name="FetchQnAConfigurationRequestMessage">
+		<wsdl:part name="FetchQnAConfigurationRequest" element="msgs:FetchQnAConfigurationRequest" />
+	</wsdl:message>
+	<wsdl:message name="FetchQnAConfigurationResponseMessage">
+		<wsdl:part name="FetchQnAConfigurationResponse" element="msgs:FetchQnAConfigurationResponse" />
+	</wsdl:message>
+	<wsdl:message name="CreateCustomCredentialRequestMessage">
+		<wsdl:part name="CreateCustomCredentialRequest" element="msgs:CustomRequest" />
+	</wsdl:message>
+	<wsdl:message name="CreateCustomCredentialResponseMessage">
+		<wsdl:part name="CreateCustomCredentialResponse" element="msgs:CustomResponse" />
+	</wsdl:message>
+	<wsdl:message name="DeleteCustomCredentialRequestMessage">
+		<wsdl:part name="DeleteCustomCredentialRequest" element="msgs:CustomRequest" />
+	</wsdl:message>
+	<wsdl:message name="DeleteCustomCredentialResponseMessage">
+		<wsdl:part name="DeleteCustomCredentialResponse" element="msgs:CustomResponse" />
+	</wsdl:message>
+	<wsdl:message name="DisableCustomCredentialRequestMessage">
+		<wsdl:part name="DisableCustomCredentialRequest" element="msgs:CustomRequest" />
+	</wsdl:message>
+	<wsdl:message name="DisableCustomCredentialResponseMessage">
+		<wsdl:part name="DisableCustomCredentialResponse" element="msgs:CustomResponse" />
+	</wsdl:message>
+	<wsdl:message name="EnableCustomCredentialRequestMessage">
+		<wsdl:part name="EnableCustomCredentialRequest" element="msgs:CustomRequest" />
+	</wsdl:message>
+	<wsdl:message name="EnableCustomCredentialResponseMessage">
+		<wsdl:part name="EnableCustomCredentialResponse" element="msgs:CustomResponse" />
+	</wsdl:message>
+	<wsdl:message name="FetchCustomCredentialRequestMessage">
+		<wsdl:part name="FetchCustomCredentialRequest" element="msgs:CustomRequest" />
+	</wsdl:message>
+	<wsdl:message name="FetchCustomCredentialResponseMessage">
+		<wsdl:part name="FetchCustomCredentialResponse" element="msgs:CustomResponse" />
+	</wsdl:message>
+	<wsdl:message name="ReissueCustomCredentialRequestMessage">
+		<wsdl:part name="ReissueCustomCredentialRequest" element="msgs:CustomRequest" />
+	</wsdl:message>
+	<wsdl:message name="ReissueCustomCredentialResponseMessage">
+		<wsdl:part name="ReissueCustomCredentialResponse" element="msgs:CustomResponse" />
+	</wsdl:message>
+	<wsdl:message name="ResetCustomCredentialRequestMessage">
+		<wsdl:part name="ResetCustomCredentialRequest" element="msgs:CustomRequest" />
+	</wsdl:message>
+	<wsdl:message name="ResetCustomCredentialResponseMessage">
+		<wsdl:part name="ResetCustomCredentialResponse" element="msgs:CustomResponse" />
+	</wsdl:message>
+	<wsdl:message name="ResetCustomCredentialValidityRequestMessage">
+		<wsdl:part name="ResetCustomCredentialValidityRequest"
+			element="msgs:CustomRequest" />
+	</wsdl:message>
+	<wsdl:message name="ResetCustomCredentialValidityResponseMessage">
+		<wsdl:part name="ResetCustomCredentialValidityResponse"
+			element="msgs:CustomResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="ArcotIDKeyBagGetElementsRequestMessage">
+		<wsdl:part name="ArcotIDKeyBagGetElementsRequest" element="msgs:ArcotIDKeyBagGetElementsRequest" />
+	</wsdl:message>
+
+	<wsdl:message name="ArcotIDKeyBagGetElementsResponsetMessage">
+		<wsdl:part name="ArcotIDKeyBagGetElementsResponse" element="msgs:ArcotIDKeyBagGetElementsResponse" />
+	</wsdl:message>
+	<wsdl:message name="ArcotIDKeyBagAddElementsRequestMessage">
+		<wsdl:part name="ArcotIDKeyBagAddElementsRequest" element="msgs:ArcotIDKeyBagAddElementsRequest" />
+	</wsdl:message>
+	<wsdl:message name="ArcotIDKeyBagAddElementsResponseMessage">
+		<wsdl:part name="ArcotIDKeyBagAddElementsResponse" element="msgs:ArcotIDKeyBagAddElementsResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="ArcotIDKeyBagDeleteElementsRequestMessage">
+		<wsdl:part name="ArcotIDKeyBagDeleteElementsRequest" element="msgs:ArcotIDKeyBagDeleteElementsRequest" />
+	</wsdl:message>
+	<wsdl:message name="ArcotIDKeyBagDeleteElementsResponseMessage">
+		<wsdl:part name="ArcotIDKeyBagDeleteElementsResponse" element="msgs:ArcotIDKeyBagDeleteElementsResponse" />
+	</wsdl:message>
+	<wsdl:portType name="IssuanceAPIPortType">
+		<wsdl:operation name="CreateCredential">
+			<wsdl:documentation>
+				This function creates one or more credentials for
+				a
+				user. The operation is atomic, which implies that either
+				the
+				operation succeeds for all credentials or fails for
+				all.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:CreateCredentialRequestMessage" />
+			<wsdl:output message="wfiss:CreateCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="DeleteCredential">
+			<wsdl:documentation>
+				This function deletes one or more credentials for
+				a
+				given user. The operation is atomic, which implies that
+				either the
+				operation succeeds for all credentials or
+				fails for all.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:DeleteCredentialRequestMessage" />
+			<wsdl:output message="wfiss:DeleteCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="DisableCredential">
+			<wsdl:documentation>
+				This function disables one or more credentials
+				for a
+				given user. The operation is atomic, which implies that
+				either
+				the operation succeeds for all credentials or
+				fails for all.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:DisableCredentialRequestMessage" />
+			<wsdl:output message="wfiss:DisableCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="EnableCredential">
+			<wsdl:documentation>
+				This function enables one or more credentials for
+				a
+				given user. The operation is atomic, which implies that
+				either the
+				operation succeeds for all credentials or
+				fails.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:EnableCredentialRequestMessage" />
+			<wsdl:output message="wfiss:EnableCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="FetchCredential">
+			<wsdl:documentation>
+				This function can fetch one or more credentials
+				for a
+				given user. If one or more credentials are specified ,
+				then the
+				call succeeds if all the requested credentials
+				are found. Otherwise
+				fails. Returns all available
+				credentials if no credential is
+				specified in the
+				request.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:FetchCredentialRequestMessage" />
+			<wsdl:output message="wfiss:FetchCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="DownloadCredential">
+			<wsdl:documentation>
+				This function can download one or more credentials
+				for a
+				given user. If one or more credentials are specified ,
+				then the
+				call succeeds if all the requested credentials
+				are found. Otherwise
+				fails.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:DownloadCredentialRequestMessage" />
+			<wsdl:output message="wfiss:DownloadCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="ReissueCredential">
+			<wsdl:documentation>
+				This function re-creates one or more credentials
+				for a
+				given user. The operation is atomic, which implies that
+				either
+				the operation succeeds for all credentials or
+				fails for all.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ReissueCredentialRequestMessage" />
+			<wsdl:output message="wfiss:ReissueCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="ResetCredential">
+			<wsdl:documentation>
+				This function resets the password for one or more
+				credentials for a given user. The operation is atomic,
+				which implies
+				that either the operation succeeds for all
+				credentials or fails.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ResetCredentialRequestMessage" />
+			<wsdl:output message="wfiss:ResetCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="ResetCredentialNotes">
+			<wsdl:documentation>
+				This function resets the custom attributes for
+				one or
+				more credentials for a given user. The operation is
+				atomic,
+				which implies that either the operation succeeds
+				for all credentials
+				or fails.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ResetCredentialNotesRequestMessage" />
+			<wsdl:output message="wfiss:ResetCredentialNotesResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="ResetCredentialValidity">
+			<wsdl:documentation>
+				This function resets the validity for one or more
+				credentials for a given user. The operation is atomic,
+				which implies
+				that either the operation succeeds for all
+				credentials or fails.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ResetCredentialValidityRequestMessage" />
+			<wsdl:output message="wfiss:ResetCredentialValidityResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="DeleteArcotIDUnsignedAttributes">
+			<wsdl:documentation>
+				This function deletes unsigned attributes in the
+				ArcotID
+				for a given user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:DeleteArcotIDUnsignedAttributesRequestMessage" />
+			<wsdl:output message="wfiss:DeleteArcotIDUnsignedAttributesResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="SetArcotIDUnsignedAttributes">
+			<wsdl:documentation>
+				This function sets unsigned attributes in the
+				ArcotID
+				for a given user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:SetArcotIDUnsignedAttributesRequestMessage" />
+			<wsdl:output message="wfiss:SetArcotIDUnsignedAttributesResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="FetchQnAConfiguration">
+			<wsdl:documentation>
+				This function fetches the QnA Configuration for
+				the
+				specified organization with the given profileName. If
+				the
+				profileName is not specified, then the default
+				profile will be
+				applied.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:FetchQnAConfigurationRequestMessage" />
+			<wsdl:output message="wfiss:FetchQnAConfigurationResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="CreateCustomCredential">
+			<wsdl:documentation>
+				This function creates custom credential for a
+				given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:CreateCustomCredentialRequestMessage" />
+			<wsdl:output message="wfiss:CreateCustomCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="DeleteCustomCredential">
+			<wsdl:documentation>
+				This function deletes the custom credential for a
+				given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:DeleteCustomCredentialRequestMessage" />
+			<wsdl:output message="wfiss:DeleteCustomCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="DisableCustomCredential">
+			<wsdl:documentation>
+				This function disables the custom credential for
+				a given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:DisableCustomCredentialRequestMessage" />
+			<wsdl:output message="wfiss:DisableCustomCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="EnableCustomCredential">
+			<wsdl:documentation>
+				This function enables custom credential for a
+				given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:EnableCustomCredentialRequestMessage" />
+			<wsdl:output message="wfiss:EnableCustomCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="FetchCustomCredential">
+			<wsdl:documentation>
+				This function fetches the details for custom
+				credential
+				for a given user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:FetchCustomCredentialRequestMessage" />
+			<wsdl:output message="wfiss:FetchCustomCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="ReissueCustomCredential">
+			<wsdl:documentation>
+				This function re-creates custom credential for a
+				given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ReissueCustomCredentialRequestMessage" />
+			<wsdl:output message="wfiss:ReissueCustomCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="ResetCustomCredential">
+			<wsdl:documentation>
+				This function resets password for the custom
+				credential
+				for the given user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ResetCustomCredentialRequestMessage" />
+			<wsdl:output message="wfiss:ResetCustomCredentialResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="ResetCustomCredentialValidity">
+			<wsdl:documentation>
+				This function resets the validity for custom
+				credential
+				for a given user.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ResetCustomCredentialValidityRequestMessage" />
+			<wsdl:output message="wfiss:ResetCustomCredentialValidityResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault" message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="ArcotIDKeyBagGetElements">
+			<wsdl:documentation>
+				This function gets list retrievable elements from the ArcotID-Keybag.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ArcotIDKeyBagGetElementsRequestMessage" />
+			<wsdl:output message="wfiss:ArcotIDKeyBagGetElementsResponsetMessage" />
+			<soap12:fault name="WebFortIssuanceFault"
+				message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="ArcotIDKeyBagAddElements">
+			<wsdl:documentation>
+				This function adds a list of lelements to the ArcotID-Keybag.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ArcotIDKeyBagAddElementsRequestMessage" />
+			<wsdl:output message="wfiss:ArcotIDKeyBagAddElementsResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault"
+				message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+
+		<wsdl:operation name="ArcotIDKeyBagDeleteElements">
+			<wsdl:documentation>
+				This function deleted a list of lelements from the ArcotID-Keybag.
+			</wsdl:documentation>
+			<wsdl:input message="wfiss:ArcotIDKeyBagDeleteElementsRequestMessage" />
+			<wsdl:output message="wfiss:ArcotIDKeyBagDeleteElementsResponseMessage" />
+			<soap12:fault name="WebFortIssuanceFault"
+				message="wfiss:WebFortIssuanceFaultMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="IssuanceAPISOAP12Binding" type="wfiss:IssuanceAPIPortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="CreateCredential">
+			<soap12:operation soapAction="urn:CreateCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteCredential">
+			<soap12:operation soapAction="urn:DeleteCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="DisableCredential">
+			<soap12:operation soapAction="urn:DisableCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="EnableCredential">
+			<soap12:operation soapAction="urn:EnableCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="FetchCredential">
+			<soap12:operation soapAction="urn:FetchCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="DownloadCredential">
+			<soap12:operation soapAction="urn:DownloadCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ReissueCredential">
+			<soap12:operation soapAction="urn:ReissueCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ResetCredential">
+			<soap12:operation soapAction="urn:ResetCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ResetCredentialNotes">
+			<soap12:operation soapAction="urn:ResetCredentialNotes"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ResetCredentialValidity">
+			<soap12:operation soapAction="urn:ResetCredentialValidity"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteArcotIDUnsignedAttributes">
+			<soap12:operation soapAction="urn:DeleteArcotIDUnsignedAttributes"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="SetArcotIDUnsignedAttributes">
+			<soap12:operation soapAction="urn:SetArcotIDUnsignedAttributes"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="FetchQnAConfiguration">
+			<soap12:operation soapAction="urn:FetchQnAConfiguration"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="CreateCustomCredential">
+			<soap12:operation soapAction="urn:CreateCustomCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="DeleteCustomCredential">
+			<soap12:operation soapAction="urn:DeleteCustomCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="DisableCustomCredential">
+			<soap12:operation soapAction="urn:DisableCustomCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="EnableCustomCredential">
+			<soap12:operation soapAction="urn:EnableCustomCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="FetchCustomCredential">
+			<soap12:operation soapAction="urn:FetchCustomCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ReissueCustomCredential">
+			<soap12:operation soapAction="urn:ReissueCustomCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ResetCustomCredential">
+			<soap12:operation soapAction="urn:ResetCustomCredential"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ResetCustomCredentialValidity">
+			<soap12:operation soapAction="urn:ResetCustomCredentialValidity"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ArcotIDKeyBagGetElements">
+			<soap12:operation
+				soapAction="urn:ArcotIDKeyBagGetElements" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="ArcotIDKeyBagAddElements">
+			<soap12:operation
+				soapAction="urn:ArcotIDKeyBagAddElements" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="ArcotIDKeyBagDeleteElements">
+			<soap12:operation
+				soapAction="urn:ArcotIDKeyBagDeleteElements" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortIssuanceFault">
+				<soap12:fault name="WebFortIssuanceFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+
+	</wsdl:binding>
+	<wsdl:service name="WebFortIssuanceService">
+		<wsdl:port name="IssuanceAPISOAP12Port" binding="wfiss:IssuanceAPISOAP12Binding">
+			<soap12:address location="http://ws.arcot.com/services/WebFortIssuanceSvc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

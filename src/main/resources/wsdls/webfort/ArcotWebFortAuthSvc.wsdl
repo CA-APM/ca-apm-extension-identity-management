@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl" href="http://wso2.org/repos/wso2/trunk/commons/annotated-stylesheets/annotated-wsdl.xsl"?>
+<wsdl:definitions xmlns:wfauth="http://ws.arcot.com/WebFortAuthAPI/7.0/wsdl"
+	xmlns:msgs="http://ws.arcot.com/WebFortAuthAPI/7.0/msgs" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://ws.arcot.com/WebFortAuthAPI/7.0/wsdl"
+	name="WebFortAuthSvc">
+	<wsdl:types>
+		<xs:schema>
+			<xs:import namespace="http://ws.arcot.com/WebFortAuthAPI/7.0/msgs"
+				schemaLocation="./ArcotWebFortAuthMsgs.xsd" />
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="WebFortAuthFaultMessage">
+		<wsdl:part name="WebFortAuthFault" element="msgs:WebFortAuthFault" />
+	</wsdl:message>
+	<wsdl:message name="GetArcotIDRequestMessage">
+		<wsdl:part name="GetArcotIDRequest" element="msgs:GetArcotIDRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetArcotIDResponseMessage">
+		<wsdl:part name="GetArcotIDResponse" element="msgs:GetArcotIDResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetPAMRequestMessage">
+		<wsdl:part name="GetPAMRequest" element="msgs:GetPAMRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetPAMResponseMessage">
+		<wsdl:part name="GetPAMResponse" element="msgs:GetPAMResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetArcotIDChallengeRequestMessage">
+		<wsdl:part name="GetArcotIDChallengeRequest" element="msgs:GetArcotIDChallengeRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetArcotIDChallengeResponseMessage">
+		<wsdl:part name="GetArcotIDChallengeResponse" element="msgs:GetArcotIDChallengeResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifySignedChallengeRequestMessage">
+		<wsdl:part name="VerifySignedChallengeRequest" element="msgs:VerifyArcotIDSignedChallenge" />
+	</wsdl:message>
+	<wsdl:message name="VerifySignedChallengeResponseMessage">
+		<wsdl:part name="VerifySignedChallengeResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetQuestionsRequestMessage">
+		<wsdl:part name="GetQuestionsRequest" element="msgs:GetQuestionsRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetQuestionsResponseMessage">
+		<wsdl:part name="GetQuestionsResponse" element="msgs:GetQuestionsResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetPasswordChallengeRequestMessage">
+		<wsdl:part name="GetPasswordChallengeRequest" element="msgs:GetPasswordChallengeRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetPasswordChallengeResponseMessage">
+		<wsdl:part name="GetPasswordChallengeResponse" element="msgs:GetPasswordChallengeResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyAnswersRequestMessage">
+		<wsdl:part name="VerifyAnswersRequest" element="msgs:VerifyAnswers" />
+	</wsdl:message>
+	<wsdl:message name="VerifyAnswersResponseMessage">
+		<wsdl:part name="VerifyAnswersResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyPasswordRequestMessage">
+		<wsdl:part name="VerifyPasswordRequest" element="msgs:VerifyPassword" />
+	</wsdl:message>
+	<wsdl:message name="VerifyPasswordResponseMessage">
+		<wsdl:part name="VerifyPasswordResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyOTPRequestMessage">
+		<wsdl:part name="VerifyOTPRequest" element="msgs:VerifyOTP" />
+	</wsdl:message>
+	<wsdl:message name="VerifyOTPResponseMessage">
+		<wsdl:part name="VerifyOTPResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyOATHOTPRequestMessage">
+		<wsdl:part name="VerifyOATHOTPRequest" element="msgs:VerifyOATHOTP" />
+	</wsdl:message>
+	<wsdl:message name="VerifyOATHOTPResponseMessage">
+		<wsdl:part name="VerifyOATHOTPResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="SynchronizeOATHOTPRequestMessage">
+		<wsdl:part name="SynchronizeOATHOTPRequest" element="msgs:SynchronizeOATHOTP" />
+	</wsdl:message>
+	<wsdl:message name="SynchronizeOATHOTPResponseMessage">
+		<wsdl:part name="SynchronizeOATHOTPResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyArcotOTPRequestMessage">
+		<wsdl:part name="VerifyArcotOTPRequest" element="msgs:VerifyArcotOTP" />
+	</wsdl:message>
+	<wsdl:message name="VerifyArcotOTPResponseMessage">
+		<wsdl:part name="VerifyArcotOTPResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="SynchronizeArcotOTPRequestMessage">
+		<wsdl:part name="SynchronizeArcotOTPRequest" element="msgs:SynchronizeArcotOTP" />
+	</wsdl:message>
+	<wsdl:message name="SynchronizeArcotOTPResponseMessage">
+		<wsdl:part name="SynchronizeArcotOTPResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyEMVRequestMessage">
+		<wsdl:part name="VerifyEMVRequest" element="msgs:VerifyEMV" />
+	</wsdl:message>
+	<wsdl:message name="VerifyEMVResponseMessage">
+		<wsdl:part name="VerifyEMVResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="SynchronizeEMVRequestMessage">
+		<wsdl:part name="SynchronizeEMVRequest" element="msgs:SynchronizeEMV" />
+	</wsdl:message>
+	<wsdl:message name="SynchronizeEMVResponseMessage">
+		<wsdl:part name="SynchronizeEMVResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyPlainRequestMessage">
+		<wsdl:part name="VerifyPlainRequest" element="msgs:VerifyPlain" />
+	</wsdl:message>
+	<wsdl:message name="VerifyPlainResponseMessage">
+		<wsdl:part name="VerifyPlainResponse" element="msgs:AuthResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyAuthTokenRequestMessage">
+		<wsdl:part name="VerifyAuthTokenRequest" element="msgs:VerifyAuthTokenRequest" />
+	</wsdl:message>
+	<wsdl:message name="VerifyAuthTokenResponseMessage">
+		<wsdl:part name="VerifyAuthTokenResponse" element="msgs:VerifyAuthTokenResponse" />
+	</wsdl:message>
+	<wsdl:message name="GetCustomChallengeRequestMessage">
+		<wsdl:part name="GetCustomChallengeRequest" element="msgs:GetCustomChallengeRequest" />
+	</wsdl:message>
+	<wsdl:message name="GetCustomChallengeResponseMessage">
+		<wsdl:part name="GetCustomChallengeResponse" element="msgs:GetCustomChallengeResponse" />
+	</wsdl:message>
+	<wsdl:message name="VerifyCustomCredentialRequestMessage">
+		<wsdl:part name="VerifyCustomCredentialRequest" element="msgs:VerifyCustomCredential" />
+	</wsdl:message>
+	<wsdl:message name="VerifyCustomCredentialResponseMessage">
+		<wsdl:part name="VerifyCustomCredentialResponse" element="msgs:CustomAuthResponse" />
+	</wsdl:message>
+	<wsdl:portType name="AuthAPIPortType">
+		<wsdl:operation name="GetArcotID">
+			<wsdl:documentation>
+				Fetches the Base64-encoded ArcotID for a given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:GetArcotIDRequestMessage" />
+			<wsdl:output message="wfauth:GetArcotIDResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetPAM">
+			<wsdl:documentation>
+				Fetches the PAM (Personal Assurance Message) for
+				a given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:GetPAMRequestMessage" />
+			<wsdl:output message="wfauth:GetPAMResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetArcotIDChallenge">
+			<wsdl:documentation>
+				This method obtains an ArcotID challenge from the
+				WebFort Server. ArcotID authentication is
+				challenge-response-based
+				authentication mechanism. The
+				challenge is a tamper-proof data sent
+				from the server,
+				which needs to be signed by the user's ArcotID for
+				the
+				ArcotID credential verification.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:GetArcotIDChallengeRequestMessage" />
+			<wsdl:output message="wfauth:GetArcotIDChallengeResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyArcotIDSignedChallenge">
+			<wsdl:documentation>
+				This method verifies the response received from
+				signing
+				the ArcotID challenge, by ArcotID.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifySignedChallengeRequestMessage" />
+			<wsdl:output message="wfauth:VerifySignedChallengeResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetQuestions">
+			<wsdl:documentation>
+				Fetches the list of questions for the given user
+				from
+				WebFort. This list can then be presented to the user for
+				answers.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:GetQuestionsRequestMessage" />
+			<wsdl:output message="wfauth:GetQuestionsResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetPasswordChallenge">
+			<wsdl:documentation>
+				This method obtains challenge for Password
+				authentication from the WebFort Server.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:GetPasswordChallengeRequestMessage" />
+			<wsdl:output message="wfauth:GetPasswordChallengeResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyAnswers">
+			<wsdl:documentation>
+				Verifies the answers provided by the user to the
+				questions obtained in the getQuestions() call.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyAnswersRequestMessage" />
+			<wsdl:output message="wfauth:VerifyAnswersResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyPassword">
+			<wsdl:documentation>
+				Verifies the Password credential for a given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyPasswordRequestMessage" />
+			<wsdl:output message="wfauth:VerifyPasswordResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyOTP">
+			<wsdl:documentation>
+				Authenticates the users based on their OTP.If
+				authentication is successful user gets his information
+				and
+				authentication token.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyOTPRequestMessage" />
+			<wsdl:output message="wfauth:VerifyOTPResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyOATHOTP">
+			<wsdl:documentation>
+				Authenticates the users based on their OATH
+				OTP.If
+				authentication is successful user gets his information
+				and
+				authentication token.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyOATHOTPRequestMessage" />
+			<wsdl:output message="wfauth:VerifyOATHOTPResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeOATHOTP">
+			<wsdl:documentation>
+				Synchronizes the OATH-OTP credential for a given
+				user.If
+				synchronization is successful user gets his information
+				and
+				authentication token.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:SynchronizeOATHOTPRequestMessage" />
+			<wsdl:output message="wfauth:SynchronizeOATHOTPResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyArcotOTP">
+			<wsdl:documentation>
+				Authenticates the users based on their
+				ArcotOTP.If
+				authentication is successful user gets his information
+				and authentication token.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyArcotOTPRequestMessage" />
+			<wsdl:output message="wfauth:VerifyArcotOTPResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeArcotOTP">
+			<wsdl:documentation>
+				Synchronizes the ArcotOTP credential for a given
+				user.If synchronization is successful user gets his
+				information and
+				authentication token.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:SynchronizeArcotOTPRequestMessage" />
+			<wsdl:output message="wfauth:SynchronizeArcotOTPResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyEMV">
+			<wsdl:documentation>
+				Authenticates the users based on their EMV. If
+				authentication is successful user gets his information
+				and
+				authentication token.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyEMVRequestMessage" />
+			<wsdl:output message="wfauth:VerifyEMVResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeEMV">
+			<wsdl:documentation>
+				Synchronizes the EMV credential for a given
+				user.If synchronization is successful user gets his
+				information and
+				authentication token.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:SynchronizeEMVRequestMessage" />
+			<wsdl:output message="wfauth:SynchronizeEMVResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyPlain">
+			<wsdl:documentation>
+				Authenticates the users based on the palin credential. If
+				authentication is successful user gets his information
+				and
+				authentication token.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyPlainRequestMessage" />
+			<wsdl:output message="wfauth:VerifyPlainResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyAuthToken">
+			<wsdl:documentation>
+				Verifies the authentication token for a given
+				user.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyAuthTokenRequestMessage" />
+			<wsdl:output message="wfauth:VerifyAuthTokenResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetCustomChallenge">
+			<wsdl:documentation>
+				This method obtains the custom challenge from
+				WebFort
+				Server. It can be useful if the custom credential uses
+				challenge-response-based authentication mechanism.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:GetCustomChallengeRequestMessage" />
+			<wsdl:output message="wfauth:GetCustomChallengeResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="VerifyCustomCredential">
+			<wsdl:documentation>
+				This method verifies the custom credential.
+			</wsdl:documentation>
+			<wsdl:input message="wfauth:VerifyCustomCredentialRequestMessage" />
+			<wsdl:output message="wfauth:VerifyCustomCredentialResponseMessage" />
+			<soap12:fault name="WebFortAuthFault" message="wfauth:WebFortAuthFaultMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="AuthAPISOAP11Binding" type="wfauth:AuthAPIPortType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GetArcotID">
+			<soap:operation style="document" soapAction="urn:GetArcotID" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetPAM">
+			<soap:operation style="document" soapAction="urn:GetPAM" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetArcotIDChallenge">
+			<soap:operation style="document" soapAction="urn:GetArcotIDChallenge" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyArcotIDSignedChallenge">
+			<soap:operation style="document"
+				soapAction="urn:VerifyArcotIDSignedChallenge" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetQuestions">
+			<soap:operation style="document" soapAction="urn:GetQuestions" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetPasswordChallenge">
+			<soap:operation style="document" soapAction="urn:GetPasswordChallenge" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyAnswers">
+			<soap:operation style="document" soapAction="urn:VerifyAnswers" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyPassword">
+			<soap:operation style="document" soapAction="urn:VerifyPassword" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyOTP">
+			<soap:operation style="document" soapAction="urn:VerifyOTP" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyOATHOTP">
+			<soap:operation style="document" soapAction="urn:VerifyOATHOTP" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeOATHOTP">
+			<soap:operation style="document" soapAction="urn:SynchronizeOATHOTP" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyArcotOTP">
+			<soap:operation style="document" soapAction="urn:VerifyArcotOTP" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeArcotOTP">
+			<soap:operation style="document" soapAction="urn:SynchronizeArcotOTP" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyEMV">
+			<soap:operation style="document" soapAction="urn:VerifyEMV" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeEMV">
+			<soap:operation style="document" soapAction="urn:SynchronizeEMV" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyPlain">
+			<soap:operation style="document" soapAction="urn:VerifyPlain" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyAuthToken">
+			<soap:operation style="document" soapAction="urn:VerifyAuthToken" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetCustomChallenge">
+			<soap:operation style="document" soapAction="urn:GetCustomChallenge" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyCustomCredential">
+			<soap:operation style="document" soapAction="urn:VerifyCustomCredential" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="AuthAPISOAP12Binding" type="wfauth:AuthAPIPortType">
+		<soap12:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GetArcotID">
+			<soap12:operation soapAction="urn:GetArcotID" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetPAM">
+			<soap12:operation style="document" soapAction="urn:GetPAM" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetArcotIDChallenge">
+			<soap12:operation style="document" soapAction="urn:GetArcotIDChallenge" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyArcotIDSignedChallenge">
+			<soap12:operation style="document"
+				soapAction="urn:VerifyArcotIDSignedChallenge" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetQuestions">
+			<soap12:operation style="document" soapAction="urn:GetQuestions" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetPasswordChallenge">
+			<soap12:operation style="document" soapAction="urn:GetPasswordChallenge" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyAnswers">
+			<soap12:operation style="document" soapAction="urn:VerifyAnswers" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyPassword">
+			<soap12:operation style="document" soapAction="urn:VerifyPassword" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyOTP">
+			<soap12:operation style="document" soapAction="urn:VerifyOTP" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyOATHOTP">
+			<soap12:operation style="document" soapAction="urn:VerifyOATHOTP" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeOATHOTP">
+			<soap12:operation style="document" soapAction="urn:SynchronizeOATHOTP" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyArcotOTP">
+			<soap12:operation style="document" soapAction="urn:VerifyArcotOTP" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeArcotOTP">
+			<soap12:operation style="document" soapAction="urn:SynchronizeArcotOTP" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyEMV">
+			<soap12:operation style="document" soapAction="urn:VerifyEMV" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="SynchronizeEMV">
+			<soap12:operation style="document" soapAction="urn:SynchronizeEMV" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyPlain">
+			<soap12:operation style="document" soapAction="urn:VerifyPlain" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyAuthToken">
+			<soap12:operation style="document" soapAction="urn:VerifyAuthToken" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetCustomChallenge">
+			<soap12:operation style="document" soapAction="urn:GetCustomChallenge" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="VerifyCustomCredential">
+			<soap12:operation style="document" soapAction="urn:VerifyCustomCredential" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAuthFault">
+				<soap12:fault name="WebFortAuthFault" use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="WebFortAuthService">
+		<wsdl:port name="AuthAPISOAP11Port" binding="wfauth:AuthAPISOAP11Binding">
+			<soap:address location="http://ws.arcot.com/services/WebFortAuthSvc" />
+		</wsdl:port>
+		<wsdl:port name="AuthAPISOAP12Port" binding="wfauth:AuthAPISOAP12Binding">
+			<soap12:address location="http://ws.arcot.com/services/WebFortAuthSvc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

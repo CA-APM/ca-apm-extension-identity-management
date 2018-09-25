@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="wsdl-viewer.xsl"?>
+<wsdl:definitions xmlns:wfadm="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/wsdl"
+	xmlns:msgs="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/msgs"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	targetNamespace="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/wsdl">
+	<!--
+		The ArcotWebFortAdminSvc WSDL is used to configure the Arcot WebFort
+		server.
+	-->
+	<wsdl:types>
+		<xs:schema>
+			<xs:import namespace="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/msgs"
+				schemaLocation="./ArcotWebFortAdminMsgs.xsd" />
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="createRequest">
+		<wsdl:part name="parameters" element="msgs:CreateRequest" />
+	</wsdl:message>
+	<wsdl:message name="createResponse">
+		<wsdl:part name="parameters" element="msgs:Response" />
+	</wsdl:message>
+	<wsdl:message name="updateRequest">
+		<wsdl:part name="parameters" element="msgs:UpdateRequest" />
+	</wsdl:message>
+	<wsdl:message name="updateResponse">
+		<wsdl:part name="parameters" element="msgs:Response" />
+	</wsdl:message>
+	<wsdl:message name="fetchRequest">
+		<wsdl:part name="parameters" element="msgs:FetchRequest" />
+	</wsdl:message>
+	<wsdl:message name="fetchResponse">
+		<wsdl:part name="parameters" element="msgs:FetchResponse" />
+	</wsdl:message>
+	<wsdl:message name="deleteRequest">
+		<wsdl:part name="parameters" element="msgs:DeleteRequest" />
+	</wsdl:message>
+	<wsdl:message name="deleteResponse">
+		<wsdl:part name="parameters" element="msgs:Response" />
+	</wsdl:message>
+	<wsdl:message name="assignDefaultRequest">
+		<wsdl:part name="parameters" element="msgs:AssignDefaultRequest" />
+	</wsdl:message>
+	<wsdl:message name="assignDefaultResponse">
+		<wsdl:part name="parameters" element="msgs:Response" />
+	</wsdl:message>
+	<wsdl:message name="fetchEventDetailsRequest">
+		<wsdl:part name="parameters" element="msgs:FetchEventDetailsRequest" />
+	</wsdl:message>
+	<wsdl:message name="fetchEventDetailsResponse">
+		<wsdl:part name="parameters" element="msgs:FetchEventDetailsResponse" />
+	</wsdl:message>
+	<wsdl:message name="isKeyAvailableInHSMRequest">
+		<wsdl:part name="parameters" element="msgs:IsKeyAvailableInHSMRequest" />
+	</wsdl:message>
+	<wsdl:message name="isKeyAvailableInHSMResponse">
+		<wsdl:part name="parameters" element="msgs:Response" />
+	</wsdl:message>
+	<wsdl:message name="WebFortAdminFault">
+		<wsdl:part name="parameters" element="msgs:WebFortAdminFault" />
+	</wsdl:message>
+	<wsdl:portType name="ArcotWebFortAdminSvcPortType">
+		<wsdl:operation name="create">
+			<wsdl:input message="wfadm:createRequest" wsaw:Action="urn:createRequest" />
+			<wsdl:output message="wfadm:createResponse" wsaw:Action="urn:createResponse" />
+			<soap12:fault message="wfadm:WebFortAdminFault" name="WebFortAdminFault"
+				wsaw:Action="urn:createWebFortAdminFault" />
+		</wsdl:operation>
+		<wsdl:operation name="update">
+			<wsdl:input message="wfadm:updateRequest" wsaw:Action="urn:updateRequest" />
+			<wsdl:output message="wfadm:updateResponse" wsaw:Action="urn:updateResponse" />
+			<soap12:fault message="wfadm:WebFortAdminFault" name="WebFortAdminFault"
+				wsaw:Action="urn:updateWebFortAdminFault" />
+		</wsdl:operation>
+		<wsdl:operation name="fetch">
+			<wsdl:input message="wfadm:fetchRequest" wsaw:Action="urn:fetchRequest" />
+			<wsdl:output message="wfadm:fetchResponse" wsaw:Action="urn:fetchResponse" />
+			<soap12:fault message="wfadm:WebFortAdminFault" name="WebFortAdminFault"
+				wsaw:Action="urn:fetchWebFortAdminFault" />
+		</wsdl:operation>
+		<wsdl:operation name="delete">
+			<wsdl:input message="wfadm:deleteRequest" wsaw:Action="urn:deleteRequest" />
+			<wsdl:output message="wfadm:deleteResponse" wsaw:Action="urn:deleteResponse" />
+			<soap12:fault message="wfadm:WebFortAdminFault" name="WebFortAdminFault"
+				wsaw:Action="urn:deleteWebFortAdminFault" />
+		</wsdl:operation>
+		<wsdl:operation name="assignDefault">
+			<wsdl:input message="wfadm:assignDefaultRequest" wsaw:Action="urn:assignDefaultRequest" />
+			<wsdl:output message="wfadm:assignDefaultResponse"
+				wsaw:Action="urn:assignDefaultResponse" />
+			<soap12:fault message="wfadm:WebFortAdminFault" name="WebFortAdminFault"
+				wsaw:Action="urn:assignDefaultWebFortAdminFault" />
+		</wsdl:operation>
+		<wsdl:operation name="fetchEventDetails">
+			<wsdl:input message="wfadm:fetchEventDetailsRequest" wsaw:Action="urn:fetchEventDetailsRequest" />
+			<wsdl:output message="wfadm:fetchEventDetailsResponse"
+				wsaw:Action="urn:fetchEventDetailsResponse" />
+			<soap12:fault message="wfadm:WebFortAdminFault" name="WebFortAdminFault"
+				wsaw:Action="urn:fetchEventDetailsWebFortAdminFault" />
+		</wsdl:operation>
+		<wsdl:operation name="isKeyAvailableInHSM">
+			<wsdl:input message="wfadm:isKeyAvailableInHSMRequest" wsaw:Action="urn:isKeyAvailableInHSMRequest" />
+			<wsdl:output message="wfadm:isKeyAvailableInHSMResponse"
+				wsaw:Action="urn:isKeyAvailableInHSMResponse" />
+			<soap12:fault message="wfadm:WebFortAdminFault" name="WebFortAdminFault"
+				wsaw:Action="urn:isKeyAvailableInHSMWebFortAdminFault" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ArcotWebFortAdminSvcSOAP12Binding"
+		type="wfadm:ArcotWebFortAdminSvcPortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="create">
+			<soap12:operation soapAction="urn:create" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAdminFault">
+				<soap12:fault use="literal" name="WebFortAdminFault" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="update">
+			<soap12:operation soapAction="urn:update" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAdminFault">
+				<soap12:fault use="literal" name="WebFortAdminFault" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="fetch">
+			<soap12:operation soapAction="urn:fetch" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAdminFault">
+				<soap12:fault use="literal" name="WebFortAdminFault" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="delete">
+			<soap12:operation soapAction="urn:delete" style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAdminFault">
+				<soap12:fault use="literal" name="WebFortAdminFault" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="assignDefault">
+			<soap12:operation soapAction="urn:assignDefault"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAdminFault">
+				<soap12:fault use="literal" name="WebFortAdminFault" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="fetchEventDetails">
+			<soap12:operation soapAction="urn:fetchEventDetails"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAdminFault">
+				<soap12:fault use="literal" name="WebFortAdminFault" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="isKeyAvailableInHSM">
+			<soap12:operation soapAction="urn:isKeyAvailableInHSM"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="WebFortAdminFault">
+				<soap12:fault use="literal" name="WebFortAdminFault" />
+			</soap12:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ArcotWebFortAdminSvc">
+		<wsdl:port name="ArcotWebFortAdminSvcSOAP12port_http"
+			binding="wfadm:ArcotWebFortAdminSvcSOAP12Binding">
+			<soap12:address location="http://ws.arcot.com/services/WebFortAdminSvc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

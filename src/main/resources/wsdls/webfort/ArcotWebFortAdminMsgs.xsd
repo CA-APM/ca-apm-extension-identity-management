@@ -1,0 +1,287 @@
+<xs:schema xmlns:msgs="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/msgs"
+	xmlns:commonxsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:xsd="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="qualified" elementFormDefault="qualified"
+	targetNamespace="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/msgs">
+	<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+	<xs:import namespace="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/xsd"
+		schemaLocation="./ArcotWebFortAdminSchema.xsd" />
+	<xs:element name="WebFortAdminFault">
+		<xs:annotation>
+			<xs:documentation>
+				WebFortAdminFault is the structure used for holding the admin
+				transaction failure details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="commonxsd:TransactionDetailsType">
+					<xs:sequence>
+						<xs:element name="adminErrorDetails" type="xsd:WebFortAdminErrorDetails"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Admin configuration error details.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CreateRequest">
+		<xs:annotation>
+			<xs:documentation>
+				CreateRequest is the structure used for holding the configurations
+				that are going to be created.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminReq">
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="configurations"
+							type="xsd:ConfigurationsInput">
+							<xs:annotation>
+								<xs:documentation>
+									Configurations for a particular organization, that are going to be created.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UpdateRequest">
+		<xs:annotation>
+			<xs:documentation>
+				UpdateRequest is the structure used for holding the configurations
+				that are going to be updated.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminReq">
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="configurations"
+							type="xsd:ConfigurationsInput">
+							<xs:annotation>
+								<xs:documentation>
+									Configurations for a particular organization, that are going to be updated.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DeleteRequest">
+		<xs:annotation>
+			<xs:documentation>
+				DeleteRequest is the structure used for holding the configuration
+				names that are going to be deleted.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminReq">
+					<xs:sequence>
+						<xs:element name="configurationNames" type="xsd:ConfigurationNames"
+							minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Configuration names for a particular organization, that are going to be deleted.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FetchRequest">
+		<xs:annotation>
+			<xs:documentation>
+				FetchRequest is the structure used for holding the configuration
+				names that are going to be fetched.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminReq">
+					<xs:sequence>
+						<xs:element name="configurationNames" type="xsd:ConfigurationNames"
+							minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Configuration names for a particular organization, that are going to be fetched.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="isFetchOnlyNames" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									This flag is to indicate that fetch only names and
+									not to include entire configuration object. This can
+									be used while fetching all configurations.
+								</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+				              	<xs:sequence>
+				                    <xs:any minOccurs="0" maxOccurs="1"/>
+				                </xs:sequence>
+				        	</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FetchResponse">
+		<xs:annotation>
+			<xs:documentation>
+				FetchResponse is the structure used for holding the configurations
+				that are fetched.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminRes">
+					<xs:sequence>
+						<xs:element name="configurations" minOccurs="1" maxOccurs="1">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element minOccurs="1" maxOccurs="1" name="configurationObjects"
+										type="xsd:ConfigurationObjectList">
+										<xs:annotation>
+											<xs:documentation>
+												Configurations for a particular organization, that are fetched.
+											</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element minOccurs="1" maxOccurs="1" name="configurationNames"
+										type="xsd:ConfigurationNamesList">
+										<xs:annotation>
+											<xs:documentation>
+												Configuration names output for a particular organization, that are fetched.
+											</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AssignDefaultRequest">
+		<xs:annotation>
+			<xs:documentation>
+				AssignDefaultRequest is the structure used for holding the configuration
+				names that are going to be assigned as default for a particular organization.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminReq">
+					<xs:sequence>
+						<xs:element name="assignDefault" type="xsd:AssignDefault"
+							minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Configuration names, that are going to be assigned as a default for a particular organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FetchEventDetailsRequest">
+		<xs:annotation>
+			<xs:documentation>
+				This is the request for getting events
+				of an orgnaization.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminReq">
+					<xs:sequence>
+						<xs:element name="orgDetails" type="commonxsd:OrgDetails"
+							minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Organization details of
+									events to be fetched.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FetchEventDetailsResponse">
+		<xs:annotation>
+			<xs:documentation>
+				FetchEventDetailsResponse is the structure used for holding the even details
+				that are fetched.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminRes">
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="events" type="xsd:EventDetailsList" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="IsKeyAvailableInHSMRequest">
+		<xs:annotation>
+			<xs:documentation>
+				Request structure used in function
+				IsKeyAvailableInHSM.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminReq">
+					<xs:sequence>
+						<xs:element name="keyLabel" type="xs:string"
+							minOccurs="1" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Label of the key that is present
+									in HSM.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Response">
+		<xs:annotation>
+			<xs:documentation>
+				Response is the structure used for holding response details of
+				the admin transaction.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xsd:BaseAdminRes" />
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

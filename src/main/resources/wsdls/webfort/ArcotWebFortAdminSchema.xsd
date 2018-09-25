@@ -1,0 +1,4520 @@
+<xs:schema xmlns:xsd="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/xsd"
+	xmlns:commonxsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified"
+	elementFormDefault="qualified" targetNamespace="http://ws.arcot.com/ArcotWebFortAdminSvc/7.0/xsd">
+	<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+	<xs:annotation>
+		<xs:documentation>
+			The xsd schema holds local types defining response
+			message contents or a logical grouping of values in
+			request messages.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="BaseAdminReq">
+		<xs:annotation>
+			<xs:documentation>
+				BaseAdminReq is base class of all admin requests.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:BaseRequestType">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="additionalInput"
+						type="commonxsd:AdditionalInputType">
+						<xs:annotation>
+							<xs:documentation>
+								This element contains the additional inputs
+								that may be needed for different operations.
+
+								Following are some
+								of the pre-defined additional
+								input parameters:
+								AR_WF_LOCALE_ID
+								identifier for the locale that
+								WebFort will use in returning the messages.
+								AR_WF_CALLER_ID identifier for the transaction in the
+								calling application. This
+								is useful for tracking the
+								transaction end-to-end.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BaseAdminRes">
+		<xs:annotation>
+			<xs:documentation>
+				BaseAdminRes is base class of all admin responses.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:BaseResponseType">
+				<xs:sequence>
+					<xs:element name="transactionDetails" type="commonxsd:TransactionDetailsType">
+						<xs:annotation>
+							<xs:documentation>
+								This element contains the details associated
+								with the transaction, such as response code,
+								reason code, a
+								unique transaction identifier,
+								localized transaction message, and
+								so on.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConfigStatus">
+		<xs:annotation>
+			<xs:documentation>
+				Configuration status is a combination of following
+				different status.
+				Not required as input. Comes as only output.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="ACTIVE" type="xs:boolean" />
+			<xs:element minOccurs="0" maxOccurs="1" name="DISABLED" type="xs:boolean" />
+			<xs:element minOccurs="0" maxOccurs="1" name="DELETED" type="xs:boolean" />
+			<xs:element minOccurs="0" maxOccurs="1" name="DEFAULT" type="xs:boolean" />
+			<xs:element minOccurs="0" maxOccurs="1" name="READONLY" type="xs:boolean" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BaseWFConfig">
+		<xs:annotation>
+			<xs:documentation>
+				BaseWFConfig is base class of all admin
+				configuration
+				data structures like profiles and policies, etc.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Configuration name
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="status"
+				type="xsd:ConfigStatus" />
+		</xs:sequence>
+	</xs:complexType>	
+	<xs:complexType name="UserCheck">
+		<xs:annotation>
+			<xs:documentation>
+				UserCheck is the structure used to represent
+				the
+				user attributes that are need to be checked.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="userActiveCheck" type="xs:boolean"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Flag that indicates the user active check.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="userAttributesToCheck" type="commonxsd:PairType"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						User attributes that are need to be checked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BaseWFAuthConfig">
+		<xs:annotation>
+			<xs:documentation>
+				BaseWFAuthConfig is base class of all admin policy
+				data structures.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element name="maxStrikes" type="xs:int" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Maximum number of unsuccessful authentications
+								tried by the user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="warningPeriod" type="xs:long"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The number of days that are left to expire the
+								credential.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="gracePeriod" type="xs:long" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The number of days that are left to fail the
+								authentication
+								of the credential after the expiry.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="autoUnlockPeriod" type="xs:long"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The number of seconds that are left to unlock the
+								credential.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="userCheck" type="xsd:UserCheck"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								User attributes that are need to be checked.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="matchAcrossUsageType" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Flag that indicates the match across usage
+								type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="usageTypeToMatch" type="xs:string"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Usage type that need to be matched.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="adProcConditions" type="commonxsd:IntegerList"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The set of webfort response codes for which
+								alternate/additional processor will be invoked.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArcotIDAuthConfig">
+		<xs:annotation>
+			<xs:documentation>
+				ArcotIDAuthConfig is the structure used
+				to represent
+				authentication configuration.
+				These configuration settings will be
+				used while
+				authenticating with ArcotID by the user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFAuthConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="challengeTimeout"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Validity time in seconds for challenge sent
+								while arcotID authentication.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="QnAAuthConfig">
+		<xs:annotation>
+			<xs:documentation>
+				QnAAuthConfig is the structure used to
+				represent QnA
+				authentication configuration.
+				These configuration settings will be
+				used while
+				authenticating with QnA by the user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFAuthConfig">
+				<xs:sequence>
+					<xs:element name="numQuestionsToChallenge" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The number of questions to be asked for
+								authentication.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="minAnswersRequired" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The minimum number of correct answers required
+								for successful authentication.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="questionsChallengeMode" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Question challenge mode has the following
+								values.
+								1 for RANDOM and 2 for ALTERNATIVE.														
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="questionSetChangeOption" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Question set change option has the following
+								values.
+								1 for STATIC and 2 for RANDOM.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="isCVMEnabled" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Flag that indicates whether caller side
+								verification is enabled or not.														
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="challengeTimeout"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Validity time in seconds for challenge sent
+								while QnA authentication.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PasswordAuthConfig">
+		<xs:annotation>
+			<xs:documentation>
+				PasswordAuthPolicy is the structure used to
+				represent authentication configuration for
+				password credential. These
+				configuration
+				settings will be used while authenticating
+				with password by the user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFAuthConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="numPositionsToChallenge" type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Number of positions to be challenged in partial
+								password case.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="challengeTimeout"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Validity time in seconds for challenge sent
+								while password authentication.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ServerOTPAuthConfig">
+		<xs:annotation>
+			<xs:documentation>
+				ServerOTPAuthConfig is the structure used to
+				represent authentication configuration for server
+				OTP credential.
+				These configuration settings will
+				be used while authenticating with server OTP by the
+				user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFAuthConfig" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OTPCounterTolerance">
+		<xs:annotation>
+			<xs:documentation>
+				OTPCounterTolerance is the structure used to
+				represent the look ahead and look back in authentication
+				and
+				synchronization cases.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="authLookAhead"
+				type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Authentication look ahead count.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="authLookBack"
+				type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Authentication look back count.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="reSyncLookAhead"
+				type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Synchronization look ahead count.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="reSyncLookBack"
+				type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Synchronization look back count.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OATHAuthConfig">
+		<xs:annotation>
+			<xs:documentation>
+				OATHAuthConfig is the structure used to
+				represent
+				authentication configuration for
+				OATH credential. These configuration settings
+				will be used while authenticating with OATH
+				by the user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFAuthConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="otpCounterTolerance" type="xsd:OTPCounterTolerance">
+						<xs:annotation>
+							<xs:documentation>
+								This element contains the OTP counter tolerance
+								parameters.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArcotOTPAuthConfig">
+		<xs:annotation>
+			<xs:documentation>
+				ArcotOTPAuthConfig is the structure used to
+				represent authentication configuration for ARCOT OTP
+				credential.
+				These configuration settings will be
+				used while authenticating with ArcotOTP by the user.
+				
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFAuthConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="otpCounterTolerance" type="xsd:OTPCounterTolerance">
+						<xs:annotation>
+							<xs:documentation>
+								This element contains the OTP counter tolerance
+								parameters.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="EMVAuthConfig">
+		<xs:annotation>
+			<xs:documentation>
+				EMV AuthPolicy is the structure used to
+				represent
+				authentication configuration for
+				EMV OTP credential. These configuration settings
+				will be used while authenticating with EMV by
+				the user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFAuthConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="otpCounterTolerance" type="xsd:OTPCounterTolerance">
+						<xs:annotation>
+							<xs:documentation>
+								This element contains the OTP counter tolerance
+								parameters.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BaseWFIssuanceConfig">
+		<xs:annotation>
+			<xs:documentation>
+				Base class of all admin profile data structures.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element name="multipleUsageCount" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Number of times credential can be used in
+								successful authentication.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="usageType" type="xs:string" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Usage type of the credential.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="validity" type="commonxsd:Validity"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Validity of the credential.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="userCheck" type="xsd:UserCheck"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								User attributes that are need to be checked.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="customAttributes"
+						type="commonxsd:PairTypeList">
+						<xs:annotation>
+							<xs:documentation>
+								Custom attributes.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PasswordStrengthParameters">
+		<xs:annotation>
+			<xs:documentation>
+				PasswordStrengthParameters is the structure used to
+				represent the password strength parameters.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="minLength" type="xs:int" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Minimum length of the password.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="maxLength" type="xs:int" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Maximum length of the password.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="minAlphaChars" type="xs:int" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Minimum number of alphabets required in the
+						password.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="minNumericChars" type="xs:int"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Minimum number of numbers required in the
+						password.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="minSpecialChars" type="xs:int"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Minimum number of special characters required in
+						the password.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CredentialHistoryConfig">
+		<xs:annotation>
+			<xs:documentation>
+				CredentialHistoryConfig is the structure used to
+				represent the configuration required
+				for credential history.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="count" type="xs:int" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						History based on count.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="time" type="commonxsd:ArcotDateType"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						History based on time.
+						Only relative ArcotDateType is allowed,
+						anything else is (ignored and ) treated 
+						as relative.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ArcotIDIssuanceConfig">
+		<xs:annotation>
+			<xs:documentation>
+				ArcotIDIssuanceConfig is the structure used to
+				represent ArcotID issuance configuration.
+				These configuration
+				settings will be used while
+				issuing a new ArcotID credential to user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFIssuanceConfig">
+				<xs:sequence>
+					<xs:element name="keyLength" type="xs:int" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The length of the arcot key of the ArcotID.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="unsignedAttributes"
+						type="commonxsd:PairTypeList">
+						<xs:annotation>
+							<xs:documentation>
+								Unsigned attributes that are used in ArcotID.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="passwordStrengthParameters" type="xsd:PasswordStrengthParameters">
+						<xs:annotation>
+							<xs:documentation>
+								Strength parameters of the ArcotID password.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="historyConfig"
+						type="xsd:CredentialHistoryConfig">
+						<xs:annotation>
+							<xs:documentation>
+								History configuration of the ArcotID.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="QnAIssuanceConfig">
+		<xs:annotation>
+			<xs:documentation>
+				QnAIssuanceConfig is the structure used to
+				represent QnA issuance configuration. These
+				configuration settings will be used while
+				issuing a new Qna credential to user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFIssuanceConfig">
+				<xs:sequence>
+					<xs:element name="maxQuestions" type="xs:int" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Maximum number of questions can be configured
+								for each user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="minQuestions" type="xs:int" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Minimum number of questions can be configured
+								for each user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="questions" type="commonxsd:StringList" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Questions can be configured for each user.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="isCaseSensitive" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Flag that indicates whether answers are case
+								sensitive or not.														
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="questionReturnMode" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Question return mode has the following values.
+								1 for STATIC and 2 for RANDOM.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PasswordIssuanceConfig">
+		<xs:annotation>
+			<xs:documentation>
+				PasswordIssuanceConfig is the structure used to
+				represent Password issuance configuration. These
+				configuration settings will be used while
+				issuing a new password credential to user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFIssuanceConfig">
+				<xs:sequence>
+					<xs:element name="enforceUniquenessAcrossUsageTypes"
+						type="xs:boolean" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Flag that indicates the uniqueness across usage
+								types.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="generatePassword" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Flag that indicates the generation of the
+								password
+								at server side or not.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="passwordStrengthParameters" type="xsd:PasswordStrengthParameters">
+						<xs:annotation>
+							<xs:documentation>
+								Strength parameters of the password.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="historyConfig"
+						type="xsd:CredentialHistoryConfig">
+						<xs:annotation>
+							<xs:documentation>
+								History configuration of the password.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ServerOTPIssuanceConfig">
+		<xs:annotation>
+			<xs:documentation>
+				ServerOTPIssuanceConfig is the structure used to
+				represent server OTP issuance configuration.
+				These configuration settings will be used while
+				issuing a new OTP credential to user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFIssuanceConfig">
+				<xs:sequence>
+					<xs:element name="length" type="xs:int" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Length of the OTP.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="type" type="xs:int" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the OTP which can be either of
+								following two types 1. Numeric 2. Alpha-numeric.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OATHIssuanceConfig">
+		<xs:annotation>
+			<xs:documentation>
+				OATHIssuanceConfig is the structure used to
+				represent OATH issuance configuration. These
+				configuration settings will be used while
+				issuing a new OATH credential to user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFIssuanceConfig" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArcotOTPIssuanceConfig">
+		<xs:annotation>
+			<xs:documentation>
+				ArcotOTPIssuanceConfig is the structure used to
+				represent ARCOTOTP issuance configuration. These
+				configuration settings will be used while
+				issuing a new ArcotOTP credential to user.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFIssuanceConfig">
+				<xs:sequence>
+					<xs:element name="length" type="xs:int" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Length of the ArcotOTP.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="type" type="xs:int" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Type of the ArcotOTP which can be either of
+								following two types 1. HOTP 2. TOTP.								
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="provisioningAttributes" type="commonxsd:PairTypeList"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Provisioning attributes are used for ArcotOTP.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="customCardAttributes" type="commonxsd:PairTypeList"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Custom card attributes are used in ArcotOTP
+								card.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="EMVIssuanceConfig">
+		<xs:annotation>
+			<xs:documentation>
+				EMVIssuanceConfig is the structure used to
+				represent EMV issuance configuration. These
+				configuration settings will be used while
+				issuing a new EMV credential to user.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFIssuanceConfig">
+				<xs:sequence>
+					<xs:element name="accountType" type="xs:string" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Account type should correspond to PAN.								
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="attributeForPanSequence" type="xs:string" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Account attribute that contains 
+								PAN Sequence.								
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>				
+					<xs:element name="provisioningAttributes" type="commonxsd:PairTypeList"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Provisioning attributes are used for EMV.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="emvAttributes" type="commonxsd:PairTypeList"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								EMV standard attributes.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="customCardAttributes" type="commonxsd:PairTypeList"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Custom card attributes are used in EMV card.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MiscellaneousConfig">
+		<xs:annotation>
+			<xs:documentation>
+				MiscellaneousConfig is the structure used to
+				represent miscellaneous configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="nativeTokenTimeout"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Validity time in seconds for native token.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="ottLength"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								One time token length.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="ottTimeout"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Validity time in seconds for one time token.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="KeyConfig">
+		<xs:annotation>
+			<xs:documentation>
+				KeyConfig is the structure used to
+				represent key
+				configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="label"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Label in HSM for key.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="keyStatus"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Key status represents whether key is active or not.
+								if its value is 1 then key is active,
+								if its value is 2 then key is inactive,
+								if its value is 3 then key is retired.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="keyInHSM"
+						type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								Flag that indicates whether key is present in
+								HSM or not.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="validity" type="commonxsd:Validity"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								This data structure represents the Key validity. 
+								In key creation Server will always take current
+								date as validityBegin even though caller passes 
+								the value of it. In key updation if validityEnd 
+								is relative then server will calculate validity 
+								end date w.r.t. existing validity end date.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RADIUSDetails">
+		<xs:annotation>
+			<xs:documentation>
+				RADIUSDetails is the structure used to represent
+				Radius client/Server configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="authType" type="xs:int" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Type of authentication associted with given
+						host.
+						Here Radius host can be configured
+						for following types of
+						authentications. "OTT"
+						"INBAND"
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="description"
+				type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						The comments asscoiated with particular host.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="maxPacketSize" type="xs:int" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						The maximum packet size used while communication.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="protocolVersion" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS packet version to be used for given host.
+						It may be one of following. "1.0" represents
+						RADIUS version 1.0, and "2.0" represents RADIUS
+						version 2.0.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="sharedSecret" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Symmetric shared secret key to be used while
+						communication.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1"
+				name="additionalRADIUSAttributes" type="commonxsd:PairTypeList">
+				<xs:annotation>
+					<xs:documentation>
+						Additional RADIUS attributes.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		</xs:complexType>
+		<xs:complexType name="EAPAuthTypeConfig">
+			<xs:annotation>
+				<xs:documentation>
+					"Configuration elements for EAP authentication."
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1"
+					name="serverCertKeyPair" type="commonxsd:CertKeyPair">
+					<xs:annotation>
+						<xs:documentation>
+							Server certificate and password.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>								
+			</xs:sequence>
+		</xs:complexType>
+		<xs:complexType name="EAPAuthTypeDetails">
+			<xs:annotation>
+				<xs:documentation>
+					"Certificate details for EAP authentication."
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1"
+					name="certificateDetails" type="commonxsd:CertificateDetails">
+					<xs:annotation>
+						<xs:documentation>
+							Server certificate details.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>								
+			</xs:sequence>
+		</xs:complexType>		
+		<xs:complexType name="RADIUSClient">
+		<xs:annotation>
+			<xs:documentation>
+				RADIUSClient is the structure used to represent
+				the
+				information about RADIUS client.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:RADIUSDetails">
+				<xs:sequence>
+					<xs:element name="defaultOrg" type="xs:string" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Default organization at global level.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="orgsSupported" type="commonxsd:StringList"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Organizations supported.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="packetDropConditions" type="commonxsd:IntegerList"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The set of WebFort response codes for which
+								WebFort server will drop the RADIUS response.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="enableRetry" type="xs:boolean"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Enables RADIUS retry feature.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="retryWindow" type="xs:int"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Time in seconds after which a retry
+								will be treated invalid.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RADIUSClientConfig">
+		<xs:annotation>
+			<xs:documentation>
+				RADIUSClientConfig is the structure used to
+				represent Radius client configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element name="radiusClient" type="xsd:RADIUSClient"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								RADIUS clients information.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="eapAuthTypeData" type="xsd:EAPAuthTypeConfig"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Configuration for EAP authentication type.
+							</xs:documentation>
+						</xs:annotation>						
+					</xs:element>					
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RADIUSClientConfigRes">
+		<xs:annotation>
+			<xs:documentation>
+				RADIUSClientConfig is the structure used to
+				represent Radius client configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element name="radiusClient" type="xsd:RADIUSClient"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								RADIUS clients information.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="eapAuthTypeData" type="xsd:EAPAuthTypeDetails"
+						minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Details of EAP authentication type.
+							</xs:documentation>
+						</xs:annotation>						
+					</xs:element>					
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	<xs:complexType name="RADIUSServer">
+		<xs:annotation>
+			<xs:documentation>
+				RADIUSServer is the structure used to represent
+				the
+				information about RADIUS server.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:RADIUSDetails">
+				<xs:sequence>
+					<xs:element name="ipAddress" type="xs:string" minOccurs="1" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								The IP address of the RADIUS server.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>				
+					<xs:element name="port" type="xs:int" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Port of the RADIUS server.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="readTimeout" type="xs:int" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Read timeout of RADIUS server.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="retryCount" type="xs:int" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Retry count with RADIUS server.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="failoverOrder" type="xs:int" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Failover order of RADIUS servers.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RADIUSServerList">
+		<xs:annotation>
+			<xs:documentation>
+				Used as list for holding RADIUS servers.
+				list - list of values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:ListType">
+				<xs:sequence>
+					<xs:element name="list" type="xsd:RADIUSServer"
+						minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of RADIUS servers.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	<xs:complexType name="RADIUSServerConfig">
+		<xs:annotation>
+			<xs:documentation>
+				RADIUSServerConfig is the structure used to
+				represent RADIUS server configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element name="isEnabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Flag indicates that whether proxy feature is
+								enabled or not.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="useSystemConfig" type="xs:boolean" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Flag that indicates whether use system
+								configuration or organization level configuration.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="radiusServers"
+						type="xsd:RADIUSServerList">
+						<xs:annotation>
+							<xs:documentation>
+								RADIUS servers information.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CredTypeResolutionConfig">
+		<xs:annotation>
+			<xs:documentation>
+				CredTypeResolutionConfig is the structure used to
+				represent credential type resolution configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element name="credType" type="xs:int" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Credential to map.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="userAttributeForCredType" type="xs:string" minOccurs="0"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								User custom attribute that contains 
+								credential type.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="EventDetails">
+		<xs:annotation>
+			<xs:documentation>
+				"EventDetails is the structure used to
+				represent event internal details."
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="eventID" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Numeric representation of the event. 
+						When specifing event to be
+						associated with plugin or callout
+						this is required (not eventName).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="eventName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						String representation of the event. 
+						When specifing event to be
+						associated with plugin or callout
+						this is not required (eventID is enough).
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EventDetailsList">
+		<xs:annotation>
+			<xs:documentation>
+				Used as list for holding event details
+				list - list of values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:ListType">
+				<xs:sequence>
+					<xs:element name="list" type="xsd:EventDetails"
+						minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of event detail values.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	<xs:complexType name="ExtModuleEvents">
+		<xs:annotation>
+			<xs:documentation>
+				"Events structure represents 
+				different types of events that
+				can come as a result of fetching
+				the plugin/callout configuration."
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="eventsSupported" 
+				type="xsd:EventDetailsList">
+				<xs:annotation>
+					<xs:documentation>
+						Events supported by plugin/callout.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="eventsAvailable" 
+				type="xsd:EventDetailsList">
+				<xs:annotation>
+					<xs:documentation>
+						For the given organization the remaining 
+						events that this plugin/callout can avail.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="eventsAssociated" 
+				type="xsd:EventDetailsList">
+				<xs:annotation>
+					<xs:documentation>
+						The events those to be associated or already
+						associated for the given org with the
+						plugin/callout.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PluginConfigElement">
+		<xs:annotation>
+			<xs:documentation>
+				PluginConfigElement is the structure used to
+				represent plugin configuration elements.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Configuration element name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="1" maxOccurs="1" name="type" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Type of the configuration element.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="description"
+				type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Description of configuration element.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="defaultValue"
+				type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Default value of configuration element.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="assignedValue"
+				type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Assigned value of configuration element.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="listValues"
+				type="commonxsd:StringList">
+				<xs:annotation>
+					<xs:documentation>
+						Possible values of configuration element
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="assignedValueBytes"
+				type="xs:base64Binary">
+				<xs:annotation>
+					<xs:documentation>
+						Assigned value of configuration element in bytes.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PluginConfigElementList">
+		<xs:annotation>
+			<xs:documentation>
+				Used as list for holding plugin configuration elements values
+				list - list of values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:ListType">
+				<xs:sequence>
+					<xs:element name="list" type="xsd:PluginConfigElement"
+						minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of plugin configuration element values.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	<xs:complexType name="PluginConfig">
+		<xs:annotation>
+			<xs:documentation>
+				PluginConfig is the structure used to
+				represent
+				plugin configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="pluginConfigElements" type="xsd:PluginConfigElementList">
+						<xs:annotation>
+							<xs:documentation>
+								Information related to plugin element.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="events" type="xsd:ExtModuleEvents">
+						<xs:annotation>
+							<xs:documentation>
+								Events related to plugin.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="isTemplate" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies whether this is template or data.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CalloutConfig">
+		<xs:annotation>
+			<xs:documentation>
+				CalloutDetailElements is the structure used to
+				represent callout configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="transport"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Transport that is used for communication.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="host"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Host name of the callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="port"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Port of the callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="uri" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								URI of the callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="connectionTimeout"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Connection timeout of callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="readTimeout"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Read timeout of callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="idleTimeout"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Idle timeout of callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="minConnections"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Minimum connections to be established with
+								callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="maxConnections"
+						type="xs:int">
+						<xs:annotation>
+							<xs:documentation>
+								Maximum connections to be established with
+								callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="serverRootCACert"
+						nillable="true" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Server root SSL certificate.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" name="clientCertKeyPair"
+						nillable="true" type="commonxsd:CertKeyPair">
+						<xs:annotation>
+							<xs:documentation>
+								Client SSL certificate.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="events" type="xsd:ExtModuleEvents">
+						<xs:annotation>
+							<xs:documentation>
+								Events related to callout.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CalloutConfigRes">
+		<xs:annotation>
+			<xs:documentation>
+				CalloutConfigRes is the structure used to
+				represent
+				callout response configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:CalloutConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="serverCertDetails"
+						nillable="true" type="commonxsd:CertificateDetails">
+						<xs:annotation>
+							<xs:documentation>
+								Server certificate details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="clientCertDetails"
+						nillable="true" type="commonxsd:CertificateDetails">
+						<xs:annotation>
+							<xs:documentation>
+								Client certificate details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ASSPMechanism">
+		<xs:annotation>
+			<xs:documentation>
+				ASSPMechanism is the structure used to represent
+				mechanism information that are used in ASSP.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="mechanism" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Mechanism used by ASSP.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="status" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						The mechanism with status 1 indicates that
+						ASSP will use the mechanism.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ASSPMechanismList">
+		<xs:annotation>
+			<xs:documentation>
+				Used as list for holding ASSP mechanism list values
+				list - list of values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:ListType">
+				<xs:sequence>
+					<xs:element name="list" type="xsd:ASSPMechanism"
+						minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of ASSP mechanism list values.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	<xs:complexType name="ASSPConfig">
+		<xs:annotation>
+			<xs:documentation>
+				ASSPConfig is the structure used to represent
+				ASSP
+				configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="tokenServer"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Token server name.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="roamingURL"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Roaming URL.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="mechanisms"
+						type="xsd:ASSPMechanismList">
+						<xs:annotation>
+							<xs:documentation>
+								Mechanisms information that are used by ASSP.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="samlTokenSigningCertKeyPair" type="commonxsd:CertKeyPair">
+						<xs:annotation>
+							<xs:documentation>
+								SAML token signing certificate and key
+								information.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="samlTokenAttributes" type="xsd:SAMLTokenAttributes">
+						<xs:annotation>
+							<xs:documentation>
+								SAML token attributes.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="kerberosUseProcessCredentials" type="xs:boolean">
+						<xs:annotation>
+							<xs:documentation>
+								Flag that indicates the kerberos use process
+								credentials.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="kerberosUserName"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Kerberos user name.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="kerberosPassword"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Kerberos user password.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="kerberosDomainName"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Kerberos domain name.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ASSPConfigRes">
+		<xs:annotation>
+			<xs:documentation>
+				ASSPConfigResp is the structure used to represent
+				ASSP configuration response.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:ASSPConfig">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="1" name="certDetails"
+						type="commonxsd:CertificateDetails">
+						<xs:annotation>
+							<xs:documentation>
+								Certificate details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SAMLAdditionalAttribute">
+		<xs:annotation>
+			<xs:documentation>
+				SAMLAdditionalAttribute is the structure used
+				to
+				represent additional attributes used in SAML
+				token.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="attributeNameSpace" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Attribute namespace.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="nameFormat" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Attribute name format.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="attributeName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Attribute name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FriendlyName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Friendly name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SAMLAdditionalAttributeList">
+		<xs:annotation>
+			<xs:documentation>
+				Used as list for holding SAML Additional attributes list values
+				list - list of values.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:ListType">
+				<xs:sequence>
+					<xs:element name="list" type="xsd:SAMLAdditionalAttribute"
+						minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>
+								List of SAML Additional attributes list values.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	<xs:complexType name="SAMLTokenAttributes">
+		<xs:annotation>
+			<xs:documentation>
+				SAMLTokenAttributes is the structure used to
+				represent SAML token attributes.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="issuerName"
+				type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						SAML Issuer name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="oneTimeUse"
+				type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>
+						Flag for one time use.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="assertionTimeOut"
+				type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Assertion timeOut.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="audiences"
+				type="commonxsd:StringList">
+				<xs:annotation>
+					<xs:documentation>
+						Audiences.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SAMLTokenConfig">
+		<xs:annotation>
+			<xs:documentation>
+				SAMLTokenConfig is the structure used to
+				represent
+				SAML token configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="tokenSigningCertKeyPair" type="commonxsd:CertKeyPair">
+						<xs:annotation>
+							<xs:documentation>
+								SAML token signing certificate and key details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="digestMethod"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Digest method.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1" name="signatureMethod"
+						type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Signature method.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="samlTokenAttributes" type="xsd:SAMLTokenAttributes">
+						<xs:annotation>
+							<xs:documentation>
+								SAML token attributes.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="subjectFormatSAML11" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Subject format for SAML1.1.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="subjectFormatSAML20" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+								Subject format for SAML2.0.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="additionalAttributes" type="xsd:SAMLAdditionalAttributeList">
+						<xs:annotation>
+							<xs:documentation>
+								SAML additional attributes.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SAMLTokenConfigRes">
+		<xs:annotation>
+			<xs:documentation>
+				SAMLTokenConfigResp is the structure used to
+				represent SAML token configuration.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:SAMLTokenConfig">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="1" name="certDetails"
+						type="commonxsd:CertificateDetails">
+						<xs:annotation>
+							<xs:documentation>
+								Certificate details.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConfigurationsInput">
+		<xs:annotation>
+			<xs:documentation>
+				ConfigurationsInput is the structure used to
+				represent configurations for a particulat
+				organization in request.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="orgDetails" type="commonxsd:OrgDetails"
+				minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Organization details of the configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDIssuanceConfigs" type="xsd:ArcotIDIssuanceConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaIssuanceConfigs" type="xsd:QnAIssuanceConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						QNA issuance configurations.
+						</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordIssuanceConfigs" type="xsd:PasswordIssuanceConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Password issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPIssuanceConfigs" type="xsd:ServerOTPIssuanceConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathIssuanceConfigs" type="xsd:OATHIssuanceConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						OATH issuance configurations.
+						</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPIssuanceConfigs" type="xsd:ArcotOTPIssuanceConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvIssuanceConfigs" type="xsd:EMVIssuanceConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						EMV issuance configurations.
+						</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDAuthConfigs" type="xsd:ArcotIDAuthConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaAuthConfigs" type="xsd:QnAAuthConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						QNA authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordAuthConfigs" type="xsd:PasswordAuthConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Password authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPAuthConfigs" type="xsd:ServerOTPAuthConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathAuthConfigs" type="xsd:OATHAuthConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						OATH authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPAuthConfigs" type="xsd:ArcotOTPAuthConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvAuthConfigs" type="xsd:EMVAuthConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						EMV authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="miscellaneousConfigs" type="xsd:MiscellaneousConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Miscellaneous configurations.
+						</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="keyConfigs" type="xsd:KeyConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Key configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusClientConfigs" type="xsd:RADIUSClientConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS client configurations.
+						</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusServerConfigs" type="xsd:RADIUSServerConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS server configurations.
+						</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="credTypeResolutionConfigs" type="xsd:CredTypeResolutionConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Credential type resolution configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pluginConfigs" type="xsd:PluginConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Plugin configurations.
+						</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="calloutConfigs" type="xsd:CalloutConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Callout configurations.
+							</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="asspConfigs" type="xsd:ASSPConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP configurations.
+							</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="samlTokenConfigs" type="xsd:SAMLTokenConfig"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						SAML token configurations.
+							</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConfigurationObjectList">
+		<xs:annotation>
+			<xs:documentation>
+				ConfigurationObjectList is the structure used to
+				represent configurations for a particulat
+				organization in response.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="orgDetails" type="commonxsd:OrgDetails"
+				minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Organization details of the configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDIssuanceConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:ArcotIDIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:ArcotIDIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default arcotID issuance configuration name to
+									the organization.
+									The default configuration is present in either
+									globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="qnaIssuanceConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						QNA issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:QnAIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:QnAIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default qna issuance configuration name to
+									the
+									organization.
+									The default configuration is present in either
+									globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="passwordIssuanceConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Password issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:PasswordIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:PasswordIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default password issuance configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="serverOTPIssuanceConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:ServerOTPIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:ServerOTPIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default server OTP issuance configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="oathIssuanceConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						OATH issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:OATHIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:OATHIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default OATH issuance configuration name to
+									the organization.
+									The default configuration is present in either
+									globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arcotOTPIssuanceConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:ArcotOTPIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:ArcotOTPIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default arcotOTP issuance configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="emvIssuanceConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						EMV issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:EMVIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:EMVIssuanceConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default EMV issuance configuration name to
+									the
+									organization.
+									The default configuration is present in either
+									globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arcotIDAuthConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:ArcotIDAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:ArcotIDAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default arcotID authentication configuration
+									name to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="qnaAuthConfigs" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						QNA authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:QnAAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:QnAAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default qna authentication configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="passwordAuthConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Password authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:PasswordAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:PasswordAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default password authentication configuration
+									name to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="serverOTPAuthConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:ServerOTPAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:ServerOTPAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default server OTP authentication
+									configuration name to
+									the organization.
+									The default configuration
+									is present in either globalConfigs or
+									orgLevelConfigs.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="oathAuthConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						OATH authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:OATHAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:OATHAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default OATH authentication configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arcotOTPAuthConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:ArcotOTPAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:ArcotOTPAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default arcotOTP authentication configuration
+									name to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="emvAuthConfigs" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:annotation>
+						<xs:documentation>
+							EMV authentication configurations.
+						</xs:documentation>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:EMVAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:EMVAuthConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default EMV authentication configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="miscellaneousConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Miscellaneous configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:MiscellaneousConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:MiscellaneousConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default miscellaneous configuration name to
+									the organization.
+									The default configuration is present in either
+									globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="keyConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Key configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+			<xs:element name="arcotIDDomainKeyConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID domain key configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default arcotID domain key configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="oathOTPMasterKeyConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						OATH OTP master key configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default OATH OTP master key configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arcotOTPMasterKeyConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP master key configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default arcotOTP master key configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="emvOTPMasterKeyConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						EMV OTP master key configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:KeyConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default EMV OTP master key configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="radiusClientConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS client configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:RADIUSClientConfigRes"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:RADIUSClientConfigRes"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="radiusServerConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS server configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:RADIUSServerConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:RADIUSServerConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default RADIUS server configuration name
+									to
+									the organization.
+									The default configuration is present in
+									either globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="credTypeResolutionConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Credential type resolution configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:CredTypeResolutionConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:CredTypeResolutionConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default Credntial type resolution
+									configuration name to
+									the organization.
+									The default configuration
+									is present in either globalConfigs or
+									orgLevelConfigs.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="radiusCredTypeResolutionConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS credential type resolution configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:CredTypeResolutionConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:CredTypeResolutionConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default RADIUS credential resolution
+									configuration name to
+									the organization.
+									The default configuration
+									is present in either globalConfigs or
+									orgLevelConfigs.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="asspCredTypeResolutionConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP credential type resolution configurations.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:CredTypeResolutionConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:CredTypeResolutionConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default ASSP credential resolution
+									configuration name to
+									the organization.
+									The default configuration
+									is present in either globalConfigs or
+									orgLevelConfigs.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="pluginConfigs" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:annotation>
+						<xs:documentation>
+							Plugin configurations.
+					</xs:documentation>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:PluginConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:PluginConfig"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="calloutConfigs" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Callout configurations.
+						</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:CalloutConfigRes"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:CalloutConfigRes"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="asspConfigs" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP configurations.
+						</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:ASSPConfigRes"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:ASSPConfigRes"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default ASSP configuration name to
+									the
+									organization.
+									The default configuration is present in either
+									globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="samlTokenConfigs" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						SAML token configurations.
+						</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="globalConfigs" type="xsd:SAMLTokenConfigRes"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured at global
+									level, but associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="orgLevelConfigs" type="xsd:SAMLTokenConfigRes"
+							minOccurs="0" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>
+									These configurations are configured and
+									associated to the organization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="defaultConfigName" type="xs:string"
+							minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+									Default SAML token configuration name to
+									the
+									organization.
+									The default configuration is present in either
+									globalConfigs or
+									orgLevelConfigs. 
+								</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConfigFilter">
+		<xs:annotation>
+			<xs:documentation>
+				ConfigFilter is the structure used to represent
+				configuration details that are used as filter
+				in fetching the configurations.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="configNames" type="xs:string" minOccurs="1"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Configuration names used as filter.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="isAllConfigs" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						isAllConfigs represents the fetch all configuration flag. If this element is
+	                    exist then server will consider fetch all is true, 
+	                    otherwise fetch all is false.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+	              	<xs:sequence>
+	                    <xs:any minOccurs="0" maxOccurs="1"/>
+	                </xs:sequence>
+	        	</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="ConfigurationNames">
+		<xs:annotation>
+			<xs:documentation>
+				ConfigurationNames is the structure used to
+				represent configuration names for a particular
+				organization.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="orgDetails" type="commonxsd:OrgDetails"
+				minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Organization details of the configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDIssuanceConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID issuance configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaIssuanceConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						QnA issuance configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordIssuanceConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Password issuance configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPIssuanceConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP issuance configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathIssuanceConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						OATH issuance configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPIssuanceConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP issuance configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvIssuanceConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						EMV issuance configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDAuthConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID authentication configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaAuthConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						QnA authentication configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordAuthConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Password authentication configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPAuthConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP authentication configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathAuthConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						OATH authentication configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPAuthConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP authentication configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvAuthConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						EMV authentication configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="miscellaneousConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Miscellaneous configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="keyConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Key configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusClientConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS client configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusServerConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS server configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="asspConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="samlTokenConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						SAML token configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="credTypeResolutionConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Credential type resolution configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pluginConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Plugin configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="calloutConfigNames" type="xsd:ConfigFilter"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Callout configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConfigNameObject">
+		<xs:annotation>
+			<xs:documentation>
+				ConfigNameObject is the structure used to represent
+				configuration details that are used while
+				fetching configuration names.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="xsd:BaseWFConfig">
+				<xs:sequence>
+					<xs:element name="isAssignedFromGlobal" type="xs:boolean" minOccurs="1" 
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Specifies whether the config is assigned
+								from global.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ConfigurationNamesList">
+		<xs:annotation>
+			<xs:documentation>
+				ConfigurationNamesList is the structure used as
+				the output of the fetch response.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="orgDetails" type="commonxsd:OrgDetails"
+				minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Organization details of the configuration names.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDIssuanceConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaIssuanceConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						QnA issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordIssuanceConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Password issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPIssuanceConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathIssuanceConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						OATH issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPIssuanceConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvIssuanceConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						EMV issuance configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDAuthConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaAuthConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						QnA authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordAuthConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Password authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPAuthConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathAuthConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						OATH authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPAuthConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvAuthConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						EMV authentication configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="miscellaneousConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Miscellaneous configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="keyConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Key configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDDomainKeyConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID Domain key configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathOTPMasterKeyConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						OATH-OTP Master key configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPMasterKeyConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP-OATH Master key configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvOTPMasterKeyConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP-EMV Master key configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>			
+			<xs:element name="radiusClientConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS client configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusServerConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS server configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="asspConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="samlTokenConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						SAML token configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="credTypeResolutionConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Credential type resolution configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusCredTypeResolutionConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS credential type resolution configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="asspCredTypeResolutionConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP credential type resolution configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pluginConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Plugin configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="calloutConfigs" type="xsd:ConfigNameObject"
+				minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Callout configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>	
+	<xs:complexType name="AssignDefault">
+		<xs:annotation>
+			<xs:documentation>
+				AssignDefault is the structure used to represent
+				configuration names that are used for assigning
+				configurations as default.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="orgDetails" type="commonxsd:OrgDetails"
+				minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Organization for which the configurations are
+						assigned as default.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDIssuanceConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID issuance configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaIssuanceConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						QnA issuance configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordIssuanceConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Password issuance configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPIssuanceConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP issuance configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathIssuanceConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						OATH issuance configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPIssuanceConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP issuance configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvIssuanceConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						EMV issuance configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDAuthConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID authentication configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaAuthConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						QnA authentication configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordAuthConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Password authentication configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPAuthConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP authentication configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathAuthConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						OATH authentication configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPAuthConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP authentication configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvAuthConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						EMV authentication configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusServerConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS server configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDDomainKeyConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID domain key configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathOTPMasterKeyConfig" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						OATH OTP master key configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPMasterKeyConfig" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP master key configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvOTPMasterKeyConfig" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						EMV OTP master key configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="asspConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="samlTokenConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						SAML token configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="credTypeResolutionConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Credential type resolution configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusCredTypeResolutionConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS credential type resolution configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="asspCredTypeResolutionConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP credential type resolution configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="miscConfigName" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Miscellenious configuration name.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConfigurationErrorDetails">
+		<xs:annotation>
+			<xs:documentation>
+				ConfigurationErrorDetails is the structure used for
+				holding the admin
+				transaction failure details per configuration. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:ErrorDetails">
+				<xs:sequence>
+					<xs:element name="configName" type="xs:string" minOccurs="1"
+						maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+								Configuration name to which the transaction is failed.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="WebFortAdminErrorDetails">
+		<xs:annotation>
+			<xs:documentation>
+				WebFortAdminErrorDetails is the structure used for
+				holding the admin
+				transaction failure details per organization. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="orgDetails" type="commonxsd:OrgDetails"
+				minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Organization details of the configurations.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDIssuanceConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID issuance configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaIssuanceConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						QnA issuance configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordIssuanceConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Password issuance configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPIssuanceConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP issuance configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathIssuanceConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						OATH issuance configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPIssuanceConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP issuance configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvIssuanceConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						EMV issuance configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDAuthConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID authentication configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qnaAuthConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						QnA authentication configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="passwordAuthConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Password authentication configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serverOTPAuthConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Server OTP authentication configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathAuthConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						OATH authentication configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPAuthConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP authentication configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvAuthConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						EMV authentication configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="miscellaneousConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Miscellaneous configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="keyConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Key configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotIDDomainKeyConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotID domain key configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="oathOTPMasterKeyConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						OATH OTP master key configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arcotOTPMasterKeyConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ArcotOTP master key configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="emvOTPMasterKeyConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						EMV OTP master key configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusClientConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS client configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusServerConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS server configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="credTypeResolutionConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Credential type resolution configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="radiusCredTypeResolutionConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						RADIUS credential type resolution configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="asspCredTypeResolutionConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP credential type resolution configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pluginConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Plugin configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="calloutConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						Callout configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="asspConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						ASSP configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="samlTokenConfigErrors" type="xsd:ConfigurationErrorDetails" minOccurs="0"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>
+						SAML token configurations error details.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

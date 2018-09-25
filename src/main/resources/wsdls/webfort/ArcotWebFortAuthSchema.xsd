@@ -1,0 +1,79 @@
+<xs:schema xmlns:xsd="http://ws.arcot.com/WebFortAuthAPI/7.0/xsd"
+	xmlns:commonxsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="qualified" targetNamespace="http://ws.arcot.com/WebFortAuthAPI/7.0/xsd">
+	<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+	<xs:complexType name="BaseAuthRequestType">
+		<xs:annotation>
+			<xs:documentation>
+				Base request used in authentication requests.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:BaseRequestType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BaseAuthResponseType">
+		<xs:annotation>
+			<xs:documentation>
+				Base response used in authentication responses.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="commonxsd:BaseResponseType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GetQnAType">
+		<xs:annotation>
+			<xs:documentation>
+				Returned as an output of the function
+				GetQuestions
+				which holds the QuestionIDs,
+				questions and answers of the user.
+				questionID -
+				The identifier with which the server recognizes
+				the asked
+				question. question - The question it
+				self. answer - Answer of
+				question.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="questionID" type="xs:string" />
+			<xs:element name="question" type="xs:string" />
+			<xs:element name="answer" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AuthQnAType">
+		<xs:annotation>
+			<xs:documentation>
+				This type is used while doing QnA
+				authentication.
+				Holds QuestionIDs and Answers
+				for QnA authentication. QuestionIDs are
+				returned
+				as output for the operation GetQuestions as an
+				array of
+				GetQnAType objects. questionID - The
+				identifier with which the server
+				recognizes the
+				asked question. answer - Answer corresponding to
+				the
+				question(ID). verificationStatus - When
+				answer verification is
+				happening at client side,
+				it indicates status like answered
+				correctly,
+				answered incorrectly etc.
+					</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="questionID" type="xs:string" />
+			<xs:element name="answer" type="xs:string" />
+			<xs:element name="verificationStatus" type="xs:int"
+				minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

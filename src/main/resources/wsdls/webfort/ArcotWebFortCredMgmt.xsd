@@ -1,0 +1,58 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:arwfcredmgmt="http://www.arcot.com/ArWFCredMgmt/7.0"
+	xmlns:commonxsd="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+	xmlns:issxsd="http://ws.arcot.com/WebFortIssuanceAPI/7.0/xsd"
+	xmlns:issmsgs="http://ws.arcot.com/WebFortIssuanceAPI/7.0/msgs"
+	targetNamespace="http://www.arcot.com/ArWFCredMgmt/7.0"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://ws.arcot.com/WebFortCommonAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortCommonSchema.xsd" />
+	<xs:import namespace="http://ws.arcot.com/WebFortIssuanceAPI/7.0/xsd"
+		schemaLocation="./ArcotWebFortIssuanceSchema.xsd" />
+	<xs:import namespace="http://ws.arcot.com/WebFortIssuanceAPI/7.0/msgs"
+		schemaLocation="./ArcotWebFortIssuanceMsgs.xsd" />
+	<xs:annotation>
+		<xs:documentation>
+			This schema defines an XML-based Credential
+			container for bulk Credential provisioning by the
+			Arcot WebFort
+			Server.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="ArCredContainer">
+		<xs:annotation>
+			<xs:documentation>
+				Request object used in the credential
+				management operations.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="credentials" type="arwfcredmgmt:CredContainer"
+					minOccurs="1" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="CredContainer">
+		<xs:annotation>
+			<xs:documentation>
+				Single credential object.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="issmsgs:CredentialRequest" />
+			<xs:element minOccurs="0" ref="issmsgs:WebFortIssuanceFault">
+				<xs:annotation>
+					<xs:documentation>
+						Will be used by webfort when generating the
+						failed credentials file, for giving the
+						failure details. It is
+						ignored in input. So that
+						the generated output can directly be fed
+						for retry.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

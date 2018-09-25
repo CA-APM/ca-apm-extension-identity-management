@@ -1,0 +1,239 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:arwftokx="http://www.arcot.com/ArWFTokenExchangeFormat/1.0"
+	targetNamespace="http://www.arcot.com/ArWFTokenExchangeFormat/1.0"
+	elementFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation>
+           This schema defines an XML-based key container for  
+           One Time Password (OTP) shared secrets and related
+           meta data for provisioning by the Arcot WebFort Server. 
+		</xs:documentation>
+	</xs:annotation>	
+	<xs:element name="ArKeyContainer" type="arwftokx:ArKeyContainer" />
+	<xs:complexType name="ArKeyContainer">
+		<xs:annotation>
+			<xs:documentation>
+			  Describes the container that carries file level EncryptionMethod
+			  and a list of Tokens.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EncryptionMethod"
+				type="arwftokx:EncryptionMethod">
+				<xs:annotation>
+					<xs:documentation />
+				</xs:annotation>				
+			</xs:element>
+			<xs:element name="Token" type="arwftokx:Token" minOccurs="1"
+				maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation />
+				</xs:annotation>				
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="version" type="xs:string" use="optional" default="1.0">
+			<xs:annotation>
+				<xs:documentation>
+				  Describes the version of the schema. Current value is "1.0".
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>		
+	</xs:complexType>
+	<xs:complexType name="EncryptionMethod">
+		<xs:annotation>
+			<xs:documentation>
+			  Describes the encryption scheme used for sensitive 
+			  information in the file. For example the data element 
+			  'Secret' is encrypted.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IV" type="xs:string" minOccurs="0">
+				<xs:annotation>
+			      <xs:documentation>
+			        Base64 encoded value of the Initialization Vector 
+					used in the encryption scheme. This is required only 
+					for "AES128-CBC" among the supported algorithms.
+			      </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="algorithm" type="xs:string"
+			use="required">
+			<xs:annotation>
+				<xs:documentation>
+			       Describes the encryption algorithm. Supported values 
+				   are "AES128-CBC" , "HEX" and "BASE64".
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>		
+	</xs:complexType>
+	<xs:complexType name="Token">
+		<xs:annotation>
+		  <xs:documentation>
+		    Describes the information about each token including
+		    vendor information, identity, shared secret and 
+		    other parameters like initial state(counter/time), 
+		    length of the OTP etc. Some of the values are either in 
+	        encrypted form (for example for data element 'Secret') or 
+		    plain text (for example the data element 'Counter')		  
+		  </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TokenInfo" type="arwftokx:TokenInfo"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation />
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Key" type="arwftokx:Key">
+				<xs:annotation>
+					<xs:documentation />
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TokenInfo">
+		<xs:annotation>
+			<xs:documentation>
+			Describes the information about each token including
+		    vendor information, identity and any other additional details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Manufacturer" type="xs:string"
+				minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+					  Indicates the manufacturer of the token.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SerialNo" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+					  Indicates the serial number of the token.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Model" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+					Indicates the model of the token.
+                    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdditionalInfo"
+				type="arwftokx:AdditionalInfo" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation/>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AdditionalInfo">
+		<xs:annotation>
+			<xs:documentation>
+			  Additional information related to the token if any. It is pair of name and value. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+						Name of the data item.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Value" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+					   Value of the data item.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Key">
+		<xs:annotation>
+			<xs:documentation>
+			  Describes the details of the key like secret, OTP generation algorithm,
+			  and corresponding parameters.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OTPFormat" type="arwftokx:OTPFormat">
+				<xs:annotation>
+					<xs:documentation />
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Secret" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+					  Encrypted/Hex Encoded/Base64 Encoded secret, based on algorithm specified
+					  in EncryptionMethod element.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Counter" type="xs:int" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+					    Value of the event counter for event based OTP tokens (HOTP).
+                    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Time" type="xs:int" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+					  This is for time based OTP tokens (TOTP). 
+					  It is the initial time drift (in seconds) compared to UNIX epoch.  
+                    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TimeInterval" type="xs:int" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+					  Value of the the time step in seconds for time based OTP tokens.
+                    </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="KeyAlgorithm" type="xs:string"
+			use="required">
+			<xs:annotation>
+				<xs:documentation>
+					Algorithm used for OTP Generation . Allowed values are 
+					"HOTP" and "TOTP" for event based and time based oath 
+					tokens respectively.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="KeyId" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>
+					Unique identifier for the token.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OTPFormat">
+		<xs:annotation>
+			<xs:documentation />
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Length" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>
+						Length of the OTP.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-stylesheet type="text/xsl" href="wsdl-viewer.xsl"?>
+
+<wsdl:definitions
+xmlns:admin="http://schemas.arcot.com/admin/v1"
+xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:rfadm="http://ws.arcot.com/ArcotRiskFortAdminSvc/1.0/wsdl"
+	xmlns:xsd="http://ws.arcot.com/ArcotRiskFortAdminSvc/1.0/xsd"
+	xmlns:msgs="http://ws.arcot.com/ArcotRiskFortAdminSvc/1.0/msgs"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ws.arcot.com/ArcotRiskFortAdminSvc/1.0/wsdl">
+
+<!-- xmlns:atypes="http://schemas.arcot.com/admin/v1/types" -->
+	<!--  **************************************Basic***************************************************** -->
+	<wsdl:types>
+		<xs:schema attributeFormDefault="qualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://ws.arcot.com/ArcotRiskFortAdminSvc/1.0/xsd">
+
+			<xs:complexType name="LocationAndConnectionInfo">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:element name="city" type="xs:string"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="cityCF" type="xs:int"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="state" type="xs:string"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="stateCF" type="xs:int"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="country" type="xs:string"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="countryCF" type="xs:int"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="countryISOCode" type="xs:string"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="postalCode" type="xs:string"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="timeZone" type="xs:float"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="longitude" type="xs:float"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="latitude" type="xs:float"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="aolFlag" type="xs:boolean"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="connectionType" type="xs:string"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="routingType" type="xs:string"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+					<xs:element name="lineSpeed" type="xs:string"
+					minOccurs="0" maxOccurs="1" nillable="true"/>
+					<xs:annotation>
+						<xs:documentation>
+						</xs:documentation>
+					</xs:annotation>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+		<!-- ****************************************Complex***************************************************** -->
+		<xs:schema attributeFormDefault="qualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://ws.arcot.com/ArcotRiskFortAdminSvc/1.0/msgs">
+
+<!-- The following calls are kept for backward compatibility.
+These calls should not be used for new implementations -->
+			<xs:element name="addUserToExceptionList">
+				<xs:annotation>
+					<xs:documentation>
+						Adds a user to the exception list of the Riskfort server for
+						a period defined by startDate and endDate. 'reason' is to identify
+						why the user is added to the exception list. 'callerId'  identifies
+						the caller of the API.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="userName" />
+						<xs:element type="xs:string" name="groupName" />
+						<xs:element type="xs:date" name="startDate" />
+						<xs:element type="xs:date" name="endDate" />
+						<xs:element type="xs:string" name="reason" />
+						<xs:element type="xs:string" name="callerId" minOccurs="0" nillable="true"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addUserToExceptionListResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Returned when addUserExceptionList is called.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="code" />
+						<xs:element type="xs:string" name="message" />
+						<xs:element type="xs:string" name="transactionId" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name = "deleteUserFromExceptionList">
+				<xs:annotation>
+					<xs:documentation>
+						Deletes user from the Exception list of the RiskFort server.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="userName" />
+						<xs:element type="xs:string" name="groupName" />
+						<xs:element type="xs:string" name="moveReason" />
+						<xs:element type="xs:string" name="callerId" minOccurs="0" nillable="true"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="deleteUserFromExceptionListResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Returned when deleteUserFromExceptionList is called.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="code" />
+						<xs:element type="xs:string" name="message" />
+						<xs:element type="xs:string" name="transactionId" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getUserProfile">
+				<xs:annotation>
+					<xs:documentation>
+						Returns the profile information of the user
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="userName" />
+						<xs:element type="xs:string" name="groupName" />
+						<xs:element type="xs:string" name="callerId" minOccurs="0" nillable="true"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getUserProfileResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Returned when getUserProfile is called. Returns the profile information of the user
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="code" />
+						<xs:element type="xs:string" name="message" />
+						<xs:element type="xs:string" name="transactionId" />
+						<xs:element type="xs:string" name="userName" />
+						<xs:element type="xs:string" name="firstName" nillable="true" minOccurs="0" />
+						<xs:element type="xs:string" name="lastName" nillable="true" minOccurs="0" />
+						<xs:element type="xs:string" name="emailAddress" nillable="true" minOccurs="0" />
+						<xs:element type="xs:boolean" name="isExceptionUser" />
+						<xs:element type="xs:date" name="exceptionStartDate" nillable="true" minOccurs="0" />
+						<xs:element type="xs:date" name="exceptionEndDate" nillable="true" minOccurs="0" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getLocationAndConnectionInfo">
+				<xs:annotation>
+					<xs:documentation>
+						Request to get location and connection attributes for an IP.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="ip" />
+						<xs:element type="xs:string" name="callerId" minOccurs="0" nillable="true"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getLocationAndConnectionInfoResponse">
+				<xs:annotation>
+					<xs:documentation>
+						Response for the getLocationAndConnectionInfo.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="code" />
+						<xs:element type="xs:string" name="message" />
+						<xs:element type="xs:string" name="transactionId" />
+						<xs:element type="xsd:LocationAndConnectionInfo" name="locationAndConnectionInfo" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="fault">
+				<xs:annotation>
+					<xs:documentation>
+						Exception thrown when performing API operations.
+						Possible ERROR CODES are:
+						Exception User does not exist = 1003.
+						Location and connection information does not exist = 1006.
+						Duration is invalid = 2002.
+						User does not exist/User profile information cant be retrieved = 3002.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element type="xs:string" name="transactionId" />
+						<xs:element type="xs:string" name="errorCode" />
+						<xs:element type="xs:string" name="reason" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+
+
+
+	<!-- *************************************Message************************************************************ -->
+
+<!-- The following are kept for backward compatibility.
+These should not be used for new implementations -->
+	<wsdl:message name="faultMessage">
+		<wsdl:part element="msgs:fault" name="part1" />
+	</wsdl:message>
+	<wsdl:message name="addUserToExceptionListMessage">
+		<wsdl:part element="msgs:addUserToExceptionList" name="part1" />
+	</wsdl:message>
+	<wsdl:message name="addUserToExceptionListResponseMessage">
+		<wsdl:part element="msgs:addUserToExceptionListResponse" name="part1" />
+	</wsdl:message>
+	<wsdl:message name="deleteUserFromExceptionListMessage">
+		<wsdl:part element="msgs:deleteUserFromExceptionList" name="part1" />
+	</wsdl:message>
+	<wsdl:message name="deleteUserFromExceptionListResponseMessage">
+		<wsdl:part element="msgs:deleteUserFromExceptionListResponse" name="part1" />
+	</wsdl:message>
+	<wsdl:message name="getUserProfileMessage">
+		<wsdl:part element="msgs:getUserProfile" name="part1" />
+	</wsdl:message>
+	<wsdl:message name="getUserProfileResponseMessage">
+		<wsdl:part element="msgs:getUserProfileResponse" name="part1" />
+	</wsdl:message>
+	<wsdl:message name="getLocationAndConnectionInfoMessage">
+		<wsdl:part element="msgs:getLocationAndConnectionInfo" name="part1" />
+	</wsdl:message>
+	<wsdl:message name="getLocationAndConnectionInfoResponseMessage">
+		<wsdl:part element="msgs:getLocationAndConnectionInfoResponse" name="part1" />
+	</wsdl:message>
+
+
+	<!-- ***************************************Port********************************************************** -->
+	<wsdl:portType name="ArcotRiskFortAdminSvcPortType">
+
+	<!--
+ The following are kept for backward compatibility.
+These should not be used for new implementations
+<wsdl:portType name="ArcotRiskFortAdminWebServicePortType">-->
+		<wsdl:operation name="addUserToExceptionList">
+			<xs:annotation>
+				<xs:documentation>
+					Adds a user to the Exception list of the riskFort server for a specific
+					period.If a user name is in Exception list he/she can bypass the riskfort
+					authentication.
+				</xs:documentation>
+			</xs:annotation>
+			<wsdl:input message="rfadm:addUserToExceptionListMessage" />
+			<wsdl:output message="rfadm:addUserToExceptionListResponseMessage" />
+			<soap12:fault name="AdminFault" message="rfadm:faultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteUserFromExceptionList">
+			<xs:annotation>
+				<xs:documentation>
+					Delete a user from the Exception list of the riskFort server so that he/she
+					can no longer bypass the riskfort authentication.
+				</xs:documentation>
+			</xs:annotation>
+			<wsdl:input message="rfadm:deleteUserFromExceptionListMessage" />
+			<wsdl:output message="rfadm:deleteUserFromExceptionListResponseMessage" />
+			<soap12:fault name="AdminFault" message="rfadm:faultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="getUserProfile">
+			<xs:annotation>
+				<xs:documentation>
+					Returns the information about the user.
+				</xs:documentation>
+			</xs:annotation>
+			<wsdl:input message="rfadm:getUserProfileMessage" />
+			<wsdl:output message="rfadm:getUserProfileResponseMessage" />
+			<soap12:fault name="AdminFault" message="rfadm:faultMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="getLocationAndConnectionInfo">
+			<xs:annotation>
+				<xs:documentation>
+					 Get location and connection attributes for an IP.
+				</xs:documentation>
+			</xs:annotation>
+			<wsdl:input message="rfadm:getLocationAndConnectionInfoMessage" />
+			<wsdl:output message="rfadm:getLocationAndConnectionInfoResponseMessage" />
+			<soap12:fault name="AdminFault" message="rfadm:faultMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- *****************************************Binding********************************************************* -->
+	<wsdl:binding name="ArcotRiskFortAdminSvcSOAP12Binding"
+		type="rfadm:ArcotRiskFortAdminSvcPortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+<!--
+ The following are kept for backward compatibility.
+These should not be used for new implementations
+<wsdl:binding type="admin:ArcotRiskFortAdminWebServicePortType" name="ArcotRiskFortAdminWebServiceSOAP12Binding">
+	<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+-->		<wsdl:operation name="addUserToExceptionList">
+			<soap12:operation style="document" soapAction="urn:addUserToExceptionList" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="AdminFault">
+				<soap12:fault use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteUserFromExceptionList">
+			<soap12:operation style="document" soapAction="urn:deleteUserFromExceptionList" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="AdminFault">
+				<soap12:fault use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getUserProfile">
+			<soap12:operation style="document" soapAction="urn:getUserProfile" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="AdminFault">
+				<soap12:fault use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getLocationAndConnectionInfo">
+			<soap12:operation style="document" soapAction="urn:getLocationAndConnectionInfo" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+			<soap12:fault name="AdminFault">
+				<soap12:fault use="literal" />
+			</soap12:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<!-- *****************************************Service******************************************************** -->
+	<wsdl:service name="ArcotRiskFortAdminSvc">
+		<wsdl:port name="ArcotRiskFortAdminSvcSOAP12port_http"
+			binding="rfadm:ArcotRiskFortAdminSvcSOAP12Binding">
+			<soap12:address
+				location="http://localhost:8080/axis2/services/ArcotRiskFortAdminSvc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

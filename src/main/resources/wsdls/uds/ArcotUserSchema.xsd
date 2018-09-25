@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified"
+	elementFormDefault="qualified"
+	targetNamespace="http://ws.arcot.com/UserSchema/1.0"
+	xmlns="http://ws.arcot.com/UserSchema/1.0"
+	xmlns:uds="http://ws.arcot.com/UserSchema/1.0"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+	<xs:complexType name="UdsRegistryErrorType">
+		<xs:annotation>
+			<xs:documentation>
+				This is the fault type for all web services. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="errorContext"
+				type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="errorMessage"
+				type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="errorNumber"
+				type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="RepositoryUserAttributeType">
+		<xs:annotation>
+			<xs:documentation>
+				This contains a list of unmapped repository attribute names that can be retrieved in a user search.
+				Example: For LDAP repository, say, Date Of Birth (DOB) is not mapped to any of the Arcot's
+				repository attributes. To retrieve DOB for a given user, it can be passed as an attribute name.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="attributeName" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="ArcotAttributeType">
+		<xs:annotation>
+			<xs:documentation>
+				This list consists of supported arcot attributes.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="attributeName" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+		</xs:sequence>	
+	</xs:complexType>
+	
+	<xs:complexType name="RepositoryOrgAttributeType">
+		<xs:annotation>
+			<xs:documentation>
+				This list consists of supported repository attributes.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="attributeName" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+		</xs:sequence>	
+	</xs:complexType>
+	<xs:complexType name="UserBaseFilterType">
+		<xs:annotation>
+			<xs:documentation>
+			  1) If includeImage is set to true, user's image information is also retrieved if present.
+			  2) If includeAccounts is set is true, user account information is also retrieved if present.
+		    </xs:documentation>	
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="includeImage" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+			<xs:element name="includeAccounts" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="UserFilterType">
+		<xs:annotation>
+			<xs:documentation>
+			  1) If includeImage is set to true, user's image information is also retrieved if present.
+			  2) If includeAccounts is set is true, user account information is also retrieved if present.
+		      3) If deepSearch is set to true, the given user identifier is first searched against UserName; 
+		      	 On no match, it would search against AccountID; On no match it would further search against AccountIDAttribute.
+		         If deepSearch is set to false, search will be restricted to UserName.
+		    </xs:documentation>	
+		</xs:annotation>
+		
+		    <xs:complexContent> 
+			<xs:extension base="UserBaseFilterType"> 
+			 <xs:sequence> 
+				<xs:element name="deepSearch" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+			 </xs:sequence> 
+		       </xs:extension> 
+		   </xs:complexContent>		
+
+	</xs:complexType>
+	
+	<xs:complexType name="UpdateUserFlagType">
+		<xs:annotation>
+			<xs:documentation>
+			  1) If updateImage is set to true, user's image information is updated(including setting it to null).
+		    </xs:documentation>	
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="updateImage" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>	
+	
+	<xs:complexType name="UserIdentifierType">
+		<xs:annotation>
+			<xs:documentation>
+				This type holds the attributes that identify a user
+				uniquely in Arcot products.
+				The orgName contains the unique Arcot organization name.
+				The user name corresponds to the mapped unique identifier in the
+				user repository.
+				The userRefId is user's reference ID which will be unique across organizations.
+				User Ref ID need not be passed in input. Its available in output response. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="orgName"
+				type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="userName"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="userRefId"
+				type="xs:int" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="CustomAttributeType">
+		<xs:annotation>
+			<xs:documentation>
+				This is a way to store custom attributes for users and organization.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="name" type="xs:string"/>
+			<xs:element minOccurs="1" maxOccurs="1" name="value" nillable="true" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="AccountCustomAttributeType">
+		<xs:annotation>
+			<xs:documentation>
+				This is a way to store custom attributes for an account.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="attributeName" type="xs:string"/>
+			<xs:element minOccurs="1" maxOccurs="1" name="attributeValue" nillable="true" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="AccountType">
+		<xs:sequence>
+			<xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			<xs:element name="displayName" minOccurs="1" maxOccurs="1" type="xs:string" />
+			<xs:element name="customAttribute" minOccurs="0" maxOccurs="unbounded" type="uds:CustomAttributeType" />
+		</xs:sequence>
+	</xs:complexType>
+
+	    <xs:complexType name="AccountTypeForOrg">
+				<xs:sequence>
+					<xs:element maxOccurs="1" minOccurs="0" name="accountType" type="uds:AccountType" />
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="customAttribute" type="xs:string" />
+				</xs:sequence>
+	    </xs:complexType>	            
+
+
+	<xs:complexType name="EmailType">
+		<xs:sequence>
+			<xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			<xs:element name="displayName" minOccurs="1" maxOccurs="1" type="xs:string" />
+			<xs:element name="priority" minOccurs="1" maxOccurs="1" type="xs:int" />
+			<xs:element name="isMandatory" minOccurs="1" maxOccurs="1" type="xs:boolean" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TelephoneType">
+		<xs:sequence>
+			<xs:element name="name" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			<xs:element name="displayName" minOccurs="1" maxOccurs="1" type="xs:string" />
+			<xs:element name="priority" minOccurs="1" maxOccurs="1" type="xs:int" />
+			<xs:element name="isMandatory" minOccurs="1" maxOccurs="1" type="xs:boolean" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="AccountIDAttribute">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="key" use="optional" type="xs:int" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="UserAccountType">
+		<xs:annotation>
+				<xs:documentation>
+					<![CDATA[
+					Users may be identified by additional alternate ID besides the User Name.  
+					The notion of alternate ID is termed as Account.  A given user may have one or more accounts.  
+					An account is usually qualified by another attribute, which provides additional context about the usage of the account.
+					We will term this as "Account Type".  A given user can have multiple accounts based on one or more account types.
+					Example: Account Type: Netbanking : AccountID - <CustomerID>
+					Example: Account Type: Mobile Banking: AccountID - <Mobile Number>
+					An account may have "dependency" on attribute(s), which we would term as AccountIDAttribute.
+					An AccountIDAttribute is not an independent account - however, the accountID and the 
+					AccountIDAttribute co-exists where it  make sense.  Therefore, the status field applies to the 
+					AccountID + AccountIDAttribute combination.  The combination of "AccountType + AccountID + AccountIDAttribute" 
+					can be thought of as an actual account having a status.
+
+					The Account Status in an integer that signify the status depending on a range of values - 
+
+					INITIAL =    0-9 
+					ACTIVE  =    10-19
+					DISABLED =   20-29
+					DELETED =    30 - 39
+					UNKNOWN =    greater than 39
+
+					The interpretation of the account status values may differ from one account type to another.
+
+					]]>
+				</xs:documentation>
+			</xs:annotation>
+		<xs:sequence>
+			<xs:element name="accountType" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			<xs:element name="accountID" minOccurs="0" maxOccurs="1" type="xs:string" />
+			<xs:element name="accountStatus" minOccurs="0" maxOccurs="1" type="xs:int" />
+			<xs:element name="accountIDAttribute" minOccurs="0" maxOccurs="unbounded" type="uds:AccountIDAttribute"/>
+			<xs:element name="dateCreated" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+			<xs:element name="dateModified" minOccurs="0" maxOccurs="1" type="xs:dateTime" />
+			<xs:element name="accountCustomAttribute" minOccurs="0" maxOccurs="unbounded" type="uds:AccountCustomAttributeType" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="UserDetailsType">
+		<xs:annotation>
+			<xs:documentation>
+				This type holds the minimal user details that are stored
+				in Arcot systems.
+				All pre-defined parameter are searchable fields in case of Arcot repository.
+				CustomAttributes are not searchable.
+				
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="userId"
+				type="uds:UserIdentifierType" />
+			<xs:element minOccurs="0" maxOccurs="1" name="dateCreated"
+				type="xs:dateTime" />
+			<xs:element minOccurs="0" maxOccurs="1" name="dateModified"
+				type="xs:dateTime" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="emailId">
+				<xs:annotation>
+			      <xs:documentation>
+				      Set the qualifier attribute to qualify the emails.
+				      Eg: Personal Email, Official Email etc.,
+				      The qualifier name should be pre configured per organization or at global level.
+			      </xs:documentation>
+			    </xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="qualifier" type="xs:string"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="telephoneNumber">
+				<xs:annotation>
+			      <xs:documentation>
+				      Set the qualifier attribute to qualify the telephone numbers
+				      Eg: Personal, Official etc.,
+				      The qualifier name should be pre configured per organization or at global level.				      
+			      </xs:documentation>
+			    </xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="qualifier" type="xs:string"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="firstName"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="middleName"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="lastName"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="pam"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="pamImageURL"	type="xs:string" />
+			<xs:element name="image" type="xs:base64Binary" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>
+						Pass the user image as base64 encoded binary data.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element minOccurs="0" maxOccurs="1" name="status"
+				type="uds:UserStatusType" />
+			<xs:element name="customAttribute" minOccurs="0"
+				maxOccurs="unbounded" type="uds:CustomAttributeType" />
+			<xs:element minOccurs="0" maxOccurs="1" name="startLockTime"
+				type="xs:dateTime" />
+			<xs:element minOccurs="0" maxOccurs="1" name="endLockTime"
+				type="xs:dateTime" />
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Newly added -->
+	
+	<xs:complexType name="RetrieveUserIdentifierTypeEx">
+		<xs:annotation>
+			<xs:documentation>
+				This is Extended User Details Type which in addition holds user account ID and account type attributes.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="UserIdentifierType">
+				<xs:sequence>
+					<xs:element name="accountID" minOccurs="0" maxOccurs="1" type="xs:string"/>
+					<xs:element name="accountTypeAttribute" minOccurs="0" maxOccurs="1" type="xs:string"/>
+				</xs:sequence>	
+			</xs:extension>		
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="UserDetailsTypeEx">
+		<xs:annotation>
+			<xs:documentation>
+				This is Extended User Details Type which in addition holds User Account
+				Information.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="UserDetailsType">
+				<xs:sequence>
+					<xs:element name="account" minOccurs="0" maxOccurs="unbounded" type="uds:UserAccountType"/>
+				</xs:sequence>	
+			</xs:extension>		
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<!-- Newly added -->
+	<xs:complexType name="OrganizationType">
+		<xs:annotation>
+			<xs:documentation>
+				Organization details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="orgName"
+				type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="displayName"
+				type="xs:string" />
+			<xs:element name="repositoryDetails" type="RepositoryDetailsType" minOccurs="0" maxOccurs="1">
+			</xs:element>
+			<xs:element name="attributeMappings" minOccurs="0" maxOccurs="1" type="AttributeMappingsType"/>
+			<xs:element minOccurs="0" maxOccurs="1" name="dateCreated"
+				type="xs:dateTime" />
+			<xs:element minOccurs="0" maxOccurs="1" name="dateModified"
+				type="xs:dateTime" />
+			<xs:element minOccurs="0" maxOccurs="1" name="description"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="status"
+				type="uds:OrgStatusType" />
+			<xs:element minOccurs="0" maxOccurs="1" name="preferredLocale"
+				type="xs:string" />	
+			<xs:element name="customAttribute" minOccurs="0"
+				maxOccurs="unbounded" type="uds:CustomAttributeType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UdsRegistrySuccessType">
+		<xs:annotation>
+			<xs:documentation>
+				This is a return type to indicate successful method call.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element maxOccurs="1" name="message" type="xs:string" default="The operation was successful!" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="UserStatusType">
+		<xs:annotation>
+			<xs:documentation>
+			This is the enumeration for user status types.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="INITIAL" />
+			<xs:enumeration value="ACTIVE" />
+			<xs:enumeration value="INACTIVE" />
+			<xs:enumeration value="DELETED" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OrgStatusType">
+		<xs:annotation>
+			<xs:documentation>
+			This is the enumeration for org status types.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="INITIAL" />
+			<xs:enumeration value="ACTIVE" />
+			<xs:enumeration value="INACTIVE" />
+			<xs:enumeration value="DELETED" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="AttributeMappingsType">
+		<xs:annotation>
+			<xs:documentation>
+			Holds the repository attribute mapping configuration. Any repository attribute can be mapped to Arcot's attribute.
+			This mapping enables us to search, like in user search, the repository based on the configured mapping.
+			Eg: Let USERNAME (Arcot attribute) be mapped to UID (LDAP repository attribute). When a user search is performed on USERNAME, 
+			the LDAP repository is searched based on UID.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="mapping" minOccurs="1"
+				maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="repositoryattribute"
+								type="xs:string" use="required" />
+							<xs:attribute name="arcotattribute"
+								type="xs:string" use="required" />
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DNType">
+		<xs:sequence>
+			<xs:element name="dnEntry" minOccurs="1"
+				maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="name" type="xs:string"
+								use="required" />
+							<xs:attribute name="value" type="xs:string"
+								use="optional" />
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConnectionCredentialType">
+		<xs:annotation>
+			<xs:documentation>
+				Connection Details like:
+				<ul>
+					<li>ssl: Indicates connection type of LDAP repository ie., whether the LDAP is listening in TCP or SSL mode. 
+					Attribute takes the following values : NONE for TCP, 1WAY for 1-way SSL, 2WAY for 2-way SSL</li>
+					<li>loginName: Login name.</li>
+					<li>loginPassword: Password credential to login into LDAP</li>
+					<li>serverTrustCert: LDAP repository server's trusted certificate. Required only if ssl attribute is set to 1-way or 2-way SSL.</li>
+					<li>clientKeyStore: Client's keystore. Required only if ssl attribute is set to 2-way.</li>
+				</ul>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="loginName" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+			</xs:element>
+			<xs:element name="loginPassword" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+			</xs:element>
+			<xs:element name="serverTrustCert" type="xs:base64Binary"
+				minOccurs="0" maxOccurs="1">
+			</xs:element>
+			<xs:element name="clientKeyStore" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:base64Binary">
+							<xs:attribute name="password"
+								type="xs:string" use="required">
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="ssl" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="NONE"></xs:enumeration>
+					<xs:enumeration value="1WAY"></xs:enumeration>
+					<xs:enumeration value="2WAY"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="LDAPRepositoryType">
+		<xs:annotation>
+			<xs:documentation>
+				Holds the LDAP repository details. This is mandatory when the repository type is LDAP.
+				<ul>
+					<li>Host: IP address of LDAP repository</li>
+					<li>Port: Port on which LDAP is listening</li>
+					<li>Schema Name: LDAP repository's schema identifier</li>
+					<li>Base DN: Base domain name of LDAP repository</li>
+					<li>Connection Credential: Connection type like TCP or 1-way SSL or 2-way SSL and login, password etc., Refer to ConnectionCredentialType for more information.</li>
+					<li>Redirect Search Schema and Redirect Search Attribute:
+						An attribute in LDAP repository may contain DN value 'or' list of DN values pointing to some other node(s) in LDAP. 
+						If search operations, like user search, need to be performed on such nodes, then Redirection Schema, the schema to which this attribute belongs, and Redirection Attribute, the attribute name which contains such values, 
+						needs to be configured.
+					</li>
+				</ul>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="host" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+			</xs:element>
+			<xs:element name="port" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"></xs:minInclusive>
+						<xs:maxInclusive value="65535"></xs:maxInclusive>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="schemaName" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+			</xs:element>
+			<xs:element name="baseDN" type="DNType" minOccurs="1"
+				maxOccurs="1">
+			</xs:element>
+			<xs:element name="connectionCredential"
+				type="ConnectionCredentialType" minOccurs="1" maxOccurs="1">
+			</xs:element>
+			<xs:element name="redirectSearchSchema" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+			<xs:element name="redirectSearchAttribute" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RepositoryDetailsType">
+		<xs:annotation>
+			<xs:documentation>
+				Following repository types are supported:
+				<ul>
+				<li>Relational Database(RDB): ARUSER is the repository type identifier. Repository details are not needed.</li>
+				<li>Light weight Directory Access Protocol (LDAP): LDAP is the repository type identifier. Repository details like Host, Port, BaseDN etc., are needed.
+				Refer to LDAPRepositoryType for more details.</li>
+				</ul>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ldapDetails" type="uds:LDAPRepositoryType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="repositoryType" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="UserCredentialType">
+		<xs:sequence>
+			<xs:element name="userId" minOccurs="1" maxOccurs="1" type="uds:UserIdentifierType"/>
+			<xs:element name="userCredential" minOccurs="1"
+				maxOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="type" type="xs:string" use="required"></xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UserAuthResultType">
+		<xs:sequence>
+			<xs:element name="authenticationToken" type="xs:string" minOccurs="0" maxOccurs="1">
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="status" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="success"></xs:enumeration>
+					<xs:enumeration value="failure"></xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="mechanism" type="xs:string" use="optional"></xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="QnAValuesAttribute">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="info" type="uds:AttributeInfoType" />
+		</xs:sequence>
+	</xs:complexType>
+
+    <xs:complexType name="AttributeInfoType">
+    	<xs:attribute name="value" type="xs:string"></xs:attribute>
+    	<xs:attribute name="status" type="AttributeInfoStatusType"></xs:attribute>
+    </xs:complexType>
+		
+    <xs:simpleType name="AttributeInfoStatusType">
+    	<xs:restriction base="xs:string">
+    		<xs:enumeration value="FOUND"></xs:enumeration>
+    		<xs:enumeration value="NOT_FOUND"></xs:enumeration>
+    	</xs:restriction>
+    </xs:simpleType>
+
+	<xs:complexType name="QnAResponseAttribute">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="result" type="uds:QnAVerificationResultType" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="QnARequestAttribute">
+		<xs:sequence>
+			<xs:element name="attribute" minOccurs="1"
+				maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="attrName" type="xs:string" />
+					<xs:attribute name="attrValue" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+    <xs:simpleType name="QnAVerificationResultType">
+    	<xs:restriction base="xs:string">
+    		<xs:enumeration value="MATCHED"></xs:enumeration>
+    		<xs:enumeration value="NOT_MATCHED"></xs:enumeration>
+    		<xs:enumeration value="NOT_VERIFIED"></xs:enumeration>
+    		<xs:enumeration value="NOT_FOUND"></xs:enumeration>
+    	</xs:restriction>
+    </xs:simpleType>
+
+	
+	<xs:simpleType name="DeviceStatusType">
+		<xs:annotation>
+			<xs:documentation>
+			This is the enumeration for device status types.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ACTIVE" />
+			<xs:enumeration value="INACTIVE" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="DeviceResponseAttrs">
+		<xs:annotation>
+			<xs:documentation>
+				This type holds the minimal user device details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="deviceToken"
+				type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="deviceID"
+				type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="deviceStatus" 
+				type="uds:DeviceStatusType" />
+			<xs:element name="customAttribute" minOccurs="0"
+				maxOccurs="unbounded" type="uds:CustomAttributeType" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="DeviceRequestAttrs">
+		<xs:annotation>
+			<xs:documentation>
+				This type holds the minimal user device details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="deviceToken"
+				type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="deviceID"
+				type="xs:string" />
+			<xs:element name="customAttribute" minOccurs="0"
+				maxOccurs="unbounded" type="uds:CustomAttributeType" />
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

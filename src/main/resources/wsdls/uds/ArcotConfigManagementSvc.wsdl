@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ArcotConfigRegistrySvc" targetNamespace="http://ws.arcot.com/ArcotConfigRegistrySvc/1.0" xmlns:tns="http://ws.arcot.com/ArcotConfigRegistrySvc/1.0" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:msgs="http://ws.arcot.com/ArcotConfigRegistrySvc/1.0/msgs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://ws.arcot.com/ArcotConfigRegistrySvc/1.0/msgs" xmlns:uds="http://ws.arcot.com/UserSchema/1.0">
+			<xsd:import namespace="http://ws.arcot.com/UserSchema/1.0" schemaLocation="ArcotUserSchema.xsd"/>
+            <xsd:element name="configRegistryError" type="uds:UdsRegistryErrorType"/>
+
+            <xsd:element name="listEmailTypeRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="orgName" type="xsd:string">
+						</xsd:element>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+			</xsd:element>
+            <xsd:element name="listEmailTypeResponse">
+				<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="emailType" type="uds:EmailType"/>
+			</xsd:sequence>
+			<xsd:attribute name="isGlobal" type="xsd:boolean" />
+				</xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="listTelephoneTypeRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="orgName" type="xsd:string">
+						</xsd:element>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="listTelephoneTypeResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="telephoneType" type="uds:TelephoneType"/>
+			</xsd:sequence>
+            <xsd:attribute name="isGlobal" type="xsd:boolean" />
+		</xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="listAccountTypeRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="targetAllOrgs" type="xsd:boolean"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="orgName" type="xsd:string">
+						</xsd:element>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="listAccountTypeResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="accountType" type="uds:AccountType"/>
+			</xsd:sequence>
+		</xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="listConfiguredAttributesForEncryptionRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0" name="orgName" type="xsd:string">
+						</xsd:element>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="listConfiguredAttributesForEncryptionResponse">
+            	<xsd:annotation>
+            		<xsd:documentation>
+            		This list contains the arcot attributes configured for encryption for the given organization.
+            		If the organization has no configured arcot attributes for encryption, global arcot attributes configured for encryption are returned
+            		and the attribute 'isGlobal' is set to true.
+            		</xsd:documentation>
+            	</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="attribute" type="xsd:string"/>
+					</xsd:sequence>
+            		<xsd:attribute name="isGlobal" type="xsd:boolean" />
+				</xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="deleteAccountTypeRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element maxOccurs="1" minOccurs="1" name="accountType" type="xsd:string">
+            			</xsd:element>
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+			</xsd:element>
+            <xsd:element name="deleteAccountTypeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="return" type="uds:UdsRegistrySuccessType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+
+
+	    <xsd:complexType name="ListOfOrgsAccountType">
+		<xsd:sequence>
+		    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Organization" type="msgs:AccountCustomAttributeType" />
+		</xsd:sequence>
+	    </xsd:complexType>
+
+            <xsd:element name="createAccountTypeRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="accountType" type="uds:AccountType"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="targetAllOrgs" type="xsd:boolean" default="false" />
+						<xsd:element maxOccurs="1" minOccurs="0" name="ListOfOrganizations" type="msgs:ListOfOrgsAccountType"/>
+
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+			</xsd:element>
+            <xsd:element name="createAccountTypeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="return" type="uds:UdsRegistrySuccessType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+
+            <xsd:complexType name="AccountCustomAttributeType">
+           		<xsd:sequence>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="orgName" type="xsd:string" />
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="customAttribute" type="xsd:string" />
+           		</xsd:sequence>
+            </xsd:complexType>
+
+
+            <xsd:element name="updateAccountTypeRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element maxOccurs="1" minOccurs="1" name="name" type="xsd:string" />
+            			<xsd:element maxOccurs="1" minOccurs="0" name="displayName" type="xsd:string" />
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="customAttribute" type="uds:CustomAttributeType" />
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="removeCustomAttribute" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="0" name="targetAllOrgs" type="xsd:boolean" default="false" />
+
+
+						<xsd:element maxOccurs="1" minOccurs="0" name="ListOfOrganizations" type="msgs:ListOfOrgsAccountType">
+						<xsd:annotation>
+							<xsd:documentation>
+								This element contains the list of organization-AccountType associations. The list of account type custom attributes for an organization are completely overwritten.
+								To add a new custom attribute, one must pass the existing custom attributes along with new custom attributes.
+							</xsd:documentation>
+							</xsd:annotation>
+            			</xsd:element>
+						<xsd:element name="RemoveOrganizations" maxOccurs="1" minOccurs="0">
+						    <xsd:complexType>
+							<xsd:sequence>
+							    <xsd:element maxOccurs="unbounded" minOccurs="0" name="orgName" type="xsd:string" />
+							</xsd:sequence>
+						    </xsd:complexType>
+						</xsd:element>
+
+						<xsd:element minOccurs="0" maxOccurs="1" name="clientTxId" type="xsd:string" />
+            		</xsd:sequence>
+            	</xsd:complexType>
+	    </xsd:element>
+            <xsd:element name="updateAccountTypeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="return" type="uds:UdsRegistrySuccessType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+
+	  </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="listAccountTypeRequest">
+    <wsdl:part name="param" element="msgs:listAccountTypeRequest">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="listEmailTypeRequest">
+    <wsdl:part name="param" element="msgs:listEmailTypeRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listTelephoneTypeRequest">
+    <wsdl:part name="param" element="msgs:listTelephoneTypeRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listConfiguredAttributesForEncryptionRequest">
+    <wsdl:part name="param" element="msgs:listConfiguredAttributesForEncryptionRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="configRegistryError">
+    <wsdl:part name="param" element="msgs:configRegistryError">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteAccountTypeRequest">
+    <wsdl:part name="input" element="msgs:deleteAccountTypeRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createAccountTypeRequest">
+    <wsdl:part name="input" element="msgs:createAccountTypeRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateAccountTypeRequest">
+    <wsdl:part name="input" element="msgs:updateAccountTypeRequest">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="listAccountTypeResponse">
+    <wsdl:part name="param" element="msgs:listAccountTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listEmailTypeResponse">
+    <wsdl:part name="param" element="msgs:listEmailTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listTelephoneTypeResponse">
+    <wsdl:part name="param" element="msgs:listTelephoneTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listConfiguredAttributesForEncryptionResponse">
+    <wsdl:part name="param" element="msgs:listConfiguredAttributesForEncryptionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteAccountTypeResponse">
+    <wsdl:part name="return" element="msgs:deleteAccountTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createAccountTypeResponse">
+    <wsdl:part name="return" element="msgs:createAccountTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateAccountTypeResponse">
+    <wsdl:part name="return" element="msgs:updateAccountTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ArcotConfigRegistrySvcPortType">
+  	<wsdl:documentation>
+  		All the services defined under this port type exhibit the below defined global behaviour:
+  		<ul>
+	  		<li>If organization name is not passed in the request, configured default organization is assumed.</li>
+	  		<li>Every request takes a client transaction ID as input. This is an optional input and may be used by client applications to map the transactions.</li>
+	  		<li>Every response returns a server transaction ID.</li>
+	  		<li>Services on failure return ConfigRegistryError with error context, error message and error number.</li>
+	  		<li>Due to re-use of data types between operations and request-responses, certain elements in the request are displayed even though they are
+	  		not honored/required at the server side. Such elements are explicitly marked as 'Not Required' in individual operations.
+	  		<br/><b>Note:</b> 'Not Required' elements are not same as 'Optional' elements. Unlike 'Not Required' elements, optional elements are honored at the server side.</li>
+  		</ul>
+  		<br/>If a service is enabled for protection through AnA (Authentication and Authorization), additional inputs should be passed in the request header as defined below.
+  		The header elements should be qualified with the <i>http://ws.arcot.com/UDSTransaction/1.0</i> namespace.
+  		<br/><b>If authentication token is not available:</b>
+  		<ul>
+  			<li>userID:User identifier</li>
+  			<li>orgName: Organization name to which the user belongs</li>
+  			<li>credential: User's credential</li>
+  		</ul>
+  		The service returns an authentication token as part of the response header on successful AnA request. This token can be used in subsequent requests.
+  		The token is valid for a configurable duration of 1 day.
+  		<br/><b>If Authentication Token is available:</b>
+  		<ul>
+  			<li>authToken: The token returned by the service.</li>
+  		</ul>
+  	</wsdl:documentation>
+    <wsdl:operation name="listAccountTypes">
+<wsdl:documentation>
+		This service lists the account types configured for the given organization.
+	</wsdl:documentation>
+      <wsdl:input name="listAccountTypeRequest" message="tns:listAccountTypeRequest">
+    </wsdl:input>
+      <wsdl:output name="listAccountTypeResponse" message="tns:listAccountTypeResponse">
+    </wsdl:output>
+      <soap12:fault name="listAccountTypesError" message="tns:configRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listEmailTypes">
+	<wsdl:documentation>
+		This service lists the email types configured for the given organization.
+		If no email types are configured for the given organization, email types configured at global level are returned.
+	</wsdl:documentation>
+      <wsdl:input name="listEmailTypeRequest" message="tns:listEmailTypeRequest">
+    </wsdl:input>
+      <wsdl:output name="listEmailTypeResponse" message="tns:listEmailTypeResponse">
+    </wsdl:output>
+      <soap12:fault name="listEmailTypesError" message="tns:configRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+
+    <wsdl:operation name="listTelephoneTypes">
+		<wsdl:documentation>
+		This service lists the telephone types configured for the given organization.
+		If no telephone types are configured for the given organization, telephone types configured at global level are returned.
+		</wsdl:documentation>
+      <wsdl:input name="listTelephoneTypeRequest" message="tns:listTelephoneTypeRequest">
+    </wsdl:input>
+      <wsdl:output name="listTelephoneTypeResponse" message="tns:listTelephoneTypeResponse">
+    </wsdl:output>
+      <soap12:fault name="listTelephoneTypesError" message="tns:configRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listConfiguredAttributesForEncryption">
+	<wsdl:documentation>
+		This service lists the arcot attributes configured for encryption for the given organization.
+		If there are no arcot attributes configured for encryption for the given organization, global arcot attributes configured for encryption are returned.
+	</wsdl:documentation>
+      <wsdl:input name="listConfiguredAttributesForEncryptionRequest" message="tns:listConfiguredAttributesForEncryptionRequest">
+    </wsdl:input>
+      <wsdl:output name="listConfiguredAttributesForEncryptionResponse" message="tns:listConfiguredAttributesForEncryptionResponse">
+    </wsdl:output>
+      <soap12:fault name="listConfiguredAttributesForEncryptionError" message="tns:configRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAccountType">
+	<wsdl:documentation>
+			This service is used to delete the specified account type.
+			Account type is deleted only if no accounts are created for this account type in any of the organizations.
+		</wsdl:documentation>
+      <wsdl:input name="deleteAccountTypeRequest" message="tns:deleteAccountTypeRequest">
+    </wsdl:input>
+      <wsdl:output name="deleteAccountTypeResponse" message="tns:deleteAccountTypeResponse">
+    </wsdl:output>
+      <soap12:fault name="deleteAccountTypeError" message="tns:configRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createAccountType">
+	<wsdl:documentation>
+		  This service is used to create account type.
+		  The account type will be available to all organizations if the flag 'targetAllOrgs' is set to true else it is assigned to the provided list of organizations.
+		  By default targetAllOrgs is set to false.
+		</wsdl:documentation>
+      <wsdl:input name="createAccountTypeRequest" message="tns:createAccountTypeRequest">
+    </wsdl:input>
+      <wsdl:output name="createAccountTypeResponse" message="tns:createAccountTypeResponse">
+    </wsdl:output>
+      <soap12:fault name="createAccountTypeError" message="tns:configRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateAccountType">
+	<wsdl:documentation>
+		  This service updates the given account type with account type display name,
+		  custom attributes and the organizations assigned to the account type.
+		</wsdl:documentation>
+      <wsdl:input name="updateAccountTypeRequest" message="tns:updateAccountTypeRequest">
+    </wsdl:input>
+      <wsdl:output name="updateAccountTypeResponse" message="tns:updateAccountTypeResponse">
+    </wsdl:output>
+      <soap12:fault name="updateAccountTypeError" message="tns:configRegistryError">
+    </soap12:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ArcotConfigRegistrySvcBinding" type="tns:ArcotConfigRegistrySvcPortType">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="listAccountTypes">
+      <soap12:operation soapAction="urn:UDS.ListAccountTypes" style="document"/>
+      <wsdl:input name="listAccountTypeRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listAccountTypeResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="listAccountTypesError">
+        <soap12:fault name="listAccountTypesError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listEmailTypes">
+      <soap12:operation soapAction="urn:UDS.ListEmailTypes" style="document"/>
+      <wsdl:input name="listEmailTypeRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listEmailTypeResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="listEmailTypesError">
+        <soap12:fault name="listEmailTypesError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listTelephoneTypes">
+      <soap12:operation soapAction="urn:UDS.ListTelephoneTypes" style="document"/>
+      <wsdl:input name="listTelephoneTypeRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listTelephoneTypeResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="listTelephoneTypesError">
+        <soap12:fault name="listTelephoneTypesError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listConfiguredAttributesForEncryption">
+      <soap12:operation soapAction="urn:UDS.ListConfiguredAttributesForEncryption" style="document"/>
+      <wsdl:input name="listConfiguredAttributesForEncryptionRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listConfiguredAttributesForEncryptionResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="listConfiguredAttributesForEncryptionError">
+        <soap12:fault name="listConfiguredAttributesForEncryptionError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAccountType">
+      <soap12:operation soapAction="urn:UDS.DeleteAccountType" style="document"/>
+      <wsdl:input name="deleteAccountTypeRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteAccountTypeResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="deleteAccountTypeError">
+        <soap12:fault name="deleteAccountTypeError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createAccountType">
+      <soap12:operation soapAction="urn:UDS.CreateAccountType" style="document"/>
+      <wsdl:input name="createAccountTypeRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createAccountTypeResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="createAccountTypeError">
+        <soap12:fault name="createAccountTypeError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateAccountType">
+      <soap12:operation soapAction="urn:UDS.UpdateAccountType" style="document"/>
+      <wsdl:input name="updateAccountTypeRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateAccountTypeResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <soap12:fault name="updateAccountTypeError">
+        <soap12:fault name="updateAccountTypeError" use="literal"/>
+      </soap12:fault>
+    </wsdl:operation>
+ </wsdl:binding>
+  <wsdl:service name="ArcotConfigRegistrySvc">
+    <wsdl:port name="ArcotConfigRegistrySvcBinding" binding="tns:ArcotConfigRegistrySvcBinding">
+      <soap12:address location="http://localhost:8080/arcotuds/services/ArcotConfigRegistrySvc"/>
+    </wsdl:port>
+  </wsdl:service>
+  <wsdl:documentation>
+	<br/>
+	<b>WSDL Documentation</b>:
+	Click <a href="wsdl/3/porttype/ArcotConfigRegistrySvcPortType.html">here</a> to view the documentation on the operations provided by this service.
+  </wsdl:documentation>
+</wsdl:definitions>
