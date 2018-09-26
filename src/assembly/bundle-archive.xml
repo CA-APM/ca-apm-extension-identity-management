@@ -26,9 +26,9 @@
 		</file>
 
 		<file>
-			<source>${project.build.sourceDirectory}/../managementModules/IdentityManagerMM.jar</source>
+			<source>${project.build.sourceDirectory}/../managementModules/CAIdentityManagementMM.jar</source>
 			<outputDirectory>copy-to-em/deploy</outputDirectory>
-			<destName>IdentityManagerMM.jar</destName>
+			<destName>CAIdentityManagementMM.jar</destName>
 		</file>
 
 		<file>

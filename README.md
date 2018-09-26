@@ -33,7 +33,7 @@ You need to install [CA APM Infrastructure Agent 10.5 or 10.7](https://docops.ca
 1. Extract `im-monitor-<version>-dist.tar.gz`
 2. Copy `post-10.5/im-monitor.tar.gz` to `${AGENT_HOME}/extensions/deploy` of your CA APM 10.5 or 10.7 Infrastructure Agent.
 3. Restart the Infrastructure Agent.
-4. Copy `copy-to-em/deploy/CAIdentityManagerMM.jar` to the `${EM_HOME}/deploy` directory of your CA APM MOM (Enterprise Manager).
+4. Copy `copy-to-em/deploy/CAIdentityManagementMM.jar` to the `${EM_HOME}/deploy` directory of your CA APM MOM (Enterprise Manager).
 
 ## Configuration
 The file `extensions/im-monitor/bundle.properties` contains the configuration of the Identity Manager Extension.
