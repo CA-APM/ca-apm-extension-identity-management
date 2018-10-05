@@ -28,8 +28,11 @@ import com.google.common.base.Throwables;
 import com.wily.introscope.agent.IAgent;
 import com.wily.util.heartbeat.IRegisteredBehavior;
 
+import org.apache.axis.SimpleChain;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Stub;
+import org.apache.axis.configuration.BasicClientConfig;
+import org.apache.axis.transport.http.CommonsHTTPSender;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,7 +47,7 @@ public class ArcotService extends ADynamicService {
     // encryption provider
     private CommonEncryptionProvider cep;
 
-    // stubs for SOAP calls
+    // stubs for SOAP calls, you shoudl only do one parallel call per stub!
     private ArcotConfigRegistrySvcPortType          configRegistryService;
     private ArcotUserRegistrySvcPortType            userRegistryService;
     private ArcotUserRegistryMgmtSvcPortType        userRegistryManagementService;
@@ -71,7 +74,7 @@ public class ArcotService extends ADynamicService {
     public static final String kArcotAuthUser = "arcot.authorization.user";
     public static final String kArcotAuthPassword = "arcot.authorization.password";
 
-    public static final int kSoapTimeoutSecs = 10;
+    public static final int kSoapTimeoutSecs = 30;
 
     @Override
     public void IAgentService_startService(IAgent agent, Map parameters) throws Exception {
@@ -86,7 +89,28 @@ public class ArcotService extends ADynamicService {
         registeredBehaviorList = new ArrayList<IRegisteredBehavior>();
 
         try {
-            registerTasks(agent);
+            registerTask(agent,
+                    GetUserStatusTask.kArcotGetUserStatusEnabled,
+                    GetUserStatusTask.kArcotGetUserStatusInterval,
+                    new GetUserStatusTask(agent, this, log));
+        } catch (Exception e) {
+            log.error("exception in startService(): " + Throwables.getStackTraceAsString(e), e);
+        }
+
+        try {
+            registerTask(agent,
+                    EvaluateRiskTask.kArcotEvaluateRiskEnabled,
+                    EvaluateRiskTask.kArcotEvaluateRiskInterval,
+                    new EvaluateRiskTask(agent, this, log));
+        } catch (Exception e) {
+            log.error("exception in startService(): " + Throwables.getStackTraceAsString(e), e);
+        }
+
+        try {
+            registerTask(agent,
+                    FetchCredentialTask.kArcotFetchCredentialEnabled,
+                    FetchCredentialTask.kArcotFetchCredentialInterval,
+                    new FetchCredentialTask(agent, this, log));
         } catch (Exception e) {
             log.error("exception in startService(): " + Throwables.getStackTraceAsString(e), e);
         }
@@ -106,21 +130,21 @@ public class ArcotService extends ADynamicService {
      * Register the tasks.
      * @param agent the agent
      */
-    public void registerTasks(IAgent agent) {
+    public void registerTask(IAgent agent,
+                             String enabledProperty,
+                             String intervalProperty,
+                             AAdvancedAuthenticationTask task) {
 
         // register the get user status task
-        if (IConstants.TRUE.equals(getProperty(
-                GetUserStatusTask.kArcotGetUserStatusEnabled).toLowerCase())) {
+        if (IConstants.TRUE.equals(getProperty(enabledProperty).toLowerCase())) {
 
-            long interval = Long.parseLong(getProperty(
-                    GetUserStatusTask.kArcotGetUserStatusInterval));
+            long interval = Long.parseLong(getProperty(intervalProperty));
 
             IRegisteredBehavior behavior = agent.IAgent_getCommonHeartbeat().addBehavior(
-                    new GetUserStatusTask(agent, this, log),
-                    "AA Get User Status Task", true, interval, false);
+                    task, task.getTaskName(), true, interval, false);
             registeredBehaviorList.add(behavior);
 
-            log.info("AA Get User Status Task started with interval = " + interval);
+            log.info(task.getTaskName() + " started with interval = " + interval);
         }
     }
 
@@ -242,6 +266,20 @@ public class ArcotService extends ADynamicService {
         return service;
     }
 
+    /**
+     * Create a client config with CommonsHTTPSender.
+     * This is a workaround for an Axis problem that results in a SocketTimeoutException
+     * being thrown. see https://samaxes.com/2009/04/axis-14-read-timed-out-and-http-11/
+     * @return a client config
+     */
+    protected BasicClientConfig getClientConfig() {
+        BasicClientConfig basicClientConfig = new BasicClientConfig();
+        SimpleChain simpleChain = new SimpleChain();
+
+        simpleChain.addHandler(new CommonsHTTPSender());
+        basicClientConfig.deployTransport("http", simpleChain);
+        return basicClientConfig;
+    }
 
     /**
      * Initialize the WebFort Issuance service.
@@ -253,12 +291,12 @@ public class ArcotService extends ADynamicService {
 
             if (null != url) {
 
-                // get the SOAP service
-                WebFortIssuanceServiceLocator locator = new WebFortIssuanceServiceLocator();
+                // get the SOAP service stub
+                WebFortIssuanceServiceLocator locator =
+                        new WebFortIssuanceServiceLocator(getClientConfig());
                 URL portAddress = new URL(url);
                 IssuanceAPIPortType service =
                         locator.getIssuanceAPISOAP12Port(portAddress);
-
                 addAuthorization((Stub) service, kArcotAuthUser, kArcotAuthPassword);
 
                 ((Stub) service).setTimeout(kSoapTimeoutSecs * 1000);
@@ -281,9 +319,9 @@ public class ArcotService extends ADynamicService {
 
             if (null != url) {
 
-                // get the SOAP service
+                // get the SOAP service stub
                 ArcotWebFortBulkOperationsSvcLocator locator =
-                        new ArcotWebFortBulkOperationsSvcLocator();
+                        new ArcotWebFortBulkOperationsSvcLocator(getClientConfig());
                 URL portAddress = new URL(url);
                 ArcotWebFortBulkOperationsAPIPortType service =
                         locator.getArcotWebFortBulkOperationsAPIPort(portAddress);
@@ -310,9 +348,9 @@ public class ArcotService extends ADynamicService {
 
             if (null != url) {
 
-                // get the SOAP service
+                // get the SOAP service stub
                 WebFortAuthServiceLocator locator =
-                        new WebFortAuthServiceLocator();
+                        new WebFortAuthServiceLocator(getClientConfig());
                 URL portAddress = new URL(url);
                 AuthAPIPortType service = locator.getAuthAPISOAP11Port(portAddress);
 
@@ -338,9 +376,9 @@ public class ArcotService extends ADynamicService {
 
             if (null != url) {
 
-                // get the SOAP service
+                // get the SOAP service stub
                 ArcotWebFortAdminSvcLocator locator =
-                        new ArcotWebFortAdminSvcLocator();
+                        new ArcotWebFortAdminSvcLocator(getClientConfig());
                 URL portAddress = new URL(url);
                 ArcotWebFortAdminSvcPortType service =
                         locator.getArcotWebFortAdminSvcSOAP12port_http(portAddress);
@@ -367,12 +405,12 @@ public class ArcotService extends ADynamicService {
 
             if (null != url) {
 
-                // get the SOAP service
+                // get the SOAP service stub
                 RiskFortEvaluateRiskSvcLocator locator =
-                        new RiskFortEvaluateRiskSvcLocator();
+                        new RiskFortEvaluateRiskSvcLocator(getClientConfig());
                 URL portAddress = new URL(url);
                 EvaluateRiskAPIPortType service =
-                        locator.getEvaluateRiskAPISOAP11Port(portAddress);
+                        locator.getEvaluateRiskAPISOAP12Port(portAddress);
 
                 addAuthorization((Stub) service, kArcotAuthUser, kArcotAuthPassword);
 
@@ -396,9 +434,9 @@ public class ArcotService extends ADynamicService {
 
             if (null != url) {
 
-                // get the SOAP service
+                // get the SOAP service stub
                 ArcotRiskFortAdminSvcLocator locator =
-                        new ArcotRiskFortAdminSvcLocator();
+                        new ArcotRiskFortAdminSvcLocator(getClientConfig());
                 URL portAddress = new URL(url);
                 ArcotRiskFortAdminSvcPortType service =
                         locator.getArcotRiskFortAdminSvcSOAP12port_http(portAddress);
@@ -426,9 +464,9 @@ public class ArcotService extends ADynamicService {
             if (null == url) {
                 return null;
             }
-
-            // get the SOAP service
-            ArcotUserRegistryMgmtSvcLocator locator = new ArcotUserRegistryMgmtSvcLocator();
+            // get the SOAP service stub
+            ArcotUserRegistryMgmtSvcLocator locator =
+                    new ArcotUserRegistryMgmtSvcLocator(getClientConfig());
             URL portAddress = new URL(url);
             ArcotUserRegistryMgmtSvcPortType service =
                     locator.getArcotUserRegistryMgmtSvcBinding(portAddress);
@@ -456,9 +494,9 @@ public class ArcotService extends ADynamicService {
             if (null == url) {
                 return null;
             }
-
-            // get the SOAP service
-            ArcotConfigRegistrySvcLocator locator = new ArcotConfigRegistrySvcLocator();
+            // get the SOAP service stub
+            ArcotConfigRegistrySvcLocator locator =
+                    new ArcotConfigRegistrySvcLocator(getClientConfig());
             URL portAddress = new URL(url);
             ArcotConfigRegistrySvcPortType service =
                     locator.getArcotConfigRegistrySvcBinding(portAddress);
@@ -487,8 +525,9 @@ public class ArcotService extends ADynamicService {
                 return null;
             }
 
-            // get the SOAP service
-            ArcotUserRegistrySvcLocator locator = new ArcotUserRegistrySvcLocator();
+            // get the SOAP service stub
+            ArcotUserRegistrySvcLocator locator =
+                    new ArcotUserRegistrySvcLocator(getClientConfig());
             URL portAddress = new URL(url);
             ArcotUserRegistrySvcPortType service =
                     locator.getArcotUserRegistrySvcBinding(portAddress);

@@ -103,7 +103,59 @@ arcot.getUserStatus.userRefId=2
 #<property type="integer">
 # Milliseconds to wait between consecutive requests.
 #</property>
-arcot.getUserStatus.interval=30000
+arcot.getUserStatus.interval=60000
+
+
+#<property type="string">
+# URL of CA Advanced Authentication RiskFort evaluation service.
+#</property>
+arcot.riskFort.evaluate.url=http://localhost:7778/services/RiskFortEvaluateRiskSvc
+
+#<property type="boolean">
+# Send evaluate risk request.
+#</property>
+arcot.evaluateRisk.enabled=true
+
+#<property type="string">
+# CA Advanced Authentication org name for evaluate risk
+#</property>
+arcot.evaluateRisk.orgName=DEFAULTORG
+
+#<property type="string">
+# CA Advanced Authentication user name for evaluate risk
+#</property>
+arcot.evaluateRisk.userName=AUSER1
+
+#<property type="integer">
+# Milliseconds to wait between consecutive requests.
+#</property>
+arcot.evaluateRisk.interval=60000
+
+
+#<property type="string">
+# URL of CA Advanced Authentication WebFort issuance service.
+#</property>
+arcot.webfort.issuance.url=http://localhost:9744/services/WebFortIssuanceSvc
+
+#<property type="boolean">
+# Send fetch credential request.
+#</property>
+arcot.fetchCredential.enabled=true
+
+#<property type="string">
+# CA Advanced Authentication org name for fetch credential
+#</property>
+arcot.fetchCredential.orgName=DEFAULTORG
+
+#<property type="string">
+# CA Advanced Authentication user name for fetch credential
+#</property>
+arcot.fetchCredential.userName=AUSER1
+
+#<property type="integer">
+# Milliseconds to wait between consecutive requests.
+#</property>
+arcot.fetchCredential.interval=60000
 
 
 #<property type="string">
@@ -117,31 +169,21 @@ arcot.configRegistry.url=http://localhost:8080/arcotuds/services/ArcotConfigRegi
 arcot.userRegistryMgmt.url=http://localhost:8080/arcotuds/services/ArcotUserRegistryMgmtSvc
                         
 #<property type="string">
-# URL of CA Advanced Authentication RisKFort administration service.
+# URL of CA Advanced Authentication RiskFort administration service.
 #</property>
 arcot.riskFort.admin.url=http://localhost:8080/axis2/services/ArcotRiskFortAdminSvc
-                        
-#<property type="string">
-# URL of CA Advanced Authentication RisKFort evaluation service.
-#</property>
-arcot.riskFort.evaluate.url=http://ws.arcot.com/services/RiskFortEvaluateRiskSvc
-                        
+
 #<property type="string">
 # URL of CA Advanced Authentication WebFort administration service.
 #</property>
-arcot.webfort.admin.url=http://ws.arcot.com/services/WebFortAdminSvc
+arcot.webfort.admin.url=http://localhost:8080/services/WebFortAdminSvc
                         
 #<property type="string">
 # URL of CA Advanced Authentication WebFort Authentication service.
 #</property>
-arcot.webfort.auth.url=http://ws.arcot.com/services/WebFortAuthSvc
+arcot.webfort.auth.url=http://localhost:8080/services/WebFortAuthSvc
                         
 #<property type="string">
 # URL of CA Advanced Authentication WebFort bulk operations service.
 #</property>
-arcot.webfort.bulk.url=http://ws.arcot.com/services/WebFortBulkOperationsSvc
-                        
-#<property type="string">
-# URL of CA Advanced Authentication WebFort issuance service.
-#</property>
-arcot.webfort.issuance.url=http://ws.arcot.com/services/WebFortIssuanceSvc
+arcot.webfort.bulk.url=http://localhost:8080/services/WebFortBulkOperationsSvc

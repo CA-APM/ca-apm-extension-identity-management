@@ -1,7 +1,7 @@
 # CA Identity Management Extension
 
 # Description
-This (Infrastructure) agent extension provides availability and functional checks against CA Identity Manager and CA Advanced Authentication.
+This (Infrastructure) agent extension provides availability and functional checks against CA Identity Manager and CA Advanced Authentication using the SOAP APIs provided by the two solutions.
 
 ## Short Description
 This agent extension provides availability and functional checks against CA Identity Manager and CA Advanced Authentication.
@@ -48,7 +48,7 @@ The *CA Identity Manager - Reset User Password example* has the following proper
 * `im.resetUserPassword.enabled=true`: enables/disables this check
 * `im.url=http://localhost:8080/iam/im/TEWS6/identityEnv`: the URL for the CA Identity Manager TEWS API
 * `#im.authorization.user=`: the user needed for (basic http) authorization, if empty or commented out no authentication header is sent 
-* `#im.authorization.password=`: the user needed for (basic http) authorization
+* `#im.authorization.password=`: the encrypted password needed for (basic http) authorization
 * `im.admin.user=imadmin`: a CA Identity Manager user that may perform the request
 * `im.admin.password=interOP@123`: the password of the a CA Identity Manager user that may perform the request
 * `im.resetUserPassword.user=auser01`: the user whose password will be reset
@@ -75,6 +75,9 @@ These CA Advanced Authentication service have no examples
 * `arcot.webfort.auth.url=http://ws.arcot.com/services/WebFortAuthSvc`
 * `arcot.webfort.bulk.url=http://ws.arcot.com/services/WebFortBulkOperationsSvc`
 * `arcot.webfort.issuance.url=http://ws.arcot.com/services/WebFortIssuanceSvc`
+
+### Encrypting Passwords
+To encrypt a password run `java -cp lib/EPAgent.jar -jar extensions/im-monitor/lib/im-monitor.jar <password>` from the Infrastructure agent directory.
 
 # Usage Instructions
 Configure the examples as shown above matching your environment and (re-) start the Infrastructure agent.
@@ -146,7 +149,10 @@ The Management Module agent expression is `(.*)\|(Infrastructure|EPAgent)\|(.*)`
 n/a
 
 ## Debugging and Troubleshooting
-Set `log4j.logger.IntroscopeAgent.ext.im-monitor=DEBUG, logfile` in `extensions/im-monitor/bundle.properties` to increase the log level. This will only apply to the extension logging and not the agent in general.
+* All log messages from this extension are prefixed with `[IntroscopeAgent.ext.im-monitor]`.
+* If no metrics appear in the metric viewer check the `IntroscopeAgent.log` for log messages with level `WARN` or `ERROR`.
+* Verify the configuration of the extension in `extensions/im-monitor/bundle.properties`.
+* To increase the log level set `log4j.logger.IntroscopeAgent.ext.im-monitor=DEBUG, logfile` in `extensions/im-monitor/bundle.properties`. This will only apply to log messages from this extension and not the agent in general.
 
 ## Support
 This document and associated tools are made available from CA Technologies as examples and provided at no charge as a courtesy to the CA APM Community at large. This resource may require modification for use in your environment. However, please note that this resource is not supported by CA Technologies, and inclusion in this site should not be construed to be an endorsement or recommendation by CA Technologies. These utilities are not covered by the CA Technologies software license agreement and there is no explicit or implied warranty from CA Technologies. They can be used and distributed freely amongst the CA APM Community, but not sold. As such, they are unsupported software, provided as is without warranty of any kind, express or implied, including but not limited to warranties of merchantability and fitness for a particular purpose. CA Technologies does not warrant that this resource will meet your requirements or that the operation of the resource will be uninterrupted or error free or that any defects will be corrected. The use of this resource implies that you understand and agree to the terms listed herein.

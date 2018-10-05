@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>im-monitor</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 
@@ -57,14 +57,22 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.ca.apm.agent</groupId>
-			<artifactId>Agent</artifactId>
+			<groupId>com.ca.apm.agent.EPAgent</groupId>
+			<artifactId>EPAgent</artifactId>
+			<version>10.5.2.52</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>axis</groupId>
 			<artifactId>axis</artifactId>
 			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
 		</dependency>
 
 	</dependencies>
@@ -104,6 +112,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.ca.apm.extensions.im.service.ImService</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
 			</plugin>
 
 			<!-- remove if you don't need to include dependencies -->

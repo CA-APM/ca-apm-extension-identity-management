@@ -136,7 +136,7 @@ public class ImService extends ADynamicService {
         // configure and start the tasks
         registeredBehaviorList = new ArrayList<IRegisteredBehavior>();
 
-            try {
+        try {
             registerTasks(agent);
         } catch (Exception e) {
             log.error("exception in startService(): " + Throwables.getStackTraceAsString(e), e);
@@ -197,14 +197,21 @@ public class ImService extends ADynamicService {
             String authUser = getProperty(kImAuthUser);
 
             if ((null != authUser) && (authUser.length() > 0)) {
-                String authPassword = cep.decrypt(getProperty(kImAuthPassword));
+                String authPassword = getProperty(kImAuthPassword);
 
-                //((Tews6SoapBindingStub)service).setUsername(authUser);
-                //((Tews6SoapBindingStub)service).setPassword(authPassword);
+                if ((null != authUser) && (authUser.length() > 0)) {
+                    authPassword = cep.decrypt(authPassword);
 
-                // use Basic HTTP Authentication:
-                ((Stub) service)._setProperty(Call.USERNAME_PROPERTY, authUser);
-                ((Stub) service)._setProperty(Call.PASSWORD_PROPERTY, authPassword);
+                    //((Tews6SoapBindingStub)service).setUsername(authUser);
+                    //((Tews6SoapBindingStub)service).setPassword(authPassword);
+
+                    // use Basic HTTP Authentication:
+                    ((Stub) service)._setProperty(Call.USERNAME_PROPERTY, authUser);
+                    ((Stub) service)._setProperty(Call.PASSWORD_PROPERTY, authPassword);
+                } else {
+                    log.warn(kImAuthPassword + " is empty, cannot set basic authorizationn");
+                    log.warn("supply either both user and password or neither");
+                }
             }
 
             ((Stub) service).setTimeout(kSoapTimeoutSecs * 1000);

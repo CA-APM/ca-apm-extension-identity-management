@@ -30,6 +30,7 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
     public static final String kStatusMessageMetricPostfix =  COLON + "Status Message";
     public static final String kErrorCodeMetricPostfix =  COLON + "Error Code";
     public static final String kStatusMetricPostfix =  COLON + "Status";
+    public static final String kTransactionIdMetricPostfix =  COLON + "Last Transaction Id";
     public static final String kRequest =  "Request";
     public static final String kCompleted = "completed";
 
@@ -101,6 +102,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
             final ImsStatus status = makeRequest();
             final long completedTime = System.currentTimeMillis();
 
+            log.debug("task " + getTaskName() + " returned " + status);
+
             if (null != status) {
                 // check info messages
                 String message = kCompleted;
@@ -120,7 +123,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                         0,
                         message,
                         startTime,
-                        completedTime);
+                        completedTime,
+                        status.getTransactionId());
 
                 // print the transaction id
                 log.debug("transaction id = " + status.getTransactionId());
@@ -138,7 +142,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                         1,
                         getTaskName() + " request did not return a status",
                         startTime,
-                        completedTime);
+                        completedTime,
+                        null);
             }
 
         } catch (ImsException ex) {
@@ -151,7 +156,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                     Integer.parseInt(ex.getException().getCode()),
                     ex.getException().getDescription(),
                     startTime,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    null);
 
         } catch (AxisFault ex) {
             log.warn("AxisFault in " + getTaskName() + " request: " + ex);
@@ -173,7 +179,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                     1,
                     message,
                     startTime,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    null);
 
         } catch (RemoteException ex) {
 
@@ -202,7 +209,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                     1,
                     null != ex.getMessage() ? ex.getMessage() : ex.toString(),
                     startTime,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    null);
 
         } catch (InterruptedException e) {
 
@@ -260,7 +268,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                         errorCode,
                         item.getState(),
                         0,
-                        item.getCompletedTime());
+                        item.getCompletedTime(),
+                        item.getId());
 
                 log.debug(item.getName() + " (" + item.getId() + "): " + item.getState()
                         + " at " + item.getCompletedTime());
@@ -289,7 +298,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                             errorCode,
                             detail.getState(),
                             0,
-                            detail.getCompletedTime());
+                            detail.getCompletedTime(),
+                            detail.getId());
 
                     log.debug("  " + detail.getName() + " (" + detail.getId() + "): "
                             + detail.getState() + " at " + detail.getCompletedTime());
@@ -304,7 +314,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                     Integer.parseInt(ex.getException().getCode()),
                     ex.getException().getDescription(),
                     0,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    null);
 
         } catch (AxisFault ex) {
             log.warn("AxisFault in " + getTaskName() + " request: " + ex);
@@ -316,7 +327,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                     1,
                     ex.getFaultString(),
                     0,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    null);
 
         } catch (java.rmi.RemoteException ex) {
 
@@ -340,7 +352,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                     1,
                     null != ex.getMessage() ? ex.getMessage() : ex.toString(),
                     0,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    null);
         }
     }
 
@@ -367,13 +380,15 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
      * @param statusMessage the status message, may be null
      * @param startTime the request start time
      * @param completedTimeString the request completed time
+     * @param lastTransactionId the id of the last transaction
      */
     public void sendStatus(String metricPath,
                            int status,
                            int errorCode,
                            String statusMessage,
                            long startTime,
-                           String completedTimeString) {
+                           String completedTimeString,
+                           String lastTransactionId) {
         // convert completed time
         long completedTime = getTimestampFromString(completedTimeString, defaultDateFormat);
 
@@ -382,7 +397,8 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
             completedTime = System.currentTimeMillis();
         }
 
-        sendStatus(metricPath, status, errorCode, statusMessage, startTime, completedTime);
+        sendStatus(metricPath, status, errorCode, statusMessage, startTime, completedTime,
+                lastTransactionId);
     }
 
     /**
@@ -393,13 +409,15 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
      * @param statusMessage the status message, may be null
      * @param startTime the request start time, leave 0 if you don't want to send duration
      * @param completedTime the request completed time
+     * @param lastTransactionId the id of the last transaction
      */
     public void sendStatus(String metricPath,
                            int status,
                            int errorCode,
                            String statusMessage,
                            long startTime,
-                           long completedTime) {
+                           long completedTime,
+                           String lastTransactionId) {
 
         final long currentTime = System.currentTimeMillis();
 
@@ -438,5 +456,13 @@ public abstract class AIdentityManagerTask implements ITimestampedRunnable, ICon
                 defaultDateFormat.format(new Date(completedTime)),
                 IConstants.MetricType.STRING,
                 currentTime);
+
+        if (null != lastTransactionId) {
+            service.addMetric(kIdentityManagerMetricPrefix,
+                    metricPath + kTransactionIdMetricPostfix,
+                    lastTransactionId,
+                    MetricType.STRING,
+                    currentTime);
+        }
     }
 }

@@ -13,11 +13,11 @@ import java.rmi.RemoteException;
  */
 public class GetUserStatusTask extends AAdvancedAuthenticationTask {
 
-    public static final String kArcotGetUserStatusEnabled = "arcot.getUserStatus.enabled";
-    public static final String kArcotGetUserStatusInterval = "arcot.getUserStatus.interval";
+    public static final String kArcotGetUserStatusEnabled   = "arcot.getUserStatus.enabled";
+    public static final String kArcotGetUserStatusInterval  = "arcot.getUserStatus.interval";
 
-    public static final String kArcotGetUserStatusOrgName     = "arcot.getUserStatus.orgName";
-    public static final String kArcotGetUserStatusUserName = "arcot.getUserStatus.userName";
+    public static final String kArcotGetUserStatusOrgName   = "arcot.getUserStatus.orgName";
+    public static final String kArcotGetUserStatusUserName  = "arcot.getUserStatus.userName";
     public static final String kArcotGetUserStatusUserRefId = "arcot.getUserStatus.userRefId";
 
     public static final String kArcotGetUserStatus = "Get User Status";
@@ -25,7 +25,7 @@ public class GetUserStatusTask extends AAdvancedAuthenticationTask {
     public static final String ACTIVE = "ACTIVE";
 
     /**
-     * Create a new ResetUserPasswordTask.
+     * Create a new GetUserStatusTask.
      * @param agent the agent
      * @param service the service
      * @param log the logger

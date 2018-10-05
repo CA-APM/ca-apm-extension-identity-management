@@ -1,8 +1,6 @@
 package com.ca.apm.extensions.arcot.service;
 
 import com.ca.apm.extensions.base.service.IConstants;
-import com.ca.apm.extensions.im.service.ImService;
-import com.ca.apm.extensions.utils.ExtensionUtils;
 import com.google.common.base.Throwables;
 import com.wily.introscope.agent.IAgent;
 import com.wily.util.feedback.IModuleFeedbackChannel;
@@ -25,8 +23,8 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
     public static final String kStatusMessageMetricPostfix =  COLON + "Status Message";
     public static final String kErrorCodeMetricPostfix =  COLON + "Error Code";
     public static final String kStatusMetricPostfix =  COLON + "Status";
+    public static final String kTransactionIdMetricPostfix =  COLON + "Last Transaction Id";
     public static final String kRequest =  "Request";
-    public static final String kCompleted = "completed";
 
     public static final String kConnectException = "ConnectException";
 
@@ -96,6 +94,7 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
 
             // make the custom request
             Status status = makeRequest();
+
             final long completedTime = System.currentTimeMillis();
 
             if (null != status) {
@@ -105,7 +104,8 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
                         status.getErrorCode(),
                         status.getMessage(),
                         startTime,
-                        completedTime);
+                        completedTime,
+                        status.getTransactionId());
 
                 // print the transaction id
                 log.debug("transaction id = " + status.getTransactionId());
@@ -117,7 +117,8 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
                         1,
                         getTaskName() + " request did not return a status",
                         startTime,
-                        completedTime);
+                        completedTime,
+                        null);
             }
 
         } catch (AxisFault ex) {
@@ -125,14 +126,22 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
             log.debug("  faultCode: " + ex.getFaultCode()
                     + ", faultstring: " + ex.getFaultString() + ";\n  " + ex.dumpToString());
 
+            RemoteException rex = (RemoteException) ex;
+            Throwable throwable = rex.getCause();
+            while (null != throwable) {
+                log.debug("  cause Exception: " + throwable);
+                log.debug(getTaskName() + ": "
+                        + Throwables.getStackTraceAsString(throwable));
+                throwable = throwable.getCause();
+            }
+
+
             int status = STATUS_WARN; // minor error
             String message = ex.getFaultString();
             // connection error => DANGER
             if (ex.getFaultString().contains(kConnectException)) {
                 status = STATUS_DANGER;
-                message = "Cannot connect to "
-                        + ExtensionUtils.formatToBeResourceSafe(
-                                service.getProperty(ImService.kImUrl));
+                message = "Cannot connect to " + getTaskName();
             }
 
             sendStatus(getTaskName() + PIPE + kRequest,
@@ -140,7 +149,8 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
                     1,
                     message,
                     startTime,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    null);
 
         } catch (RemoteException ex) {
 
@@ -169,7 +179,8 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
                     1,
                     null != ex.getMessage() ? ex.getMessage() : ex.toString(),
                     startTime,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    null);
 
         } catch (Exception e) {
 
@@ -212,13 +223,15 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
      * @param statusMessage the status message, may be null
      * @param startTime the request start time
      * @param completedTimeString the request completed time
+     * @param lastTransactionId the id of the last transaction
      */
     public void sendStatus(String metricPath,
                            int status,
                            int errorCode,
                            String statusMessage,
                            long startTime,
-                           String completedTimeString) {
+                           String completedTimeString,
+                           String lastTransactionId) {
         // convert completed time
         long completedTime = getTimestampFromString(completedTimeString, defaultDateFormat);
 
@@ -227,7 +240,8 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
             completedTime = System.currentTimeMillis();
         }
 
-        sendStatus(metricPath, status, errorCode, statusMessage, startTime, completedTime);
+        sendStatus(metricPath, status, errorCode, statusMessage, startTime, completedTime,
+                lastTransactionId);
     }
 
     /**
@@ -238,13 +252,15 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
      * @param statusMessage the status message, may be null
      * @param startTime the request start time, leave 0 if you don't want to send duration
      * @param completedTime the request completed time
+     * @param lastTransactionId the id of the last transaction
      */
     public void sendStatus(String metricPath,
                            int status,
                            int errorCode,
                            String statusMessage,
                            long startTime,
-                           long completedTime) {
+                           long completedTime,
+                           String lastTransactionId) {
 
         final long currentTime = System.currentTimeMillis();
 
@@ -283,6 +299,14 @@ public abstract class AAdvancedAuthenticationTask implements ITimestampedRunnabl
                 defaultDateFormat.format(new Date(completedTime)),
                 MetricType.STRING,
                 currentTime);
+
+        if (null != lastTransactionId) {
+            service.addMetric(kAdvancedAuthenticationMetricPrefix,
+                    metricPath + kTransactionIdMetricPostfix,
+                    lastTransactionId,
+                    MetricType.STRING,
+                    currentTime);
+        }
     }
 
     /**
