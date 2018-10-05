@@ -14,15 +14,15 @@
 
 	<files>
 		<file>
-			<source>${project.build.directory}/${artifactId}-${version}-gae.${bundle.file.format}</source>
+			<source>${project.build.directory}/${artifactId}-${project.version}-gae.${bundle.file.format}</source>
 			<outputDirectory>post-10.5</outputDirectory>
-			<destName>${artifactId}.${bundle.file.format}</destName>
+			<destName>${project.artifactId}.${bundle.file.format}</destName>
 		</file>
 		
 		<file>
-			<source>${project.build.directory}/${artifactId}-${version}-wily.${bundle.file.format}</source>
+			<source>${project.build.directory}/${artifactId}-${project.version}-wily.${bundle.file.format}</source>
 			<outputDirectory>pre-10.5</outputDirectory>
-			<destName>${artifactId}.pre-10.5.${bundle.file.format}</destName>
+			<destName>${project.artifactId}.pre-10.5.${bundle.file.format}</destName>
 		</file>
 
 		<file>
