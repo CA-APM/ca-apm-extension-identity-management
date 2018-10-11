@@ -7,10 +7,10 @@ This (Infrastructure) agent extension provides availability and functional check
 This agent extension provides availability and functional checks against CA Identity Manager and CA Advanced Authentication.
 
 ## APM version
-Test with CA APM 10.5 and 10.7.
+Test with CA APM 10.7.
 
 ## Supported third party versions
-CA Identity Manager
+CA Identity Manager 12.6.8
 CA Advanced Authentication
 
 ## Limitations
@@ -24,10 +24,13 @@ CA Advanced Authentication
 # Installation Instructions
 
 ## Prerequisites
-You need to install [CA APM Infrastructure Agent 10.5 or 10.7](https://docops.ca.com/ca-apm/10-7/en/implementing-agents/infrastructure-agent).
+* You need to install [CA APM Infrastructure Agent  10.7](https://docops.ca.com/ca-apm/10-7/en/implementing-agents/infrastructure-agent). It does not have to be on a specific server. It is recommended to isntall on a server in the same subnet as the monitored identity management servers.
+* Open firewall ports:
+  * From CA APM Infrastructure Agent to CA APM Enterprise Managers (MOM and collectors): port 5001
+  * From the CA APM Infrastructure Agent to web service ports of the identity management servers. See all parameters ending in `url` below.
 
 ## Dependencies
-[CA APM Infrastructure Agent 10.5 or 10.7](https://docops.ca.com/ca-apm/10-7/en/implementing-agents/infrastructure-agent).
+[CA APM Infrastructure Agent 10.7](https://docops.ca.com/ca-apm/10-7/en/implementing-agents/infrastructure-agent).
 
 ## Installation
 1. Extract `im-monitor-<version>-dist.tar.gz`
@@ -47,7 +50,7 @@ There are two properties that configure logging for the Identity Manager Extensi
 The *CA Identity Manager - Reset User Password example* has the following properties:
 * `im.resetUserPassword.enabled=true`: enables/disables this check
 * `im.url=http://localhost:8080/iam/im/TEWS6/identityEnv`: the URL for the CA Identity Manager TEWS API
-* `#im.authorization.user=`: the user needed for (basic http) authorization, if empty or commented out no authentication header is sent 
+* `#im.authorization.user=`: the user needed for (basic http) authorization, if empty or commented out no authentication header is sent
 * `#im.authorization.password=`: the encrypted password needed for (basic http) authorization
 * `im.admin.user=imadmin`: a CA Identity Manager user that may perform the request
 * `im.admin.password=interOP@123`: the password of the a CA Identity Manager user that may perform the request
@@ -68,13 +71,13 @@ The *CA Advanced Authentication - Get User Status example* has the following pro
 ### CA Advanced Authentication: other service URLs
 These CA Advanced Authentication service have no examples
 * `arcot.configRegistry.url=http://localhost:8080/arcotuds/services/ArcotConfigRegistrySvc`
-* `arcot.userRegistryMgmt.url=http://localhost:8080/arcotuds/services/ArcotUserRegistryMgmtSvc`
+* `arcot.userRegistryMgmt.url=http://localhost:9080/arcotuds/services/ArcotUserRegistryMgmtSvc`
 * `arcot.riskFort.admin.url=http://localhost:8080/axis2/services/ArcotRiskFortAdminSvc`
-* `arcot.riskFort.evaluate.url=http://ws.arcot.com/services/RiskFortEvaluateRiskSvc`
-* `arcot.webfort.admin.url=http://ws.arcot.com/services/WebFortAdminSvc`
-* `arcot.webfort.auth.url=http://ws.arcot.com/services/WebFortAuthSvc`
-* `arcot.webfort.bulk.url=http://ws.arcot.com/services/WebFortBulkOperationsSvc`
-* `arcot.webfort.issuance.url=http://ws.arcot.com/services/WebFortIssuanceSvc`
+* `arcot.riskFort.evaluate.url=http://localhost:7778/services/RiskFortEvaluateRiskSvc`
+* `arcot.webfort.admin.url=http://localhost:9744/services/WebFortAdminSvc`
+* `arcot.webfort.auth.url=http://localhost:8080/services/WebFortAuthSvc`
+* `arcot.webfort.bulk.url=http://localhost:8080/services/WebFortBulkOperationsSvc`
+* `arcot.webfort.issuance.url=http://localhost:8080/services/WebFortIssuanceSvc`
 
 ### Encrypting Passwords
 To encrypt a password run `java -cp lib/EPAgent.jar -jar extensions/im-monitor/lib/im-monitor.jar <password>` from the Infrastructure agent directory.
