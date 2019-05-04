@@ -80,7 +80,8 @@ These CA Advanced Authentication service have no examples
 * `arcot.webfort.issuance.url=http://localhost:8080/services/WebFortIssuanceSvc`
 
 ### Encrypting Passwords
-To encrypt a password run `java -cp lib/EPAgent.jar -jar extensions/im-monitor/lib/im-monitor.jar <password>` from the Infrastructure agent directory.
+* On Unix: to encrypt a password run `java -cp lib/EPAgent.jar:extensions/im-monitor/lib/im-monitor.jar com.ca.apm.extensions.im.service.ImService <password>` from the Infrastructure agent directory.
+* On Windows: to encrypt a password run `java -cp lib\EPAgent.jar;extensions\im-monitor\lib\im-monitor.jar com.ca.apm.extensions.im.service.ImService <password>`
 
 # Usage Instructions
 Configure the examples as shown above matching your environment and (re-) start the Infrastructure agent.
